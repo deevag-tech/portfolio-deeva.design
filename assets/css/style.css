@@ -1,0 +1,269 @@
+/* ==========================================================================
+   Deeva Gupta · Portfolio
+   A night climb rendered in WebGL (see assets/js/scene.js). Page content
+   floats over the 3D world as frosted "camp" panels. Scroll = altitude.
+   ========================================================================== */
+
+:root{
+  color-scheme: dark;
+  --night:#0B1714;      /* sky / page */
+  --ridge:#12261F;      /* surfaces */
+  --ridge-2:#1B362D;    /* raised surfaces */
+  --contour:#2B4B41;    /* lines, borders */
+  --snow:#F2EEE6;       /* primary text */
+  --mist:#9FB5AD;       /* secondary text */
+  --lantern:#FF8A3D;    /* trail + accent */
+  --glacier:#8FD1C9;    /* data, links */
+  --dawn:#F6B48F;       /* summit sunrise */
+  --ink:#2A1F1A;        /* text on dawn */
+  --ember:#A8401A;      /* accent on dawn */
+
+  --glass:rgba(11,23,20,.72);
+  --glass-line:rgba(43,75,65,.8);
+
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Instrument Sans","Helvetica Neue",Arial,system-ui,sans-serif;
+  --f-hand:"Caveat","Segoe Print","Bradley Hand",cursive;
+  --f-data:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --gutter:clamp(16px,5vw,72px);
+  --dawn-t:0;           /* 0 = night, 1 = sunrise (set by app.js) */
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--night);color:var(--snow);font-family:var(--f-body);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--glacier)}
+:focus-visible{outline:2px solid var(--lantern);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--f-display);font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:0;text-wrap:balance}
+p{margin:0}
+.mono{font-family:var(--f-data);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist);font-variant-numeric:tabular-nums}
+.hand{font-family:var(--f-hand);color:var(--lantern);font-size:24px;line-height:1.1}
+
+.skip{position:fixed;left:16px;top:-60px;z-index:100;background:var(--lantern);color:var(--night);padding:10px 16px;border-radius:10px;font-weight:600;text-decoration:none;transition:top .2s}
+.skip:focus{top:16px}
+
+/* ---------- 3D world ---------- */
+#world{position:fixed;inset:0;width:100vw;height:100vh;height:100lvh;z-index:0;display:block;outline:none}
+#world-fallback{position:fixed;inset:0;z-index:0;display:none;pointer-events:none;
+  background:
+    radial-gradient(90% 60% at 50% 110%, #1B362D 0%, transparent 60%),
+    linear-gradient(180deg,#07110E 0%,#0B1714 55%,#12261F 100%)}
+#world-fallback::after{content:"";position:absolute;inset:0;opacity:var(--dawn-t);
+  background:linear-gradient(180deg,#3B2A3A 0%,#E58A66 62%,#F6B48F 100%)}
+.no-webgl #world{display:none}
+.no-webgl #world-fallback{display:block}
+
+/* ---------- HUD: altitude meter ---------- */
+.hud{position:fixed;left:max(14px,env(safe-area-inset-left));top:50%;transform:translateY(-50%);z-index:20;display:flex;align-items:center;gap:12px;pointer-events:none}
+.gauge{width:4px;height:42vh;background:rgba(43,75,65,.9);border-radius:4px;position:relative}
+.gauge i{position:absolute;left:0;bottom:0;width:100%;background:var(--lantern);border-radius:4px;height:0}
+.gauge b{position:absolute;left:50%;width:12px;height:12px;border-radius:50%;background:var(--lantern);transform:translate(-50%,50%);bottom:0;box-shadow:0 0 18px var(--lantern)}
+.hud-read{display:flex;flex-direction:column;gap:2px;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.hud-alt{font-family:var(--f-data);font-size:15px;font-weight:600;color:var(--snow);font-variant-numeric:tabular-nums}
+.hud-name{font-family:var(--f-data);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist)}
+@media (max-width:1100px){
+  .hud{top:auto;bottom:max(14px,env(safe-area-inset-bottom));transform:none;left:16px;background:rgba(11,23,20,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:8px 14px;border-radius:999px;border:1px solid var(--contour)}
+  .gauge{display:none}
+  .hud-read{text-shadow:none}
+}
+
+/* ---------- Trail map nav ---------- */
+.nav{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:var(--gutter);z-index:30}
+.nav button{font:600 13px var(--f-body);color:var(--snow);background:rgba(18,38,31,.8);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--contour);border-radius:999px;padding:9px 16px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.nav button:hover{border-color:var(--lantern)}
+.nav ol{list-style:none;margin:8px 0 0;padding:8px;background:var(--ridge);border:1px solid var(--contour);border-radius:16px;min-width:240px;box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.nav li a{display:flex;justify-content:space-between;gap:16px;padding:9px 10px;border-radius:10px;color:var(--snow);text-decoration:none;font-size:14px}
+.nav li a:hover,.nav li a[aria-current="true"]{background:var(--ridge-2)}
+.nav li a span{font-family:var(--f-data);font-size:11px;color:var(--mist)}
+
+/* ---------- Layout ---------- */
+main{position:relative;z-index:2}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:var(--gutter)}
+@media (min-width:1101px){.wrap{padding-left:max(var(--gutter),150px)}}
+section.camp{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-block:clamp(120px,30vh,340px)}
+
+/* Frosted camp panel */
+.panel{position:relative;max-width:780px;border-radius:28px;padding:clamp(22px,3.6vw,44px);
+  background:var(--glass);border:1px solid var(--glass-line);
+  -webkit-backdrop-filter:blur(14px) saturate(120%);backdrop-filter:blur(14px) saturate(120%);
+  box-shadow:0 40px 80px rgba(0,0,0,.35)}
+.panel.right{margin-left:auto}
+.panel.wide{max-width:none}
+.camp h2{font-size:clamp(38px,5.6vw,76px)}
+.camp h2 em{font-style:normal;color:var(--lantern)}
+.lede{font-size:clamp(17px,1.5vw,20px);color:var(--mist);max-width:62ch;margin-top:18px}
+
+/* Reveal */
+.rv{transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.js .rv:not(.in){opacity:.001;transform:translateY(32px) scale(.985)}
+
+/* Camp marker */
+.marker{display:inline-flex;align-items:center;gap:12px;margin-bottom:20px}
+.flag{width:34px;height:34px;border-radius:50%;background:var(--lantern);display:grid;place-items:center;color:var(--night);font:800 14px var(--f-display);flex:none;box-shadow:0 0 0 6px rgba(255,138,61,.15),0 0 24px rgba(255,138,61,.5)}
+.flag.dark{background:var(--night);color:var(--dawn);box-shadow:0 0 0 6px rgba(11,23,20,.12)}
+
+/* ---------- Trailhead (hero) ---------- */
+.hero{padding-block:120px 160px}
+.hero .wrap{text-shadow:0 2px 24px rgba(11,23,20,.7)}
+.coords{display:flex;flex-wrap:wrap;gap:8px 20px;margin-bottom:28px}
+.hero h1{font-size:clamp(64px,13vw,190px);line-height:.88}
+.hero h1 .l2{display:block;color:var(--lantern)}
+.hero .intro{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:40px;align-items:end;margin-top:36px;max-width:1000px}
+.hero .intro p{font-size:clamp(18px,1.7vw,22px);color:var(--snow);max-width:44ch}
+.hero .note{transform:rotate(-3deg);justify-self:start}
+.start{margin-top:44px;display:inline-flex;align-items:center;gap:12px;color:var(--snow);text-decoration:none;font-weight:600;border:1px solid var(--contour);padding:14px 22px;border-radius:999px;background:rgba(18,38,31,.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);width:max-content;text-shadow:none}
+.start:hover{border-color:var(--lantern)}
+.start svg{animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(4px)}}
+@media (max-width:760px){.hero .intro{grid-template-columns:1fr;gap:20px}}
+
+/* ---------- Placeholders (swap for real images) ---------- */
+.ph{position:relative;border-radius:22px;overflow:hidden;background:
+  radial-gradient(120% 80% at 70% 15%,rgba(246,180,143,.35),transparent 60%),
+  linear-gradient(170deg,#1f3d34 0%,#12261F 55%,#0b1714 100%);border:1px solid var(--contour)}
+.ph::before{content:"";position:absolute;inset:auto 0 0 0;height:55%;background:
+  linear-gradient(160deg,transparent 40%,rgba(11,23,20,.9) 40.5%),
+  linear-gradient(200deg,transparent 45%,rgba(18,38,31,.95) 45.5%)}
+.ph::after{content:attr(data-label);position:absolute;left:16px;bottom:14px;right:16px;font-family:var(--f-data);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--snow);padding-left:24px;
+  background:no-repeat left center/16px 12px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'%3E%3Crect x='.75' y='.75' width='14.5' height='10.5' rx='2.5' fill='none' stroke='%23F2EEE6' stroke-width='1.5'/%3E%3C/svg%3E")}
+.ph > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.ph:has(> img)::before,.ph:has(> img)::after{display:none}
+
+/* ---------- Base camp ---------- */
+.two{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(24px,3.4vw,44px);align-items:start;margin-top:36px}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+.portrait{aspect-ratio:4/5}
+@media (max-width:860px){.portrait{aspect-ratio:4/3}}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.fact{padding:14px 12px;border:1px solid var(--contour);border-radius:16px;background:rgba(18,38,31,.6)}
+.fact b{display:block;font:800 22px var(--f-display);color:var(--snow);white-space:nowrap}
+.fact small{color:var(--mist);font-size:12.5px;line-height:1.35;display:block}
+.pack h3{font-size:26px;margin-bottom:4px}
+.gear{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:8px}
+.gear li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;align-items:center;padding:10px 14px;border-radius:14px;border:1px solid var(--contour);background:rgba(18,38,31,.55);transition:border-color .25s,transform .25s}
+.gear li:hover{border-color:var(--lantern);transform:translateX(6px)}
+.gear svg{width:40px;height:40px}
+.gear strong{font-weight:600;display:block;font-size:16px}
+.gear small{color:var(--mist);font-size:14px;line-height:1.4;display:block}
+
+/* ---------- Expedition: Astroverse ---------- */
+.factsheet{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--contour);border-radius:16px;overflow:hidden;margin:32px 0 32px;border:1px solid var(--contour)}
+.factsheet div{background:var(--ridge);padding:14px 16px}
+.factsheet b{display:block;font-weight:600;font-size:15px;margin-top:4px}
+@media (max-width:760px){.factsheet{grid-template-columns:1fr 1fr}}
+.profile{position:relative;height:130px;margin:8px 0 18px}
+.profile svg{width:100%;height:100%;overflow:visible}
+.switch{display:flex;gap:8px;flex-wrap:wrap}
+.switch button{font:600 14px var(--f-body);color:var(--mist);background:rgba(11,23,20,.4);border:1px solid var(--contour);border-radius:999px;padding:10px 16px;cursor:pointer;display:flex;gap:8px;align-items:center;transition:border-color .2s,color .2s}
+.switch button:hover{border-color:var(--lantern);color:var(--snow)}
+.switch button[aria-selected="true"]{background:var(--lantern);color:var(--night);border-color:var(--lantern)}
+.switch button .n{font-family:var(--f-data);font-size:11px}
+.leg{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(24px,4vw,56px);margin-top:28px;align-items:start}
+@media (max-width:860px){.leg{grid-template-columns:1fr}}
+.leg h3{font-size:clamp(26px,3vw,38px);margin-bottom:18px}
+.notes{display:grid;gap:12px}
+.n-row{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;padding-top:12px;border-top:1px dashed var(--contour)}
+.n-row .mono{padding-top:3px}
+.n-row.win p{color:var(--snow);font-weight:600}
+.n-row.win .mono{color:var(--lantern)}
+@media (max-width:520px){.n-row{grid-template-columns:1fr;gap:4px}}
+.phones{display:flex;gap:14px;justify-content:center;perspective:900px;padding-bottom:28px}
+.phone{width:min(46%,190px);aspect-ratio:390/844;border-radius:28px;border:6px solid #050b09;background:linear-gradient(180deg,#fff1f3,#ffffff 40%);position:relative;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.45);transform:rotateY(8deg)}
+.phone:nth-child(2){transform:translateY(28px) rotateY(-8deg)}
+.phone > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.phone .bar{height:44px;background:#ffe3ea}
+.phone .blk{margin:12px;border-radius:10px;background:#f6dde3;height:22%}
+.phone .ln{margin:8px 12px;height:8px;border-radius:4px;background:#efd7dc}
+.phone .ln.s{width:55%}
+.phone .cta{position:absolute;left:12px;right:12px;bottom:18px;height:30px;border-radius:9px;background:#FE5C7D}
+.phone em{position:absolute;left:10px;right:10px;top:48%;text-align:center;font:600 11px/1.3 var(--f-data);color:#8a5562;text-transform:uppercase;letter-spacing:.06em;font-style:normal}
+.summit-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:36px}
+.summit-stats div{padding:18px;border-radius:16px;background:rgba(11,23,20,.55);border:1px solid var(--contour)}
+.summit-stats b{display:block;font:800 clamp(26px,2.8vw,38px)/1 var(--f-display);color:var(--lantern);font-variant-numeric:tabular-nums}
+.summit-stats small{display:block;margin-top:8px;color:var(--mist);font-size:14px;line-height:1.4}
+@media (max-width:760px){.summit-stats{grid-template-columns:1fr 1fr}}
+.log-link{display:inline-flex;gap:10px;align-items:center;margin-top:28px;padding:14px 22px;border-radius:999px;background:var(--snow);color:var(--night);text-decoration:none;font-weight:600;transition:background .2s}
+.log-link:hover{background:var(--lantern)}
+
+/* ---------- Side trails ---------- */
+.trails{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;margin-top:36px}
+.sign{grid-column:span 2;border-radius:22px;background:rgba(18,38,31,.75);border:1px solid var(--contour);overflow:hidden;display:flex;flex-direction:column;transition:transform .35s,border-color .35s;transform-style:preserve-3d}
+.sign:hover{border-color:var(--lantern)}
+.sign.big{grid-column:span 3}
+.sign .ph{border-radius:0;border:0;border-bottom:1px solid var(--contour);aspect-ratio:16/10}
+.sign .body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:8px;flex:1}
+.sign h3{font-size:26px}
+.sign p{color:var(--mist);font-size:15px}
+.sign .stat{margin-top:auto;padding-top:12px;font:800 22px var(--f-display);color:var(--lantern)}
+.sign .stat small{font:500 13px var(--f-body);color:var(--mist);margin-left:6px}
+.tag{align-self:flex-start;font-family:var(--f-data);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--glacier);border:1px solid var(--contour);border-radius:999px;padding:4px 10px}
+@media (max-width:960px){.sign,.sign.big{grid-column:span 3}}
+@media (max-width:620px){.trails{grid-template-columns:1fr}.sign,.sign.big{grid-column:auto}}
+
+/* ---------- Fridge door ---------- */
+.fridge-zone{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:clamp(24px,4vw,48px);margin-top:36px;align-items:start}
+@media (max-width:900px){.fridge-zone{grid-template-columns:1fr}}
+.fridge{position:relative;height:min(540px,68vh);min-height:430px;border-radius:30px 30px 22px 22px;background:linear-gradient(105deg,#E9E6DF 0%,#F7F5F0 38%,#DDD9D1 100%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08),0 40px 80px rgba(0,0,0,.45);overflow:hidden;touch-action:none}
+.fridge::after{content:"";position:absolute;right:22px;top:24%;width:12px;height:30%;border-radius:8px;background:linear-gradient(90deg,#bdb8ae,#f2efe9)}
+.fridge .hint{position:absolute;left:22px;bottom:16px;font-family:var(--f-hand);font-size:22px;color:#6b665d;pointer-events:none}
+.magnet{position:absolute;cursor:grab;user-select:none;-webkit-user-select:none;border:0;padding:0;background:none;transition:filter .2s;filter:drop-shadow(0 6px 6px rgba(0,0,0,.28));touch-action:none}
+.magnet:active{cursor:grabbing}
+.magnet.dragging{filter:drop-shadow(0 18px 18px rgba(0,0,0,.35));z-index:5}
+.magnet .face{display:grid;place-items:center;text-align:center;font:800 13px/1.05 var(--f-display);color:#fff;padding:10px;border:3px solid rgba(255,255,255,.85);background-size:cover;background-position:center}
+.magnet .face small{display:block;font:600 9px var(--f-data);letter-spacing:.08em;opacity:.85;margin-top:3px}
+.magnet[aria-pressed="true"] .face{outline:3px solid var(--lantern);outline-offset:3px}
+.postcard{perspective:1200px}
+.card-inner{position:relative;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.7,.2,1);min-height:400px}
+.postcard.flip .card-inner{transform:rotateY(180deg)}
+.side{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.front{background:var(--ridge-2);border:1px solid var(--contour)}
+.front .ph{flex:1;min-height:220px}
+.back{background:#F4EFE4;color:#2a2620;transform:rotateY(180deg);background-image:repeating-linear-gradient(0deg,transparent 0 31px,rgba(0,0,0,.07) 31px 32px)}
+.back .stamp{position:absolute;right:18px;top:18px;width:64px;height:76px;border:2px dashed #c9603a;border-radius:6px;display:grid;place-items:center;font:600 10px var(--f-data);color:#c9603a;text-align:center;transform:rotate(4deg)}
+.back h3{font-size:30px;color:#2a2620;padding-right:84px}
+.back .hand{color:#2a2620;font-size:25px}
+.back .mono{color:#7b7262}
+.pc-note{font-size:15px;color:#4b4439}
+.flipbtn{align-self:flex-start;font:600 13px var(--f-body);border-radius:999px;padding:8px 14px;cursor:pointer;border:1px solid currentColor;background:transparent;color:inherit}
+.back .flipbtn{margin-top:auto}
+
+/* ---------- Summit (sunrise) ---------- */
+.summit{padding-block:clamp(120px,30vh,320px) 0;min-height:110vh;justify-content:flex-end}
+.summit-card{max-width:880px;border-radius:28px;padding:clamp(24px,4vw,52px);
+  background:rgba(246,236,226,.72);border:1px solid rgba(255,255,255,.6);
+  -webkit-backdrop-filter:blur(14px) saturate(130%);backdrop-filter:blur(14px) saturate(130%);
+  box-shadow:0 40px 80px rgba(59,42,58,.25);color:var(--ink)}
+.summit h2{font-size:clamp(44px,6.4vw,96px);line-height:.94;color:var(--ink)}
+.summit h2 span{color:var(--ember)}
+.summit .lede{color:#2c2622}
+.summit .mono{color:#4a3b33}
+.contact{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:600;text-decoration:none;border:1.5px solid var(--night);color:var(--night);background:transparent;font-size:16px;cursor:pointer;font-family:var(--f-body);transition:transform .2s}
+.pill.solid{background:var(--night);color:var(--dawn)}
+.pill:hover{transform:translateY(-2px)}
+.pill[hidden]{display:none}
+.copied{font-family:var(--f-hand);font-size:22px;color:var(--night);min-height:26px;margin-top:10px}
+footer{padding-block:40px 96px}
+footer .mono{color:var(--ink)}
+
+/* ---------- Mobile ---------- */
+@media (max-width:760px){
+  body{font-size:16px}
+  section.camp{padding-block:clamp(90px,22vh,200px)}
+  .panel{border-radius:22px}
+  .phones{padding-bottom:36px}
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{transition:none}.js .rv:not(.in){opacity:1;transform:none}
+  .start svg{animation:none}
+  .card-inner{transition:none}
+  .gear li,.sign,.pill{transition:none}
+}
+
+/* footer sits on the sunrise sky */
+footer .mono{display:inline-block;background:rgba(246,236,226,.75);padding:6px 12px;border-radius:999px}

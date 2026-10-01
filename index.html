@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en" class="no-webgl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Deeva Gupta · Senior Product Designer</title>
+  <meta name="description" content="Deeva Gupta is a senior product designer who builds 0-to-1 consumer apps. Follow the trail through her work, from Astroverse 2.0 to client launches, to the summit.">
+  <meta name="theme-color" content="#0B1714">
+  <meta property="og:title" content="Deeva Gupta · Senior Product Designer">
+  <meta property="og:description" content="A portfolio you climb. Follow the lantern trail through 0-to-1 consumer products, AI features and a fridge door of travel magnets.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://deeva.design/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B1714'/%3E%3Cpath d='M8 50 26 20l9 14 6-8 15 24Z' fill='%2312261F' stroke='%23FF8A3D' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='26' cy='20' r='4' fill='%23FF8A3D'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#basecamp">Skip to content</a>
+
+  <!-- 3D world -->
+  <canvas id="world" aria-hidden="true"></canvas>
+  <div id="world-fallback" aria-hidden="true"></div>
+
+  <!-- Altitude HUD -->
+  <div class="hud" aria-hidden="true">
+    <div class="gauge"><i id="g-fill"></i><b id="g-dot"></b></div>
+    <div class="hud-read"><span class="hud-alt" id="alt">0 m</span><span class="hud-name" id="altname">Trailhead</span></div>
+  </div>
+
+  <!-- Trail map -->
+  <nav class="nav" aria-label="Trail map">
+    <button id="mapbtn" aria-expanded="false" aria-controls="maplist">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="1.8"/></svg>
+      Trail map
+    </button>
+    <ol id="maplist" hidden>
+      <li><a href="#trailhead">Trailhead <span>0 m</span></a></li>
+      <li><a href="#basecamp">Base camp · About <span>1,200 m</span></a></li>
+      <li><a href="#expedition">The big climb · Astroverse <span>2,600 m</span></a></li>
+      <li><a href="#sidetrails">Side trails · Client work <span>3,300 m</span></a></li>
+      <li><a href="#fridge">The fridge door · Travel <span>3,900 m</span></a></li>
+      <li><a href="#summit">Summit · Say hello <span>4,500 m</span></a></li>
+    </ol>
+  </nav>
+
+  <main id="main">
+
+    <!-- TRAILHEAD -->
+    <section class="camp hero" id="trailhead" data-alt="0" data-name="Trailhead">
+      <div class="wrap">
+        <div class="coords rv">
+          <span class="mono">Trailhead</span><span class="mono">28.61°N · 77.21°E</span><span class="mono">Alt 0 m</span><span class="mono">Night trek · clear skies</span>
+        </div>
+        <h1 class="rv">Deeva<span class="l2">Gupta.</span></h1>
+        <div class="intro">
+          <p class="rv">Senior product designer who builds 0-to-1 consumer apps. Off the clock I trek, collect fridge magnets, and ask locals for the story behind every place.</p>
+          <p class="hand note rv">↓ scroll to climb. Every camp is something I built or somewhere I went</p>
+        </div>
+        <a class="start rv" href="#basecamp">Start the climb
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14m0 0-6-6m6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- BASE CAMP -->
+    <section class="camp" id="basecamp" data-alt="1200" data-name="Base camp · About">
+      <div class="wrap">
+        <div class="panel right rv">
+          <div class="marker"><span class="flag">1</span><span class="mono">Camp 1 · Base camp · 1,200 m</span></div>
+          <h2>Who's on <em>this climb</em></h2>
+          <p class="lede">I'm a product designer with 4+ years in consumer mobile and web. For the last 2+ I've been the founding product designer at ScaleX. I own the work from strategy and research to shipped UI, design systems, UX writing and Mixpanel analytics.</p>
+          <div class="two">
+            <div>
+              <div class="ph portrait" data-label="Photo · You on a trail (portrait)"></div>
+              <div class="facts">
+                <div class="fact"><b>4+</b><small>years designing consumer products</small></div>
+                <div class="fact"><b>100K+</b><small>downloads in month one for a client app</small></div>
+                <div class="fact"><b>0→1</b><small>founding designer on Astroverse</small></div>
+              </div>
+            </div>
+            <div class="pack">
+              <h3>Packing list</h3>
+              <p class="hand">what's always in my bag</p>
+              <ul class="gear">
+                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><circle cx="22" cy="22" r="15" stroke="#8FD1C9" stroke-width="2"/><path d="m27 17-3.5 8.5L15 29l3.5-8.5L27 17Z" fill="#FF8A3D"/></svg><div><strong>Compass · Research</strong><small>User calls, usability tests, journey mapping</small></div></li>
+                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M8 12l9-3 10 3 9-3v23l-9 3-10-3-9 3V12Z" stroke="#8FD1C9" stroke-width="2" stroke-linejoin="round"/><path d="M14 22c4-5 8 4 14-3" stroke="#FF8A3D" stroke-width="2" stroke-dasharray="2 3" stroke-linecap="round"/></svg><div><strong>Map · Flows &amp; IA</strong><small>End-to-end product design for iOS, Android and web</small></div></li>
+                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect x="15" y="12" width="14" height="20" rx="4" stroke="#8FD1C9" stroke-width="2"/><path d="M19 8h6M22 17v8" stroke="#FF8A3D" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="21" r="3" fill="#FF8A3D"/></svg><div><strong>Lantern · UX writing</strong><small>Microcopy, Hinglish notifications, paywalls</small></div></li>
+                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M12 32c0-8 20-4 20-12s-14-6-14-1 12 4 12 13" stroke="#8FD1C9" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="32" r="3" fill="#FF8A3D"/></svg><div><strong>Rope · Design systems</strong><small>Tokens and components that hold a team together</small></div></li>
+                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M8 32 18 16l6 9 4-5 8 12H8Z" stroke="#8FD1C9" stroke-width="2" stroke-linejoin="round"/><path d="M28 10v6M25 13h6" stroke="#FF8A3D" stroke-width="2" stroke-linecap="round"/></svg><div><strong>Altimeter · Analytics</strong><small>Mixpanel funnels, retention, A/B tests</small></div></li>
+                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect x="10" y="14" width="24" height="18" rx="5" stroke="#8FD1C9" stroke-width="2"/><path d="M16 9l4 5M28 9l-4 5" stroke="#8FD1C9" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="23" r="2" fill="#FF8A3D"/><circle cx="27" cy="23" r="2" fill="#FF8A3D"/></svg><div><strong>Radio · AI products</strong><small>Conversational AI and LLM prompt design</small></div></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPEDITION -->
+    <section class="camp" id="expedition" data-alt="2600" data-name="The big climb · Astroverse">
+      <div class="wrap">
+        <div class="panel wide rv">
+          <div class="marker"><span class="flag">2</span><span class="mono">Camp 2 · The big climb · 2,600 m</span></div>
+          <h2>Astroverse 2.0: <em>fewer profiles, better matches</em></h2>
+          <p class="lede">A Kundli-based dating app for Indian millennials and Gen Z. Version 1.0 was a swipe clone with an astrology score bolted on. I led the rebuild into a curated, Kundli-first product. The route had four switchbacks.</p>
+
+          <div class="factsheet">
+            <div><span class="mono">Role</span><b>Founding Product Designer</b></div>
+            <div><span class="mono">Duration</span><b>Dec 2025 – Sep 2026</b></div>
+            <div><span class="mono">Terrain</span><b>iOS &amp; Android · Flutter</b></div>
+            <div><span class="mono">Grade</span><b>0 → 1, then a full revamp</b></div>
+          </div>
+
+          <span class="mono">Route profile · tap a switchback</span>
+          <div class="profile" aria-hidden="true">
+            <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
+              <path d="M0 140 L120 120 L250 92 L330 104 L470 70 L560 82 L700 44 L780 58 L920 18 L1000 22 V150 H0Z" fill="#12261F"/>
+              <path d="M0 140 L120 120 L250 92 L330 104 L470 70 L560 82 L700 44 L780 58 L920 18 L1000 22" fill="none" stroke="#FF8A3D" stroke-width="3"/>
+              <g id="pins"></g>
+            </svg>
+          </div>
+
+          <div class="switch" role="tablist" aria-label="Astroverse problems">
+            <button role="tab" id="tab-0" aria-selected="true" aria-controls="leg" data-i="0"><span class="n">01</span>Verification wall</button>
+            <button role="tab" id="tab-1" aria-selected="false" aria-controls="leg" data-i="1" tabindex="-1"><span class="n">02</span>Endless swiping</button>
+            <button role="tab" id="tab-2" aria-selected="false" aria-controls="leg" data-i="2" tabindex="-1"><span class="n">03</span>Unreadable Kundli</button>
+            <button role="tab" id="tab-3" aria-selected="false" aria-controls="leg" data-i="3" tabindex="-1"><span class="n">04</span>Empty days</button>
+          </div>
+
+          <div class="leg" id="leg" role="tabpanel" aria-labelledby="tab-0">
+            <div>
+              <h3 id="leg-title"></h3>
+              <div class="notes">
+                <div class="n-row"><span class="mono">Problem</span><p id="leg-p"></p></div>
+                <div class="n-row"><span class="mono">Insight</span><p id="leg-i"></p></div>
+                <div class="n-row"><span class="mono">What I did</span><p id="leg-d"></p></div>
+                <div class="n-row win"><span class="mono">Result</span><p id="leg-r"></p></div>
+              </div>
+            </div>
+            <div class="phones" id="leg-phones"></div>
+          </div>
+
+          <div class="summit-stats">
+            <div><b>26K+</b><small>Kundli profiles created</small></div>
+            <div><b>~88%</b><small>of people who start onboarding finish their Kundli profile</small></div>
+            <div><b>23→38%</b><small>share of Discover decisions that are likes</small></div>
+            <div><b>11K+</b><small>questions asked to Veda in 3 months</small></div>
+          </div>
+          <a class="log-link" id="caseStudyLink" href="#" target="_blank" rel="noopener">Read the full case study
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIDE TRAILS -->
+    <section class="camp" id="sidetrails" data-alt="3300" data-name="Side trails · Client work">
+      <div class="wrap">
+        <div class="panel wide rv">
+          <div class="marker"><span class="flag">3</span><span class="mono">Camp 3 · Side trails · 3,300 m</span></div>
+          <h2>Shorter routes, <em>big views</em></h2>
+          <p class="lede">Client launches at ScaleX and earlier agency work at Hucentric. Different terrain each time: astrology, creators, SaaS, fintech.</p>
+          <div class="trails">
+            <article class="sign big">
+              <div class="ph" data-label="Image · Horocosmo app screens"></div>
+              <div class="body"><span class="tag">ScaleX client · Astrology app</span><h3>Horocosmo</h3><p>Built the complete UI foundation for celebrity astrologer Arun Pandit's app, including the design system, core flows and app screens.</p><div class="stat">100K+<small>downloads in the first month</small></div></div>
+            </article>
+            <article class="sign big">
+              <div class="ph" data-label="Image · Wishup website redesign"></div>
+              <div class="body"><span class="tag">Hucentric · VA SaaS</span><h3>Wishup</h3><p>Redesigned the lead-generation website using Clarity heatmaps and stakeholder interviews.</p><div class="stat">+25%<small>pageviews · 15% lower bounce · 10% lead conversion</small></div></div>
+            </article>
+            <article class="sign">
+              <div class="ph" data-label="Image · Report landing pages"></div>
+              <div class="body"><span class="tag">ScaleX client · Reports</span><h3>Astrologer Arvind Sud</h3><p>Conversion-focused landing pages for personalised astrology reports, built to drive purchases.</p></div>
+            </article>
+            <article class="sign">
+              <div class="ph" data-label="Image · SkillHouse landing page"></div>
+              <div class="body"><span class="tag">ScaleX client · Creator edtech</span><h3>BeerBiceps SkillHouse</h3><p>A click-through landing page for the SkillHouse design program.</p></div>
+            </article>
+            <article class="sign">
+              <div class="ph" data-label="Image · Vegapay brand &amp; site"></div>
+              <div class="body"><span class="tag">Hucentric · Fintech</span><h3>Vegapay</h3><p>New brand identity and website: moodboard, style guide and motion graphics, built hand in hand with engineering.</p></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FRIDGE -->
+    <section class="camp" id="fridge" data-alt="3900" data-name="The fridge door · Travel">
+      <div class="wrap">
+        <div class="panel wide rv">
+          <div class="marker"><span class="flag">4</span><span class="mono">Camp 4 · The fridge door · 3,900 m</span></div>
+          <h2>A magnet from <em>every place</em></h2>
+          <p class="lede">I collect a fridge magnet wherever I go, and I ask a local for the one thing a guidebook won't tell me. Drag the magnets around, then tap one to read its postcard.</p>
+          <div class="fridge-zone">
+            <div class="fridge" id="fridgeDoor" aria-label="Fridge door with travel magnets">
+              <span class="hint">drag me around →</span>
+            </div>
+            <div class="postcard" id="postcard" aria-live="polite">
+              <div class="card-inner">
+                <div class="side front">
+                  <span class="mono" id="pc-meta">Postcard</span>
+                  <div class="ph" id="pc-photo" data-label="Photo · pick a magnet"></div>
+                  <button class="flipbtn" id="pc-flip" type="button">Read the back</button>
+                </div>
+                <div class="side back">
+                  <div class="stamp">STAMP<br>HERE</div>
+                  <span class="mono" id="pc-meta-b">Postcard</span>
+                  <h3 id="pc-title">Pick a magnet</h3>
+                  <p class="hand" id="pc-local">A local's tip will show up here.</p>
+                  <p id="pc-note" class="pc-note"></p>
+                  <button class="flipbtn" id="pc-flip2" type="button">Back to the photo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUMMIT -->
+    <section class="camp summit" id="summit" data-alt="4500" data-name="Summit">
+      <div class="wrap">
+        <div class="summit-card rv">
+          <div class="marker"><span class="flag dark">5</span><span class="mono">Summit · 4,500 m · sunrise</span></div>
+          <h2>You made it <span>to the top.</span></h2>
+          <p class="lede">I'm looking for senior product design roles on consumer, AI or marketplace products. If you have a route in mind, let's plan it together.</p>
+          <div class="contact">
+            <button class="pill solid" id="copyEmail" type="button">dee.vag78@gmail.com · copy</button>
+            <a class="pill" id="emailLink" href="mailto:dee.vag78@gmail.com">Write to me ↗</a>
+            <a class="pill" id="linkedin" href="#" target="_blank" rel="noopener" hidden>LinkedIn ↗</a>
+          </div>
+          <p class="copied" id="copied" aria-live="polite"></p>
+        </div>
+        <footer><span class="mono">Deeva Gupta · Senior Product Designer · India</span></footer>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="assets/js/app.js"></script>
+  <script type="module" src="assets/js/scene.js"></script>
+</body>
+</html>
