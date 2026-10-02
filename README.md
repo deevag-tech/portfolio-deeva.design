@@ -1,6 +1,11 @@
 # deeva.design: a portfolio you climb
 
-This is Deeva Gupta's portfolio, built as a 3D night trek. As you scroll, a lantern climbs a low-poly mountain made with Three.js. Along the way you pass five camps (About, Astroverse, Client work, Travel, Contact) and reach the summit at sunrise.
+This is Deeva Gupta's portfolio, built as a 3D night trek. As you scroll, a lantern climbs a low-poly mountain made with Three.js. Along the way you pass five camps (About, Work, Side trails, Travel, Contact) and reach the summit at sunrise. The rail on the left is both the altitude meter and the menu.
+
+- `index.html`: the trek (home page)
+- `astroverse.html`: the full Astroverse 2.0 case study
+
+**Look:** "Alpenglow". Deep-blue night (`#0F1B2D`), rose alpenglow as the single accent (`#F4A7B9`), gold only for the lantern (`#F6D58E`). Type is Instrument Serif (headlines, italic accent words), Geist (UI and body), Geist Mono (labels) and Caveat (one or two handwritten notes).
 
 It is a static site with no build step. It runs on GitHub Pages as it is.
 
@@ -17,21 +22,22 @@ You have to serve the site over HTTP because ES modules don't load from `file://
 
 | What | Where |
 |---|---|
-| Astroverse problems, results, phone screens | `assets/js/content.js` → `legs` |
+| Astroverse case study (problems, decisions, results, screens) | `astroverse.html` |
+| Work cards, About permit, side trails | `index.html` |
 | Fridge magnets and local stories (placeholders now) | `assets/js/content.js` → `places` |
 | Email, LinkedIn, case study link | `assets/js/content.js` → `links` |
-| All other copy (hero, about, client work, summit) | `index.html` |
-| Colours and fonts | `assets/css/style.css` → `:root` |
+| Colours and fonts | `assets/css/style.css` and `assets/css/case.css` → `:root` |
 | Mountain, trail, sky and camera | `assets/js/scene.js` |
 
 ### Replace placeholders with real images
 
 1. Put images in `assets/img/`.
 2. Then do one of the following:
-   - **Phone screens and travel photos**: set `src` / `photo` in `content.js`, for example `photo: "assets/img/hampi.jpg"`.
-   - **Portrait and client work cards** in `index.html`: put an `<img>` inside the placeholder. The label hides automatically.
+   - **Travel photos**: set `photo` in `content.js`, for example `photo: "assets/img/hampi.jpg"`.
+   - **Permit photo** (`.permit-photo`) and **case study screens** (`.shot` in `astroverse.html`): put an `<img>` inside the placeholder. The label hides automatically.
+   - **Work card mockups** (`.wc-stage` in `index.html`): replace the `.phone` / `.browser` placeholders with an `<img>` of your real screens.
      ```html
-     <div class="ph portrait" data-label="…"><img src="assets/img/me.jpg" alt="Deeva on the Kedarkantha trail"></div>
+     <div class="ph permit-photo" data-label="Your photo"><img src="assets/img/me.jpg" alt="Deeva on the Kedarkantha trail"></div>
      ```
 
 ### LinkedIn

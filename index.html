@@ -3,17 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Deeva Gupta · Senior Product Designer</title>
-  <meta name="description" content="Deeva Gupta is a senior product designer who builds 0-to-1 consumer apps. Follow the trail through her work, from Astroverse 2.0 to client launches, to the summit.">
-  <meta name="theme-color" content="#0B1714">
-  <meta property="og:title" content="Deeva Gupta · Senior Product Designer">
-  <meta property="og:description" content="A portfolio you climb. Follow the lantern trail through 0-to-1 consumer products, AI features and a fridge door of travel magnets.">
+  <title>Deeva Gupta · Product Designer</title>
+  <meta name="description" content="Deeva Gupta is a product designer who builds 0-to-1 consumer apps. Climb the trail through Astroverse 2.0, client launches and a fridge door of travel magnets.">
+  <meta name="theme-color" content="#0F1B2D">
+  <meta property="og:title" content="Deeva Gupta · Product Designer">
+  <meta property="og:description" content="A portfolio you climb: 0-to-1 consumer products, AI features, and a magnet from every place.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://deeva.design/">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B1714'/%3E%3Cpath d='M8 50 26 20l9 14 6-8 15 24Z' fill='%2312261F' stroke='%23FF8A3D' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='26' cy='20' r='4' fill='%23FF8A3D'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1B2D'/%3E%3Cpath d='M8 50 26 20l9 14 6-8 15 24Z' fill='%231C2B44' stroke='%23F4A7B9' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='26' cy='20' r='4' fill='%23F6D58E'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
@@ -25,27 +24,30 @@
   <!-- 3D world -->
   <canvas id="world" aria-hidden="true"></canvas>
   <div id="world-fallback" aria-hidden="true"></div>
+  <div class="scrim" aria-hidden="true"></div>
 
-  <!-- Altitude HUD -->
-  <div class="hud" aria-hidden="true">
-    <div class="gauge"><i id="g-fill"></i><b id="g-dot"></b></div>
-    <div class="hud-read"><span class="hud-alt" id="alt">0 m</span><span class="hud-name" id="altname">Trailhead</span></div>
-  </div>
+  <!-- Top bar -->
+  <header class="topbar">
+    <a class="brand" href="#trailhead" aria-label="Deeva Gupta, back to the trailhead">Deeva<i>.</i></a>
+    <nav class="toplinks" aria-label="Primary">
+      <a href="#expedition">Work</a>
+      <a href="#basecamp">About</a>
+      <a class="btn btn-sm" href="#summit">Say hello</a>
+    </nav>
+  </header>
 
-  <!-- Trail map -->
-  <nav class="nav" aria-label="Trail map">
-    <button id="mapbtn" aria-expanded="false" aria-controls="maplist">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="1.8"/></svg>
-      Trail map
-    </button>
-    <ol id="maplist" hidden>
-      <li><a href="#trailhead">Trailhead <span>0 m</span></a></li>
-      <li><a href="#basecamp">Base camp · About <span>1,200 m</span></a></li>
-      <li><a href="#expedition">The big climb · Astroverse <span>2,600 m</span></a></li>
-      <li><a href="#sidetrails">Side trails · Client work <span>3,300 m</span></a></li>
-      <li><a href="#fridge">The fridge door · Travel <span>3,900 m</span></a></li>
-      <li><a href="#summit">Summit · Say hello <span>4,500 m</span></a></li>
+  <!-- Trail navigation: the altitude bar is the menu -->
+  <nav class="route" aria-label="Trail camps">
+    <div class="route-track" aria-hidden="true"><i id="routeFill"></i></div>
+    <ol>
+      <li><a href="#trailhead"><span class="dot"></span><span class="lbl"><b>Trailhead</b><small>0 m</small></span></a></li>
+      <li><a href="#basecamp"><span class="dot"></span><span class="lbl"><b>About</b><small>1,200 m</small></span></a></li>
+      <li><a href="#expedition"><span class="dot"></span><span class="lbl"><b>Work</b><small>2,600 m</small></span></a></li>
+      <li><a href="#sidetrails"><span class="dot"></span><span class="lbl"><b>Side trails</b><small>3,300 m</small></span></a></li>
+      <li><a href="#fridge"><span class="dot"></span><span class="lbl"><b>Travel</b><small>3,900 m</small></span></a></li>
+      <li><a href="#summit"><span class="dot"></span><span class="lbl"><b>Summit</b><small>4,500 m</small></span></a></li>
     </ol>
+    <p class="route-alt"><span id="alt">0 m</span><small id="altname">Trailhead</small></p>
   </nav>
 
   <main id="main">
@@ -53,169 +55,217 @@
     <!-- TRAILHEAD -->
     <section class="camp hero" id="trailhead" data-alt="0" data-name="Trailhead">
       <div class="wrap">
-        <div class="coords rv">
-          <span class="mono">Trailhead</span><span class="mono">28.61°N · 77.21°E</span><span class="mono">Alt 0 m</span><span class="mono">Night trek · clear skies</span>
-        </div>
-        <h1 class="rv">Deeva<span class="l2">Gupta.</span></h1>
-        <div class="intro">
-          <p class="rv">Senior product designer who builds 0-to-1 consumer apps. Off the clock I trek, collect fridge magnets, and ask locals for the story behind every place.</p>
-          <p class="hand note rv">↓ scroll to climb. Every camp is something I built or somewhere I went</p>
-        </div>
-        <a class="start rv" href="#basecamp">Start the climb
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14m0 0-6-6m6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-    </section>
-
-    <!-- BASE CAMP -->
-    <section class="camp" id="basecamp" data-alt="1200" data-name="Base camp · About">
-      <div class="wrap">
-        <div class="panel right rv">
-          <div class="marker"><span class="flag">1</span><span class="mono">Camp 1 · Base camp · 1,200 m</span></div>
-          <h2>Who's on <em>this climb</em></h2>
-          <p class="lede">I'm a product designer with 4+ years in consumer mobile and web. For the last 2+ I've been the founding product designer at ScaleX. I own the work from strategy and research to shipped UI, design systems, UX writing and Mixpanel analytics.</p>
-          <div class="two">
-            <div>
-              <div class="ph portrait" data-label="Photo · You on a trail (portrait)"></div>
-              <div class="facts">
-                <div class="fact"><b>4+</b><small>years designing consumer products</small></div>
-                <div class="fact"><b>100K+</b><small>downloads in month one for a client app</small></div>
-                <div class="fact"><b>0→1</b><small>founding designer on Astroverse</small></div>
-              </div>
-            </div>
-            <div class="pack">
-              <h3>Packing list</h3>
-              <p class="hand">what's always in my bag</p>
-              <ul class="gear">
-                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><circle cx="22" cy="22" r="15" stroke="#8FD1C9" stroke-width="2"/><path d="m27 17-3.5 8.5L15 29l3.5-8.5L27 17Z" fill="#FF8A3D"/></svg><div><strong>Compass · Research</strong><small>User calls, usability tests, journey mapping</small></div></li>
-                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M8 12l9-3 10 3 9-3v23l-9 3-10-3-9 3V12Z" stroke="#8FD1C9" stroke-width="2" stroke-linejoin="round"/><path d="M14 22c4-5 8 4 14-3" stroke="#FF8A3D" stroke-width="2" stroke-dasharray="2 3" stroke-linecap="round"/></svg><div><strong>Map · Flows &amp; IA</strong><small>End-to-end product design for iOS, Android and web</small></div></li>
-                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect x="15" y="12" width="14" height="20" rx="4" stroke="#8FD1C9" stroke-width="2"/><path d="M19 8h6M22 17v8" stroke="#FF8A3D" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="21" r="3" fill="#FF8A3D"/></svg><div><strong>Lantern · UX writing</strong><small>Microcopy, Hinglish notifications, paywalls</small></div></li>
-                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M12 32c0-8 20-4 20-12s-14-6-14-1 12 4 12 13" stroke="#8FD1C9" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="32" r="3" fill="#FF8A3D"/></svg><div><strong>Rope · Design systems</strong><small>Tokens and components that hold a team together</small></div></li>
-                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M8 32 18 16l6 9 4-5 8 12H8Z" stroke="#8FD1C9" stroke-width="2" stroke-linejoin="round"/><path d="M28 10v6M25 13h6" stroke="#FF8A3D" stroke-width="2" stroke-linecap="round"/></svg><div><strong>Altimeter · Analytics</strong><small>Mixpanel funnels, retention, A/B tests</small></div></li>
-                <li><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect x="10" y="14" width="24" height="18" rx="5" stroke="#8FD1C9" stroke-width="2"/><path d="M16 9l4 5M28 9l-4 5" stroke="#8FD1C9" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="23" r="2" fill="#FF8A3D"/><circle cx="27" cy="23" r="2" fill="#FF8A3D"/></svg><div><strong>Radio · AI products</strong><small>Conversational AI and LLM prompt design</small></div></li>
-              </ul>
-            </div>
+        <div class="hero-copy">
+          <p class="status rv"><span class="pulse" aria-hidden="true"></span>Open to senior product design roles</p>
+          <h1 class="rv">Deeva Gupta</h1>
+          <p class="hero-line rv">Product designer who takes apps from <em>zero to one</em>, one switchback at a time.</p>
+          <p class="hero-sub rv">4+ years in consumer mobile and web. Founding designer of Astroverse. Off the clock: treks, fridge magnets and asking locals for the story.</p>
+          <div class="cta-row rv">
+            <a class="btn btn-lg" href="#basecamp">
+              Start the trek
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14m0 0-6-6m6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="text-link" href="astroverse.html">Or skip to the case study</a>
           </div>
         </div>
       </div>
+      <p class="peak-note" aria-hidden="true">my email is waiting at the summit
+        <svg width="54" height="40" viewBox="0 0 54 40" fill="none"><path d="M3 36C14 34 30 26 46 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M37 8h10v10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </p>
+      <a class="scroll-cue" href="#basecamp" aria-label="Scroll to the first camp">
+        <span class="cue-line" aria-hidden="true"><i></i></span>
+        <span>Scroll to climb</span>
+      </a>
     </section>
 
-    <!-- EXPEDITION -->
-    <section class="camp" id="expedition" data-alt="2600" data-name="The big climb · Astroverse">
-      <div class="wrap">
-        <div class="panel wide rv">
-          <div class="marker"><span class="flag">2</span><span class="mono">Camp 2 · The big climb · 2,600 m</span></div>
-          <h2>Astroverse 2.0: <em>fewer profiles, better matches</em></h2>
-          <p class="lede">A Kundli-based dating app for Indian millennials and Gen Z. Version 1.0 was a swipe clone with an astrology score bolted on. I led the rebuild into a curated, Kundli-first product. The route had four switchbacks.</p>
+    <!-- BASE CAMP / ABOUT -->
+    <section class="camp about" id="basecamp" data-alt="1200" data-name="Base camp · About">
+      <div class="wrap about-grid">
+        <div class="about-copy">
+          <p class="camp-tag rv"><span>Camp 01</span>Base camp · 1,200 m</p>
+          <h2 class="rv">Who's on <em>this climb</em></h2>
+          <p class="lede rv">I'm a product designer with 4+ years in consumer mobile and web. For the last two, I've been the founding designer at ScaleX, owning the work from research to shipped UI, design systems, UX writing and Mixpanel funnels.</p>
+          <dl class="stats rv">
+            <div><dt>4+</dt><dd>years in consumer product</dd></div>
+            <div><dt>100K+</dt><dd>downloads in month one for a client app</dd></div>
+            <div><dt>0→1</dt><dd>founding designer on Astroverse</dd></div>
+          </dl>
+          <ul class="kit rv" aria-label="What I bring">
+            <li>Research</li><li>Flows &amp; IA</li><li>UX writing</li><li>Design systems</li><li>Analytics</li><li>AI products</li>
+          </ul>
+        </div>
 
-          <div class="factsheet">
-            <div><span class="mono">Role</span><b>Founding Product Designer</b></div>
-            <div><span class="mono">Duration</span><b>Dec 2025 – Sep 2026</b></div>
-            <div><span class="mono">Terrain</span><b>iOS &amp; Android · Flutter</b></div>
-            <div><span class="mono">Grade</span><b>0 → 1, then a full revamp</b></div>
-          </div>
-
-          <span class="mono">Route profile · tap a switchback</span>
-          <div class="profile" aria-hidden="true">
-            <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
-              <path d="M0 140 L120 120 L250 92 L330 104 L470 70 L560 82 L700 44 L780 58 L920 18 L1000 22 V150 H0Z" fill="#12261F"/>
-              <path d="M0 140 L120 120 L250 92 L330 104 L470 70 L560 82 L700 44 L780 58 L920 18 L1000 22" fill="none" stroke="#FF8A3D" stroke-width="3"/>
-              <g id="pins"></g>
-            </svg>
-          </div>
-
-          <div class="switch" role="tablist" aria-label="Astroverse problems">
-            <button role="tab" id="tab-0" aria-selected="true" aria-controls="leg" data-i="0"><span class="n">01</span>Verification wall</button>
-            <button role="tab" id="tab-1" aria-selected="false" aria-controls="leg" data-i="1" tabindex="-1"><span class="n">02</span>Endless swiping</button>
-            <button role="tab" id="tab-2" aria-selected="false" aria-controls="leg" data-i="2" tabindex="-1"><span class="n">03</span>Unreadable Kundli</button>
-            <button role="tab" id="tab-3" aria-selected="false" aria-controls="leg" data-i="3" tabindex="-1"><span class="n">04</span>Empty days</button>
-          </div>
-
-          <div class="leg" id="leg" role="tabpanel" aria-labelledby="tab-0">
-            <div>
-              <h3 id="leg-title"></h3>
-              <div class="notes">
-                <div class="n-row"><span class="mono">Problem</span><p id="leg-p"></p></div>
-                <div class="n-row"><span class="mono">Insight</span><p id="leg-i"></p></div>
-                <div class="n-row"><span class="mono">What I did</span><p id="leg-d"></p></div>
-                <div class="n-row win"><span class="mono">Result</span><p id="leg-r"></p></div>
+        <div class="permit-wrap rv">
+          <div class="permit" id="permit">
+            <div class="permit-inner">
+              <!-- front -->
+              <div class="permit-face front">
+                <div class="permit-head">
+                  <span>Permit to design</span>
+                  <span class="mono">No. DG/2022/0417</span>
+                </div>
+                <div class="permit-body">
+                  <div class="ph permit-photo" data-label="Your photo"></div>
+                  <dl class="permit-fields">
+                    <div><dt>Holder</dt><dd>Deeva Gupta</dd></div>
+                    <div><dt>Role</dt><dd>Product Designer</dd></div>
+                    <div><dt>Base</dt><dd>India</dd></div>
+                    <div><dt>Valid for</dt><dd>Consumer apps, AI, trust &amp; safety</dd></div>
+                    <div><dt>On the trail since</dt><dd>2022</dd></div>
+                  </dl>
+                </div>
+                <div class="permit-foot">
+                  <span class="sign">Deeva</span>
+                  <svg class="stamp s1" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="60" cy="60" r="44" fill="none" stroke="currentColor" stroke-width="1.2"/><path id="arcA" d="M60 60m-36 0a36 36 0 1 1 72 0a36 36 0 1 1-72 0" fill="none"/><text font-family="Geist Mono, monospace" font-size="10.5" letter-spacing="2.4" fill="currentColor"><textPath href="#arcA">ZERO TO ONE · CLEARED ·</textPath></text><text x="60" y="68" text-anchor="middle" font-family="Instrument Serif, serif" font-size="26" fill="currentColor">0→1</text></svg>
+                  <svg class="stamp s2" viewBox="0 0 120 120" aria-hidden="true"><rect x="8" y="22" width="104" height="76" rx="10" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="60" y="54" text-anchor="middle" font-family="Geist Mono, monospace" font-size="11" letter-spacing="2" fill="currentColor">MIXPANEL</text><text x="60" y="76" text-anchor="middle" font-family="Geist Mono, monospace" font-size="11" letter-spacing="2" fill="currentColor">FLUENT</text></svg>
+                </div>
+                <button class="permit-flip" type="button" aria-controls="permit" aria-expanded="false">See my route log</button>
+              </div>
+              <!-- back -->
+              <div class="permit-face back">
+                <div class="permit-head"><span>Route log</span><span class="mono">2018 → now</span></div>
+                <ol class="route-log">
+                  <li><time>Jun 2024</time><div><b>ScaleX</b><span>Founding Product Designer · Astroverse, Horocosmo and client launches</span></div></li>
+                  <li><time>Jan 2024</time><div><b>Freelance</b><span>Product design for web and mobile clients</span></div></li>
+                  <li><time>Mar 2022</time><div><b>Hucentric</b><span>UI/UX Designer · Wishup, Vegapay, Webflow builds</span></div></li>
+                  <li><time>2018</time><div><b>B.Tech, Computer Science</b><span>Dr. A.P.J. Abdul Kalam Technical University</span></div></li>
+                </ol>
+                <p class="log-next">next stop: your team?</p>
+                <button class="permit-flip" type="button" aria-controls="permit">Back to the permit</button>
               </div>
             </div>
-            <div class="phones" id="leg-phones"></div>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <div class="summit-stats">
-            <div><b>26K+</b><small>Kundli profiles created</small></div>
-            <div><b>~88%</b><small>of people who start onboarding finish their Kundli profile</small></div>
-            <div><b>23→38%</b><small>share of Discover decisions that are likes</small></div>
-            <div><b>11K+</b><small>questions asked to Veda in 3 months</small></div>
-          </div>
-          <a class="log-link" id="caseStudyLink" href="#" target="_blank" rel="noopener">Read the full case study
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
+    <!-- THE BIG CLIMB / WORK -->
+    <section class="camp work" id="expedition" data-alt="2600" data-name="The big climb · Work">
+      <div class="wrap">
+        <header class="sec-head">
+          <p class="camp-tag rv"><span>Camp 02</span>The big climb · 2,600 m</p>
+          <h2 class="rv">Selected <em>work</em></h2>
+          <p class="lede rv">Three products, each told by the number that mattered most. The first has a full case study.</p>
+        </header>
+
+        <div class="stack">
+          <!-- 01 Astroverse -->
+          <article class="work-card" style="--i:0">
+            <div class="wc-copy">
+              <p class="wc-meta"><span class="num">01</span><span>ScaleX · In-house product</span><span>2025–26</span></p>
+              <h3>A dating app that shows <em>fewer</em> profiles and gets more matches</h3>
+              <ul class="tags"><li>Astroverse 2.0</li><li>Dating · Vedic astrology</li><li>iOS &amp; Android</li></ul>
+              <p class="wc-desc">I led the rebuild of Astroverse from a swipe clone into a curated, Kundli-first app, with an AI astrologer that gives people a reason to come back.</p>
+              <dl class="wc-stats">
+                <div><dt>26K+</dt><dd>Kundli profiles</dd></div>
+                <div><dt>~88%</dt><dd>finish onboarding</dd></div>
+                <div><dt>23→38%</dt><dd>of Discover swipes are likes</dd></div>
+              </dl>
+              <a class="btn" id="caseStudyLink" href="astroverse.html">Read the case study
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+            <div class="wc-stage stage-astro" aria-hidden="true">
+              <svg class="prop kundli" viewBox="0 0 200 200"><rect x="10" y="10" width="180" height="180" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M100 10 190 100 100 190 10 100Z M10 10 190 190 M190 10 10 190" fill="none" stroke="currentColor" stroke-width="1.2"/><g font-family="Geist Mono, monospace" font-size="11" fill="currentColor"><text x="96" y="62">1</text><text x="52" y="34">2</text><text x="28" y="58">3</text><text x="52" y="104">4</text><text x="28" y="148">5</text><text x="52" y="172">6</text><text x="96" y="146">7</text><text x="142" y="172">8</text><text x="166" y="148">9</text><text x="138" y="104">10</text><text x="166" y="58">11</text><text x="142" y="34">12</text></g></svg>
+              <svg class="prop sparks" viewBox="0 0 200 120"><path d="M30 20l3 9 9 3-9 3-3 9-3-9-9-3 9-3z M160 70l2 6 6 2-6 2-2 6-2-6-6-2 6-2z M120 14l1.5 4.5 4.5 1.5-4.5 1.5-1.5 4.5-1.5-4.5-4.5-1.5 4.5-1.5z" fill="currentColor"/></svg>
+              <div class="phone p1"><span>Today's picks</span><i class="ph-card"></i><i class="ph-line"></i><i class="ph-line s"></i><i class="ph-score">27/36</i><i class="ph-cta"></i></div>
+              <div class="phone p2"><span>Ask Veda</span><i class="bubble l"></i><i class="bubble r"></i><i class="bubble l s"></i><i class="ph-cta"></i></div>
+              <p class="stage-cap">Placeholder screens · swap for real ones</p>
+            </div>
+          </article>
+
+          <!-- 02 Horocosmo -->
+          <article class="work-card" style="--i:1">
+            <div class="wc-copy">
+              <p class="wc-meta"><span class="num">02</span><span>ScaleX · Client launch</span><span>Astrology app</span></p>
+              <h3>An astrology app that crossed <em>100K downloads</em> in its first month</h3>
+              <ul class="tags"><li>Horocosmo</li><li>For astrologer Arun Pandit</li><li>Design system</li></ul>
+              <p class="wc-desc">I built the complete UI foundation for a celebrity astrologer's app: the design system, core flows and every launch screen.</p>
+              <dl class="wc-stats">
+                <div><dt>100K+</dt><dd>downloads in month one</dd></div>
+              </dl>
+              <a class="btn btn-ghost" href="#summit">Ask me about it</a>
+            </div>
+            <div class="wc-stage stage-horo" aria-hidden="true">
+              <svg class="prop wheel" viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="100" cy="100" r="66" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="100" cy="100" r="18" fill="none" stroke="currentColor" stroke-width="1"/><g stroke="currentColor" stroke-width="1"><path d="M100 8v34M100 158v34M8 100h34M158 100h34M35 35l24 24M141 141l24 24M165 35l-24 24M59 141l-24 24M54 20l12 29M134 151l12 29M180 54l-29 12M49 134l-29 12M146 20l-12 29M66 151l-12 29M20 54l29 12M151 134l29 12"/></g></svg>
+              <div class="phone p1 solo"><span>Your horoscope</span><i class="ph-card tall"></i><i class="ph-line"></i><i class="ph-line s"></i><i class="ph-cta"></i></div>
+              <p class="stage-cap">Placeholder screens · swap for real ones</p>
+            </div>
+          </article>
+
+          <!-- 03 Wishup -->
+          <article class="work-card" style="--i:2">
+            <div class="wc-copy">
+              <p class="wc-meta"><span class="num">03</span><span>Hucentric · Agency</span><span>2022–23</span></p>
+              <h3>A lead-gen website that earned <em>25% more</em> pageviews</h3>
+              <ul class="tags"><li>Wishup</li><li>Virtual-assistant SaaS</li><li>Website redesign</li></ul>
+              <p class="wc-desc">As lead UI/UX designer, I redesigned Wishup's lead-generation site using Clarity heatmaps and stakeholder interviews.</p>
+              <dl class="wc-stats">
+                <div><dt>+25%</dt><dd>pageviews</dd></div>
+                <div><dt>−15%</dt><dd>bounce rate</dd></div>
+                <div><dt>10%</dt><dd>lead conversion</dd></div>
+              </dl>
+              <a class="btn btn-ghost" href="#summit">Ask me about it</a>
+            </div>
+            <div class="wc-stage stage-web" aria-hidden="true">
+              <div class="browser">
+                <div class="b-bar"><i></i><i></i><i></i></div>
+                <div class="b-body">
+                  <i class="b-hero"></i><i class="b-line"></i><i class="b-line s"></i>
+                  <svg class="b-chart" viewBox="0 0 220 90"><path d="M0 80 L40 70 L80 72 L120 52 L160 40 L220 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="214" cy="14" r="5" fill="currentColor"/></svg>
+                </div>
+              </div>
+              <span class="sticker">+25% pageviews</span>
+              <p class="stage-cap">Placeholder screens · swap for real ones</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
     <!-- SIDE TRAILS -->
-    <section class="camp" id="sidetrails" data-alt="3300" data-name="Side trails · Client work">
-      <div class="wrap">
-        <div class="panel wide rv">
-          <div class="marker"><span class="flag">3</span><span class="mono">Camp 3 · Side trails · 3,300 m</span></div>
-          <h2>Shorter routes, <em>big views</em></h2>
-          <p class="lede">Client launches at ScaleX and earlier agency work at Hucentric. Different terrain each time: astrology, creators, SaaS, fintech.</p>
-          <div class="trails">
-            <article class="sign big">
-              <div class="ph" data-label="Image · Horocosmo app screens"></div>
-              <div class="body"><span class="tag">ScaleX client · Astrology app</span><h3>Horocosmo</h3><p>Built the complete UI foundation for celebrity astrologer Arun Pandit's app, including the design system, core flows and app screens.</p><div class="stat">100K+<small>downloads in the first month</small></div></div>
-            </article>
-            <article class="sign big">
-              <div class="ph" data-label="Image · Wishup website redesign"></div>
-              <div class="body"><span class="tag">Hucentric · VA SaaS</span><h3>Wishup</h3><p>Redesigned the lead-generation website using Clarity heatmaps and stakeholder interviews.</p><div class="stat">+25%<small>pageviews · 15% lower bounce · 10% lead conversion</small></div></div>
-            </article>
-            <article class="sign">
-              <div class="ph" data-label="Image · Report landing pages"></div>
-              <div class="body"><span class="tag">ScaleX client · Reports</span><h3>Astrologer Arvind Sud</h3><p>Conversion-focused landing pages for personalised astrology reports, built to drive purchases.</p></div>
-            </article>
-            <article class="sign">
-              <div class="ph" data-label="Image · SkillHouse landing page"></div>
-              <div class="body"><span class="tag">ScaleX client · Creator edtech</span><h3>BeerBiceps SkillHouse</h3><p>A click-through landing page for the SkillHouse design program.</p></div>
-            </article>
-            <article class="sign">
-              <div class="ph" data-label="Image · Vegapay brand &amp; site"></div>
-              <div class="body"><span class="tag">Hucentric · Fintech</span><h3>Vegapay</h3><p>New brand identity and website: moodboard, style guide and motion graphics, built hand in hand with engineering.</p></div>
-            </article>
-          </div>
-        </div>
+    <section class="camp side" id="sidetrails" data-alt="3300" data-name="Side trails">
+      <div class="wrap side-grid">
+        <header class="sec-head">
+          <p class="camp-tag rv"><span>Camp 03</span>Side trails · 3,300 m</p>
+          <h2 class="rv">Shorter routes, <em>big views</em></h2>
+          <p class="lede rv">Landing pages, brands and websites for astrology, creator and fintech teams.</p>
+        </header>
+        <ul class="signs rv">
+          <li><span class="mono">ScaleX client</span><b>Astrologer Arvind Sud</b><span class="sd">Landing pages for personalised astrology reports, built to sell.</span></li>
+          <li><span class="mono">ScaleX client</span><b>BeerBiceps SkillHouse</b><span class="sd">A click-through landing page for the SkillHouse design program.</span></li>
+          <li><span class="mono">Hucentric</span><b>Vegapay</b><span class="sd">Brand identity and website: moodboard, style guide and motion.</span></li>
+          <li><span class="mono">Hucentric</span><b>Sketchnote, Dexter Ventures, Elevare</b><span class="sd">Webflow sites, plus IA and prototypes for an AI cricket-coaching app.</span></li>
+        </ul>
       </div>
     </section>
 
     <!-- FRIDGE -->
-    <section class="camp" id="fridge" data-alt="3900" data-name="The fridge door · Travel">
+    <section class="camp travel" id="fridge" data-alt="3900" data-name="The fridge door · Travel">
       <div class="wrap">
-        <div class="panel wide rv">
-          <div class="marker"><span class="flag">4</span><span class="mono">Camp 4 · The fridge door · 3,900 m</span></div>
-          <h2>A magnet from <em>every place</em></h2>
-          <p class="lede">I collect a fridge magnet wherever I go, and I ask a local for the one thing a guidebook won't tell me. Drag the magnets around, then tap one to read its postcard.</p>
-          <div class="fridge-zone">
-            <div class="fridge" id="fridgeDoor" aria-label="Fridge door with travel magnets">
-              <span class="hint">drag me around →</span>
-            </div>
-            <div class="postcard" id="postcard" aria-live="polite">
-              <div class="card-inner">
-                <div class="side front">
-                  <span class="mono" id="pc-meta">Postcard</span>
-                  <div class="ph" id="pc-photo" data-label="Photo · pick a magnet"></div>
-                  <button class="flipbtn" id="pc-flip" type="button">Read the back</button>
-                </div>
-                <div class="side back">
-                  <div class="stamp">STAMP<br>HERE</div>
-                  <span class="mono" id="pc-meta-b">Postcard</span>
-                  <h3 id="pc-title">Pick a magnet</h3>
-                  <p class="hand" id="pc-local">A local's tip will show up here.</p>
-                  <p id="pc-note" class="pc-note"></p>
-                  <button class="flipbtn" id="pc-flip2" type="button">Back to the photo</button>
-                </div>
+        <header class="sec-head">
+          <p class="camp-tag rv"><span>Camp 04</span>The fridge door · 3,900 m</p>
+          <h2 class="rv">A magnet from <em>every place</em></h2>
+          <p class="lede rv">Wherever I go, I bring back a magnet and ask a local one thing a guidebook won't tell me. Drag them around, then tap one to read its postcard.</p>
+        </header>
+        <div class="fridge-zone rv">
+          <div class="fridge" id="fridgeDoor" aria-label="Fridge door with travel magnets">
+            <span class="hint">drag me around</span>
+          </div>
+          <div class="postcard" id="postcard" aria-live="polite">
+            <div class="card-inner">
+              <div class="side front">
+                <span class="mono" id="pc-meta">Postcard</span>
+                <div class="ph" id="pc-photo" data-label="Photo · pick a magnet"></div>
+                <button class="flipbtn" id="pc-flip" type="button">Read the back</button>
+              </div>
+              <div class="side back">
+                <div class="stamp-box">STAMP<br>HERE</div>
+                <span class="mono" id="pc-meta-b">Postcard</span>
+                <h3 id="pc-title">Pick a magnet</h3>
+                <p class="hand" id="pc-local">A local's tip will show up here.</p>
+                <p id="pc-note" class="pc-note"></p>
+                <button class="flipbtn" id="pc-flip2" type="button">Back to the photo</button>
               </div>
             </div>
           </div>
@@ -225,19 +275,21 @@
 
     <!-- SUMMIT -->
     <section class="camp summit" id="summit" data-alt="4500" data-name="Summit">
-      <div class="wrap">
+      <div class="wrap summit-grid">
         <div class="summit-card rv">
-          <div class="marker"><span class="flag dark">5</span><span class="mono">Summit · 4,500 m · sunrise</span></div>
-          <h2>You made it <span>to the top.</span></h2>
+          <p class="camp-tag"><span>Summit</span>4,500 m · sunrise</p>
+          <h2>You made it <em>to the top.</em></h2>
           <p class="lede">I'm looking for senior product design roles on consumer, AI or marketplace products. If you have a route in mind, let's plan it together.</p>
           <div class="contact">
-            <button class="pill solid" id="copyEmail" type="button">dee.vag78@gmail.com · copy</button>
-            <a class="pill" id="emailLink" href="mailto:dee.vag78@gmail.com">Write to me ↗</a>
-            <a class="pill" id="linkedin" href="#" target="_blank" rel="noopener" hidden>LinkedIn ↗</a>
+            <button class="btn btn-dark" id="copyEmail" type="button"><span id="emailText">dee.vag78@gmail.com</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <a class="btn btn-ghost-dark" id="emailLink" href="mailto:dee.vag78@gmail.com">Write to me</a>
+            <a class="btn btn-ghost-dark" id="linkedin" href="#" target="_blank" rel="noopener" hidden>LinkedIn</a>
           </div>
           <p class="copied" id="copied" aria-live="polite"></p>
+          <p class="foot mono">Deeva Gupta · Product Designer · India</p>
         </div>
-        <footer><span class="mono">Deeva Gupta · Senior Product Designer · India</span></footer>
       </div>
     </section>
   </main>
