@@ -62,14 +62,14 @@ function init() {
   const camera = new THREE.PerspectiveCamera(50, 1, 0.5, 2000);
 
   /* ---------- palette (night -> dawn) ---------- */
-  const night = { top: C('#04100c'), horizon: C('#163229'), bottom: C('#0B1714'), hemiSky: C('#3c6a74'), hemiGround: C('#0B1714'), key: C('#9fc4d6') };
-  const dawn  = { top: C('#4a3a5e'), horizon: C('#F6B48F'), bottom: C('#E58A66'), hemiSky: C('#f7c9a6'), hemiGround: C('#3B2A3A'), key: C('#ffb27a') };
+  const night = { top: C('#050b17'), horizon: C('#1b2b47'), bottom: C('#0F1B2D'), hemiSky: C('#5d73a3'), hemiGround: C('#0F1B2D'), key: C('#bccaea') };
+  const dawn  = { top: C('#3a4274'), horizon: C('#F4A7B9'), bottom: C('#E9B3BC'), hemiSky: C('#f6cbd6'), hemiGround: C('#3a3456'), key: C('#ffc9bd') };
   const tmp = new THREE.Color();
 
   /* ---------- sky dome ---------- */
   const skyUniforms = {
     uTop: { value: night.top.clone() }, uHorizon: { value: night.horizon.clone() }, uBottom: { value: night.bottom.clone() },
-    uSunDir: { value: new THREE.Vector3(0, -0.1, -1) }, uSunColor: { value: C('#ffd2a6') }, uDawn: { value: 0 },
+    uSunDir: { value: new THREE.Vector3(0, -0.1, -1) }, uSunColor: { value: C('#ffe3da') }, uDawn: { value: 0 },
   };
   const sky = new THREE.Mesh(
     new THREE.SphereGeometry(1500, 32, 16),
@@ -103,7 +103,7 @@ function init() {
   }
   const starGeo = new THREE.BufferGeometry();
   starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-  const starMat = new THREE.PointsMaterial({ color: C('#F2EEE6'), size: lowPower ? 1.6 : 1.8, sizeAttenuation: false, transparent: true, opacity: 0.9, fog: false, depthWrite: false });
+  const starMat = new THREE.PointsMaterial({ color: C('#F5F1EA'), size: lowPower ? 1.6 : 1.8, sizeAttenuation: false, transparent: true, opacity: 0.9, fog: false, depthWrite: false });
   const stars = new THREE.Points(starGeo, starMat);
   scene.add(stars);
 
@@ -128,7 +128,7 @@ function init() {
 
   const pos = new Float32Array((N + 1) * (N + 1) * 3);
   const col = new Float32Array((N + 1) * (N + 1) * 3);
-  const forest = C('#173a2c'), forest2 = C('#21503b'), rock = C('#3d4b46'), rock2 = C('#59625d'), snow = C('#e9eff0');
+  const forest = C('#15263a'), forest2 = C('#1c3746'), rock = C('#3a4561'), rock2 = C('#5b6480'), snow = C('#eef1f8');
   for (let j = 0; j <= N; j++) for (let i = 0; i <= N; i++) {
     const k = j * (N + 1) + i, x = X0 + i * D, z = X0 + j * D, h = H[k];
     pos.set([x, h, z], k * 3);
@@ -177,8 +177,8 @@ function init() {
   curve.arcLengthDivisions = 4000;
   const SEG = lowPower ? 1400 : 2200, RAD = 5;
   const tubeGeo = new THREE.TubeGeometry(curve, SEG, 0.17, RAD, false);
-  const trailDim = new THREE.Mesh(tubeGeo, new THREE.MeshBasicMaterial({ color: C('#45695c'), transparent: true, opacity: 0.55 }));
-  const trailLit = new THREE.Mesh(tubeGeo, new THREE.MeshBasicMaterial({ color: C('#FF8A3D'), toneMapped: false }));
+  const trailDim = new THREE.Mesh(tubeGeo, new THREE.MeshBasicMaterial({ color: C('#4a5b82'), transparent: true, opacity: 0.6 }));
+  const trailLit = new THREE.Mesh(tubeGeo, new THREE.MeshBasicMaterial({ color: C('#F4A7B9'), toneMapped: false }));
   trailDim.scale.setScalar(0.999); // avoid z-fighting with the lit tube
   scene.add(trailDim, trailLit);
   const PEAK = new THREE.Vector3(0, meshHeight(0, 0), 0);
@@ -223,7 +223,7 @@ function init() {
     const s = 0.7 + Math.random() * 0.9;
     m4.compose(p3.set(x, h - 0.2, z), q.setFromAxisAngle(sc.set(0, 1, 0), Math.random() * 6), sc.set(s, s * (2.6 + Math.random() * 1.4), s));
     trees.setMatrixAt(placed, m4);
-    trees.setColorAt(placed, tmp.set('#123425').lerp(C('#1f4a36'), Math.random()));
+    trees.setColorAt(placed, tmp.set('#112334').lerp(C('#1d3a4b'), Math.random()));
     placed++;
   }
   trees.count = placed;
@@ -232,6 +232,7 @@ function init() {
   /* ---------- camps (beacons) ---------- */
   const camps = [...document.querySelectorAll('section.camp')].map((s) => +s.dataset.alt / MAX_ALT);
   const beacons = camps.map((u, i) => {
+    if (i === 0) return null; // the lantern itself marks the trailhead
     const g = new THREE.Group();
     const { a, r } = angleAt(Math.min(u, 0.995));
     const P = curve.getPointAt(u);
@@ -243,15 +244,15 @@ function init() {
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, poleH, 5), new THREE.MeshStandardMaterial({ color: C('#d9d2c5'), roughness: 0.8 }));
     pole.position.set(0, poleH / 2, 0);
     const flagGeo = new THREE.PlaneGeometry(summit ? 2.2 : 1.4, summit ? 1.3 : 0.85, 6, 1); flagGeo.translate(summit ? 1.1 : 0.7, 0, 0);
-    const flag = new THREE.Mesh(flagGeo, new THREE.MeshBasicMaterial({ color: C('#FF8A3D'), side: THREE.DoubleSide, toneMapped: false }));
+    const flag = new THREE.Mesh(flagGeo, new THREE.MeshBasicMaterial({ color: C('#F4A7B9'), side: THREE.DoubleSide, toneMapped: false }));
     flag.position.set(0, poleH - (summit ? 0.65 : 0.45), 0);
     g.add(pole, flag);
     if (i > 0 && !summit) {
-      const tent = new THREE.Mesh(new THREE.ConeGeometry(1.2, 1.5, 4), new THREE.MeshStandardMaterial({ color: C('#c9603a'), flatShading: true, roughness: 0.9 }));
+      const tent = new THREE.Mesh(new THREE.ConeGeometry(1.2, 1.5, 4), new THREE.MeshStandardMaterial({ color: C('#7c90c4'), flatShading: true, roughness: 0.9 }));
       tent.position.set(1.6, 0.75, 0.6); tent.rotation.y = Math.PI / 4;
       g.add(tent);
     }
-    const halo = glow('#FF8A3D', summit ? 9 : 6, 0.25);
+    const halo = glow('#F4A7B9', summit ? 9 : 6, 0.25);
     halo.position.set(0, poleH, 0);
     g.add(halo);
     g.position.copy(base);
@@ -262,16 +263,16 @@ function init() {
 
   /* ---------- the hiker's lantern ---------- */
   const lantern = new THREE.Group();
-  const core = new THREE.Mesh(new THREE.SphereGeometry(0.28, 12, 8), new THREE.MeshBasicMaterial({ color: C('#ffd7b0'), toneMapped: false }));
-  const halo = glow('#FF8A3D', 7, 0.95);
-  const lampLight = new THREE.PointLight(C('#ff9a55'), 90, 55, 2);
+  const core = new THREE.Mesh(new THREE.SphereGeometry(0.28, 12, 8), new THREE.MeshBasicMaterial({ color: C('#fff3d6'), toneMapped: false }));
+  const halo = glow('#F6D58E', 7, 0.95);
+  const lampLight = new THREE.PointLight(C('#ffd79c'), 90, 55, 2);
   lantern.add(core, halo, lampLight);
   scene.add(lantern);
 
   /* ---------- drifting clouds ---------- */
   const clouds = [];
   for (let i = 0; i < (lowPower ? 8 : 14); i++) {
-    const m = new THREE.SpriteMaterial({ map: cloudTex, color: C('#9fb5ad'), transparent: true, opacity: 0.16, depthWrite: false });
+    const m = new THREE.SpriteMaterial({ map: cloudTex, color: C('#a9b4c6'), transparent: true, opacity: 0.16, depthWrite: false });
     const s = new THREE.Sprite(m);
     const w = 60 + Math.random() * 60; s.scale.set(w, w * 0.32, 1);
     clouds.push({ s, a: Math.random() * Math.PI * 2, r: 70 + Math.random() * 90, y: 18 + Math.random() * 16, v: (Math.random() * 0.5 + 0.5) * 0.012 });
@@ -281,7 +282,7 @@ function init() {
   /* ---------- sun ---------- */
   const endA = angleAt(1).a - 0.35;
   const sunAz = endA + Math.PI + 0.25;
-  const sun = glow('#ffd2a6', 120, 0);
+  const sun = glow('#ffe3da', 120, 0);
   scene.add(sun);
 
   /* ---------- sizing ---------- */
@@ -297,7 +298,7 @@ function init() {
 
   /* Horizontal framing per camp: push the mountain away from the text panel. */
   const FRAME_ALTS = [0, 1200, 2600, 3300, 3900, 4500];
-  const FRAME_X = [-0.17, 0.18, 0, 0, 0, 0];
+  const FRAME_X = [-0.17, 0, 0, 0, 0.04, 0.2];
   const frameAt = (alt) => {
     if (narrow()) return 0;
     for (let i = 0; i < FRAME_ALTS.length - 1; i++) {
@@ -339,7 +340,7 @@ function init() {
     // Camera: trails behind and outside the lantern, looking up the mountain
     const { a, r, t } = angleAt(u);
     const ca = a - 0.38 + mouse.x * 0.06;
-    const cr = r + 30 + 12 * (1 - t);
+    const cr = r + 30 + 12 * (1 - t) + 8 * smooth(0.85, 1, t);
     camPos.set(Math.cos(ca) * cr, 0, Math.sin(ca) * cr);
     camPos.y = Math.max(L.y + 11 + 7 * (1 - t) - mouse.y * 2, meshHeight(camPos.x, camPos.z) + 5);
     look.copy(L).lerp(PEAK, (narrow() ? 0.55 : 0.32) * (1 - t) + 0.1);
@@ -375,11 +376,12 @@ function init() {
 
     // Beacons: lit once you've passed them
     beacons.forEach((b, i) => {
+      if (!b) return;
       const lit = u >= b.u - 0.004;
       const pulse = reduce ? 1 : 0.85 + Math.sin(now * 0.003 + i) * 0.15;
       b.halo.material.opacity = (lit ? 0.85 * pulse : 0.18) * (1 - dn * 0.5);
-      b.halo.material.color.set(lit ? '#FF8A3D' : '#8FD1C9');
-      b.flag.material.color.set(lit ? '#FF8A3D' : '#6f8f86');
+      b.halo.material.color.set(lit ? '#F4A7B9' : '#9FD8E6');
+      b.flag.material.color.set(lit ? '#F4A7B9' : '#5d6b8c');
       if (!reduce) { // flag ripple
         const arr = b.flagGeo.attributes.position.array;
         for (let v = 0; v < arr.length; v += 3) arr[v + 2] = Math.sin(b.base[v] * 3 - now * 0.006 + i) * 0.12 * b.base[v];
@@ -391,7 +393,7 @@ function init() {
     clouds.forEach((c) => {
       if (!reduce) c.a += c.v * dt;
       c.s.position.set(Math.cos(c.a) * c.r, c.y, Math.sin(c.a) * c.r);
-      c.s.material.color.copy(tmp.set('#9fb5ad').lerp(C('#ffd2c0'), dn));
+      c.s.material.color.copy(tmp.set('#a9b4c6').lerp(C('#ffd9e2'), dn));
       c.s.material.opacity = lerp(0.14, 0.32, dn);
     });
 
