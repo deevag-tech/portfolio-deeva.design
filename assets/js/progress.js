@@ -31,6 +31,6 @@ export function readProgress() {
   if (page > 0.985) { alt = MAX_ALT; index = list.length - 1; }
 
   const p = alt / MAX_ALT;                       // 0 trailhead -> 1 summit
-  const dawn = clamp01((alt - 3950) / 500);       // night -> sunrise over the last stretch
+  const dawn = clamp01((alt - 1500) / 3000);      // golden hour -> sunset as you climb
   return { p, alt, dawn, page, index, name: list[index]?.dataset.name || '' };
 }

@@ -1,11 +1,15 @@
 /* ==========================================================================
-   The 3D world: a low-poly night mountain with a lantern trail that spirals
-   to the summit. Scroll moves the hiker (and the camera) up the trail; camp
-   beacons light up as you pass them, and the sky turns to sunrise at the top.
+   The 3D world: a low-poly mountain above a sea of golden-hour clouds, with
+   a lit trail that spirals to the summit. Scroll moves the hiker (and the
+   camera) up the trail; camp beacons light up as you pass them, and the
+   light deepens from golden hour to sunset at the top. The hero title is a
+   plane far behind the peak, so it really rises from behind the mountains.
    Uses Three.js from the CDN (see the importmap in index.html).
    ========================================================================== */
 import * as THREE from 'three';
 import { readProgress, MAX_ALT } from './progress.js';
+import { cloudCanvas } from './clouds.js';
+import { intro } from './intro.js';
 
 const canvas = document.getElementById('world');
 const root = document.documentElement;
@@ -61,15 +65,16 @@ function init() {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, 1, 0.5, 2000);
 
-  /* ---------- palette (night -> dawn) ---------- */
-  const night = { top: C('#050b17'), horizon: C('#1b2b47'), bottom: C('#0F1B2D'), hemiSky: C('#5d73a3'), hemiGround: C('#0F1B2D'), key: C('#bccaea') };
-  const dawn  = { top: C('#3a4274'), horizon: C('#F4A7B9'), bottom: C('#E9B3BC'), hemiSky: C('#f6cbd6'), hemiGround: C('#3a3456'), key: C('#ffc9bd') };
+  /* ---------- palette (golden hour -> sunset) ---------- */
+  // "night"/"dawn" keep their old names: 0 = golden hour at the trailhead, 1 = sunset at the summit
+  const night = { top: C('#3F7E8C'), horizon: C('#F2C7A2'), bottom: C('#B8A79A'), hemiSky: C('#cfe1e2'), hemiGround: C('#4b4a4c'), key: C('#ffcf9c'), fog: C('#c9c4bb') };
+  const dawn  = { top: C('#2F5866'), horizon: C('#F0A06C'), bottom: C('#C98A6A'), hemiSky: C('#f4c7a8'), hemiGround: C('#4a3a40'), key: C('#ff9f6a'), fog: C('#d9a888') };
   const tmp = new THREE.Color();
 
   /* ---------- sky dome ---------- */
   const skyUniforms = {
     uTop: { value: night.top.clone() }, uHorizon: { value: night.horizon.clone() }, uBottom: { value: night.bottom.clone() },
-    uSunDir: { value: new THREE.Vector3(0, -0.1, -1) }, uSunColor: { value: C('#ffe3da') }, uDawn: { value: 0 },
+    uSunDir: { value: new THREE.Vector3(0, 0.1, -1) }, uSunColor: { value: C('#ffe2bf') }, uDawn: { value: 0 },
   };
   const sky = new THREE.Mesh(
     new THREE.SphereGeometry(1500, 32, 16),
@@ -83,7 +88,7 @@ function init() {
           float h = d.y;
           vec3 col = h > 0.0 ? mix(uHorizon, uTop, smoothstep(0.0, 0.55, h)) : mix(uHorizon, uBottom, smoothstep(0.0, -0.25, h));
           float s = max(dot(d, normalize(uSunDir)), 0.0);
-          col += uSunColor * (pow(s, 900.0) * 6.0 + pow(s, 24.0) * 0.55 + pow(s, 4.0) * 0.18) * uDawn;
+          col += uSunColor * (pow(s, 900.0) * 5.0 + pow(s, 24.0) * 0.5 + pow(s, 4.0) * 0.22) * (0.65 + 0.35 * uDawn);
           gl_FragColor = vec4(col, 1.0);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>
@@ -91,28 +96,13 @@ function init() {
     }),
   );
   scene.add(sky);
-  scene.fog = new THREE.Fog(night.horizon.clone(), 70, 520);
-
-  /* ---------- stars ---------- */
-  const starCount = lowPower ? 900 : 1800;
-  const starPos = new Float32Array(starCount * 3);
-  for (let i = 0; i < starCount; i++) {
-    const th = Math.random() * Math.PI * 2, ph = Math.acos(1 - Math.random() * 0.95);
-    const R = 1200;
-    starPos.set([R * Math.sin(ph) * Math.cos(th), R * Math.cos(ph), R * Math.sin(ph) * Math.sin(th)], i * 3);
-  }
-  const starGeo = new THREE.BufferGeometry();
-  starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-  const starMat = new THREE.PointsMaterial({ color: C('#F5F1EA'), size: lowPower ? 1.6 : 1.8, sizeAttenuation: false, transparent: true, opacity: 0.9, fog: false, depthWrite: false });
-  const stars = new THREE.Points(starGeo, starMat);
-  scene.add(stars);
+  scene.fog = new THREE.Fog(night.fog.clone(), 80, 560);
 
   /* ---------- lights ---------- */
   const hemi = new THREE.HemisphereLight(night.hemiSky, night.hemiGround, 1.3);
   scene.add(hemi);
   const key = new THREE.DirectionalLight(night.key, 1.1);
   scene.add(key);
-  const moonPos = new THREE.Vector3(-160, 220, 120);
 
   /* ---------- terrain mesh (custom grid so the trail can sit exactly on it) ---------- */
   const SIZE = 560, N = lowPower ? 140 : 200, D = SIZE / N, X0 = -SIZE / 2;
@@ -128,7 +118,7 @@ function init() {
 
   const pos = new Float32Array((N + 1) * (N + 1) * 3);
   const col = new Float32Array((N + 1) * (N + 1) * 3);
-  const forest = C('#15263a'), forest2 = C('#1c3746'), rock = C('#3a4561'), rock2 = C('#5b6480'), snow = C('#eef1f8');
+  const forest = C('#33463f'), forest2 = C('#45574b'), rock = C('#76625a'), rock2 = C('#9a7363'), snow = C('#f6e7da');
   for (let j = 0; j <= N; j++) for (let i = 0; i <= N; i++) {
     const k = j * (N + 1) + i, x = X0 + i * D, z = X0 + j * D, h = H[k];
     pos.set([x, h, z], k * 3);
@@ -177,8 +167,8 @@ function init() {
   curve.arcLengthDivisions = 4000;
   const SEG = lowPower ? 1400 : 2200, RAD = 5;
   const tubeGeo = new THREE.TubeGeometry(curve, SEG, 0.17, RAD, false);
-  const trailDim = new THREE.Mesh(tubeGeo, new THREE.MeshBasicMaterial({ color: C('#4a5b82'), transparent: true, opacity: 0.6 }));
-  const trailLit = new THREE.Mesh(tubeGeo, new THREE.MeshBasicMaterial({ color: C('#F4A7B9'), toneMapped: false }));
+  const trailDim = new THREE.Mesh(tubeGeo, new THREE.MeshBasicMaterial({ color: C('#7d8a90'), transparent: true, opacity: 0.55 }));
+  const trailLit = new THREE.Mesh(tubeGeo, new THREE.MeshBasicMaterial({ color: C('#FFF0DC'), toneMapped: false }));
   trailDim.scale.setScalar(0.999); // avoid z-fighting with the lit tube
   scene.add(trailDim, trailLit);
   const PEAK = new THREE.Vector3(0, meshHeight(0, 0), 0);
@@ -190,17 +180,6 @@ function init() {
     const g = c.getContext('2d'); const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
     gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.18, 'rgba(255,255,255,.7)'); gr.addColorStop(0.5, 'rgba(255,255,255,.12)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
     g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
-    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
-  })();
-  const cloudTex = (() => {
-    const c = document.createElement('canvas'); c.width = 256; c.height = 128;
-    const g = c.getContext('2d');
-    for (let i = 0; i < 9; i++) {
-      const x = 40 + Math.random() * 176, y = 50 + Math.random() * 30, r = 30 + Math.random() * 40;
-      const gr = g.createRadialGradient(x, y, 0, x, y, r);
-      gr.addColorStop(0, 'rgba(255,255,255,.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
-      g.fillStyle = gr; g.fillRect(0, 0, 256, 128);
-    }
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
   })();
   const glow = (color, size, opacity = 1) => {
@@ -223,7 +202,7 @@ function init() {
     const s = 0.7 + Math.random() * 0.9;
     m4.compose(p3.set(x, h - 0.2, z), q.setFromAxisAngle(sc.set(0, 1, 0), Math.random() * 6), sc.set(s, s * (2.6 + Math.random() * 1.4), s));
     trees.setMatrixAt(placed, m4);
-    trees.setColorAt(placed, tmp.set('#112334').lerp(C('#1d3a4b'), Math.random()));
+    trees.setColorAt(placed, tmp.set('#2a3d3a').lerp(C('#3c5248'), Math.random()));
     placed++;
   }
   trees.count = placed;
@@ -241,18 +220,18 @@ function init() {
     base.y = meshHeight(base.x, base.z);
     const summit = i === camps.length - 1;
     const poleH = summit ? 5 : 3.2;
-    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, poleH, 5), new THREE.MeshStandardMaterial({ color: C('#d9d2c5'), roughness: 0.8 }));
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, poleH, 5), new THREE.MeshStandardMaterial({ color: C('#efe2d2'), roughness: 0.8 }));
     pole.position.set(0, poleH / 2, 0);
     const flagGeo = new THREE.PlaneGeometry(summit ? 2.2 : 1.4, summit ? 1.3 : 0.85, 6, 1); flagGeo.translate(summit ? 1.1 : 0.7, 0, 0);
-    const flag = new THREE.Mesh(flagGeo, new THREE.MeshBasicMaterial({ color: C('#F4A7B9'), side: THREE.DoubleSide, toneMapped: false }));
+    const flag = new THREE.Mesh(flagGeo, new THREE.MeshBasicMaterial({ color: C('#F7C59F'), side: THREE.DoubleSide, toneMapped: false }));
     flag.position.set(0, poleH - (summit ? 0.65 : 0.45), 0);
     g.add(pole, flag);
     if (i > 0 && !summit) {
-      const tent = new THREE.Mesh(new THREE.ConeGeometry(1.2, 1.5, 4), new THREE.MeshStandardMaterial({ color: C('#7c90c4'), flatShading: true, roughness: 0.9 }));
+      const tent = new THREE.Mesh(new THREE.ConeGeometry(1.2, 1.5, 4), new THREE.MeshStandardMaterial({ color: C('#B85C3C'), flatShading: true, roughness: 0.9 }));
       tent.position.set(1.6, 0.75, 0.6); tent.rotation.y = Math.PI / 4;
       g.add(tent);
     }
-    const halo = glow('#F4A7B9', summit ? 9 : 6, 0.25);
+    const halo = glow('#F7C59F', summit ? 9 : 6, 0.25);
     halo.position.set(0, poleH, 0);
     g.add(halo);
     g.position.copy(base);
@@ -263,26 +242,99 @@ function init() {
 
   /* ---------- the hiker's lantern ---------- */
   const lantern = new THREE.Group();
-  const core = new THREE.Mesh(new THREE.SphereGeometry(0.28, 12, 8), new THREE.MeshBasicMaterial({ color: C('#fff3d6'), toneMapped: false }));
-  const halo = glow('#F6D58E', 7, 0.95);
-  const lampLight = new THREE.PointLight(C('#ffd79c'), 90, 55, 2);
+  const core = new THREE.Mesh(new THREE.SphereGeometry(0.28, 12, 8), new THREE.MeshBasicMaterial({ color: C('#fff6e6'), toneMapped: false }));
+  const halo = glow('#FFD9A0', 7, 0.95);
+  const lampLight = new THREE.PointLight(C('#ffd9a0'), 60, 45, 2);
   lantern.add(core, halo, lampLight);
   scene.add(lantern);
 
-  /* ---------- drifting clouds ---------- */
+  /* ---------- the sea of clouds ---------- */
+  const cloudTexes = [11, 23, 37, 41].map((seed) => {
+    const t = new THREE.CanvasTexture(cloudCanvas(lowPower ? 256 : 384, lowPower ? 128 : 192, seed));
+    t.colorSpace = THREE.SRGBColorSpace; return t;
+  });
   const clouds = [];
-  for (let i = 0; i < (lowPower ? 8 : 14); i++) {
-    const m = new THREE.SpriteMaterial({ map: cloudTex, color: C('#a9b4c6'), transparent: true, opacity: 0.16, depthWrite: false });
+  const cloudN = lowPower ? 34 : 56;
+  for (let i = 0; i < cloudN; i++) {
+    const m = new THREE.SpriteMaterial({ map: cloudTexes[i % cloudTexes.length], transparent: true, depthWrite: false, fog: true, opacity: 0.95 });
     const s = new THREE.Sprite(m);
-    const w = 60 + Math.random() * 60; s.scale.set(w, w * 0.32, 1);
-    clouds.push({ s, a: Math.random() * Math.PI * 2, r: 70 + Math.random() * 90, y: 18 + Math.random() * 16, v: (Math.random() * 0.5 + 0.5) * 0.012 });
+    const far = i % 3 !== 0;                          // two rings: valleys around the massif, and a far sea
+    const w = far ? 110 + Math.random() * 120 : 60 + Math.random() * 60;
+    s.scale.set(w, w * 0.48, 1);
+    clouds.push({ s, w, a: Math.random() * Math.PI * 2, r: far ? 190 + Math.random() * 110 : 118 + Math.random() * 50,
+      y: far ? 12 + Math.random() * 14 : 16 + Math.random() * 12, v: (Math.random() * 0.5 + 0.5) * 0.006 * (Math.random() < 0.5 ? 1 : -1) });
     scene.add(s);
   }
 
-  /* ---------- sun ---------- */
+  /* ---------- hero title: far behind the peak ---------- */
+  const TITLE_D = 560;
+  const titleCanvas = document.createElement('canvas');
+  const titleTex = new THREE.CanvasTexture(titleCanvas);
+  titleTex.colorSpace = THREE.SRGBColorSpace;
+  titleTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const title = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: titleTex, transparent: true, depthWrite: false, fog: false, toneMapped: false, opacity: 0 }));
+  title.visible = false;
+  scene.add(title);
+  let titleAspect = 4, titleLines = 0, titleReady = false;
+  function drawTitle() {
+    const two = innerWidth / innerHeight < 0.85;
+    const lines = two ? 2 : 1;
+    if (lines === titleLines && titleReady) return;
+    titleLines = lines;
+    const fs = 520, padX = 60, padY = 90;
+    const g = titleCanvas.getContext('2d');
+    const fontA = `400 ${fs}px "Instrument Serif", Georgia, serif`, fontB = `italic 400 ${fs}px "Instrument Serif", Georgia, serif`;
+    g.font = fontA; const wA = g.measureText('Deeva').width; const wSp = g.measureText(' ').width;
+    g.font = fontB; const wB = g.measureText('Gupta').width;
+    const lineH = fs * 0.98;
+    const W = Math.ceil((two ? Math.max(wA, wB) : wA + wSp + wB) + padX * 2);
+    const H = Math.ceil(lineH * lines + padY * 2);
+    titleCanvas.width = W; titleCanvas.height = H;
+    g.clearRect(0, 0, W, H);
+    g.textBaseline = 'alphabetic';
+    const paintWord = (txt, font, x, baseY) => {
+      g.font = font;
+      const top = baseY - fs * 0.78, bot = baseY + fs * 0.12;
+      const fill = g.createLinearGradient(0, top, 0, bot);
+      fill.addColorStop(0, 'rgba(255,248,238,0.98)');
+      fill.addColorStop(0.55, 'rgba(252,222,196,0.78)');
+      fill.addColorStop(1, 'rgba(247,197,159,0.10)');
+      g.shadowColor = 'rgba(255,214,170,0.45)'; g.shadowBlur = 50;
+      g.fillStyle = fill; g.fillText(txt, x, baseY);
+      g.shadowBlur = 0;
+      const st = g.createLinearGradient(0, top, 0, bot);
+      st.addColorStop(0, 'rgba(255,250,244,1)'); st.addColorStop(1, 'rgba(255,236,214,0.55)');
+      g.lineWidth = 5; g.strokeStyle = st; g.strokeText(txt, x, baseY);
+    };
+    if (two) {
+      paintWord('Deeva', fontA, (W - wA) / 2, padY + fs * 0.8);
+      paintWord('Gupta', fontB, (W - wB) / 2, padY + fs * 0.8 + lineH);
+    } else {
+      const x0 = (W - (wA + wSp + wB)) / 2, base = padY + fs * 0.8;
+      paintWord('Deeva', fontA, x0, base);
+      paintWord('Gupta', fontB, x0 + wA + wSp, base);
+    }
+    titleAspect = W / H;
+    titleTex.needsUpdate = true;
+    titleReady = true;
+  }
+  Promise.race([
+    Promise.all([document.fonts.load('400 120px "Instrument Serif"'), document.fonts.load('italic 400 120px "Instrument Serif"')]),
+    new Promise((r) => setTimeout(r, 2500)),
+  ]).catch(() => {}).then(() => { titleLines = 0; drawTitle(); });
+  addEventListener('resize', () => { if (titleReady) drawTitle(); });
+
+  /* ---------- sun: low on the left of the trailhead view, setting beyond the summit ---------- */
   const endA = angleAt(1).a - 0.35;
-  const sunAz = endA + Math.PI + 0.25;
-  const sun = glow('#ffe3da', 120, 0);
+  // trailhead view: sun low on the left and a little behind the camera, so the faces we see glow
+  const startCa = angleAt(0).a - 0.38;
+  const fx = -Math.cos(startCa), fz = -Math.sin(startCa);          // camera forward (towards the peak)
+  const sx = fz * 0.85 - fx * 0.5, sz = -fx * 0.85 - fz * 0.5;      // left of the camera, slightly behind it
+  const sunAz0 = Math.atan2(sz, sx);
+  let sunAz1 = endA + Math.PI + 0.25;
+  while (sunAz1 - sunAz0 > Math.PI) sunAz1 -= Math.PI * 2;
+  while (sunAz0 - sunAz1 > Math.PI) sunAz1 += Math.PI * 2;
+  const sun = glow('#ffe2bf', 110, 0);
   scene.add(sun);
 
   /* ---------- sizing ---------- */
@@ -298,7 +350,7 @@ function init() {
 
   /* Horizontal framing per camp: push the mountain away from the text panel. */
   const FRAME_ALTS = [0, 1200, 2600, 3300, 3900, 4500];
-  const FRAME_X = [-0.17, 0, 0, 0, 0.04, 0.2];
+  const FRAME_X = [0, 0, 0, 0, 0.04, 0.2];
   const frameAt = (alt) => {
     if (narrow()) return 0;
     for (let i = 0; i < FRAME_ALTS.length - 1; i++) {
@@ -309,6 +361,8 @@ function init() {
 
   /* ---------- input ---------- */
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+  const ease = (t) => 1 - Math.pow(1 - clamp01(t), 3);
+  const ndc = new THREE.Vector3();
   if (!reduce) addEventListener('pointermove', (e) => { mouse.tx = e.clientX / innerWidth - 0.5; mouse.ty = e.clientY / innerHeight - 0.5; }, { passive: true });
 
   /* ---------- frame loop ---------- */
@@ -317,7 +371,7 @@ function init() {
   const camPos = new THREE.Vector3(), look = new THREE.Vector3(), camLook = new THREE.Vector3();
   const sunDir = new THREE.Vector3();
   const totalIdx = tubeGeo.index.count, perSeg = RAD * 6;
-  let first = true, last = performance.now();
+  let first = true, last = performance.now(), announced = false;
 
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
@@ -334,17 +388,19 @@ function init() {
     lantern.position.set(L.x, L.y + 0.9, L.z);
     trailLit.geometry.setDrawRange(0, Math.min(totalIdx, Math.ceil(u * SEG) * perSeg));
     const flicker = reduce ? 1 : 0.92 + Math.sin(now * 0.011) * 0.04 + Math.sin(now * 0.027) * 0.04;
-    halo.material.opacity = 0.95 * flicker * (1 - dn * 0.6);
-    lampLight.intensity = 90 * flicker * (1 - dn * 0.7);
+    halo.material.opacity = 0.8 * flicker;
+    lampLight.intensity = 60 * flicker;
 
     // Camera: trails behind and outside the lantern, looking up the mountain
     const { a, r, t } = angleAt(u);
+    const hero = 1 - smooth(0, 0.16, u);              // 1 at the trailhead, fades out by the first camp
     const ca = a - 0.38 + mouse.x * 0.06;
-    const cr = r + 30 + 12 * (1 - t) + 8 * smooth(0.85, 1, t);
+    const cr = r + 30 + 12 * (1 - t) + 8 * smooth(0.85, 1, t) + hero * 12;
     camPos.set(Math.cos(ca) * cr, 0, Math.sin(ca) * cr);
-    camPos.y = Math.max(L.y + 11 + 7 * (1 - t) - mouse.y * 2, meshHeight(camPos.x, camPos.z) + 5);
-    look.copy(L).lerp(PEAK, (narrow() ? 0.55 : 0.32) * (1 - t) + 0.1);
-    look.y += 2 + dn * 6;
+    camPos.y = Math.max(L.y + 11 + 7 * (1 - t) - mouse.y * 2 + hero * 6, meshHeight(camPos.x, camPos.z) + 5);
+    // at the trailhead, frame the peak in the middle of the screen; ease into the trail view as you climb
+    look.copy(L).lerp(PEAK, lerp((narrow() ? 0.55 : 0.32) * (1 - t) + 0.1, 1, hero));
+    look.y += (2 + dn * 6) * (1 - hero) - hero * (narrow() ? 26 : 31);
     if (first) camLook.copy(look); else camLook.lerp(look, reduce ? 1 : 0.2);
     camera.position.copy(camPos);
     camera.lookAt(camLook);
@@ -356,32 +412,30 @@ function init() {
     skyUniforms.uHorizon.value.copy(night.horizon).lerp(dawn.horizon, dn);
     skyUniforms.uBottom.value.copy(night.bottom).lerp(dawn.bottom, dn);
     skyUniforms.uDawn.value = dn;
-    const el = lerp(-0.12, 0.1, dn);
+    const el = lerp(0.13, 0.03, smooth(0, 1, u));
+    const sunAz = lerp(sunAz0, sunAz1, smooth(0.45, 1, u));
     sunDir.set(Math.cos(sunAz) * Math.cos(el), Math.sin(el), Math.sin(sunAz) * Math.cos(el));
     skyUniforms.uSunDir.value.copy(sunDir);
     sky.position.copy(camera.position);
-    stars.position.copy(camera.position);
-    scene.fog.color.copy(skyUniforms.uHorizon.value);
-    scene.fog.near = lerp(70, 120, dn); scene.fog.far = lerp(520, 900, dn);
+    scene.fog.color.copy(night.fog).lerp(dawn.fog, dn);
+    scene.fog.near = lerp(80, 110, dn); scene.fog.far = lerp(560, 760, dn);
     hemi.color.copy(night.hemiSky).lerp(dawn.hemiSky, dn);
     hemi.groundColor.copy(night.hemiGround).lerp(dawn.hemiGround, dn);
-    hemi.intensity = lerp(1.3, 1.2, dn);
+    hemi.intensity = lerp(1.15, 1.05, dn);
     key.color.copy(night.key).lerp(dawn.key, dn);
-    key.intensity = lerp(1.6, 2.6, dn);
-    key.position.copy(moonPos).lerp(sunDir.clone().multiplyScalar(300), dn);
-    starMat.opacity = 0.9 * (1 - smooth(0.1, 0.8, dn));
-    if (!reduce) stars.rotation.y = now * 0.000006;
+    key.intensity = lerp(2.4, 2.8, dn);
+    key.position.copy(sunDir).multiplyScalar(300);
     sun.position.copy(camera.position).addScaledVector(sunDir, 900);
-    sun.material.opacity = smooth(0.2, 1, dn) * 0.9;
+    sun.material.opacity = lerp(0.55, 0.9, dn);
 
     // Beacons: lit once you've passed them
     beacons.forEach((b, i) => {
       if (!b) return;
       const lit = u >= b.u - 0.004;
       const pulse = reduce ? 1 : 0.85 + Math.sin(now * 0.003 + i) * 0.15;
-      b.halo.material.opacity = (lit ? 0.85 * pulse : 0.18) * (1 - dn * 0.5);
-      b.halo.material.color.set(lit ? '#F4A7B9' : '#9FD8E6');
-      b.flag.material.color.set(lit ? '#F4A7B9' : '#5d6b8c');
+      b.halo.material.opacity = (lit ? 0.7 * pulse : 0.15);
+      b.halo.material.color.set(lit ? '#FFD9A0' : '#cfe1e2');
+      b.flag.material.color.set(lit ? '#F7C59F' : '#7d8a90');
       if (!reduce) { // flag ripple
         const arr = b.flagGeo.attributes.position.array;
         for (let v = 0; v < arr.length; v += 3) arr[v + 2] = Math.sin(b.base[v] * 3 - now * 0.006 + i) * 0.12 * b.base[v];
@@ -389,16 +443,34 @@ function init() {
       }
     });
 
-    // Clouds drift around the massif and blush at dawn
+    // The cloud sea drifts slowly; clouds close to the camera fade so you never fly into a wall
     clouds.forEach((c) => {
       if (!reduce) c.a += c.v * dt;
       c.s.position.set(Math.cos(c.a) * c.r, c.y, Math.sin(c.a) * c.r);
-      c.s.material.color.copy(tmp.set('#a9b4c6').lerp(C('#ffd9e2'), dn));
-      c.s.material.opacity = lerp(0.14, 0.32, dn);
+      const dist = c.s.position.distanceTo(camera.position);
+      c.s.material.opacity = 0.95 * smooth(c.w * 0.35, c.w * 0.9, dist);
+      c.s.material.color.copy(tmp.set('#ffffff').lerp(C('#ffd8bd'), dn));
     });
+
+    // Hero title: anchored to the view, far behind the peak; rises once the clouds part
+    if (titleReady) {
+      const vh = innerHeight || 1, heroY = clamp01(scrollY / vh);
+      const rise = reduce ? 1 : intro.start === null ? 0 : ease((now - intro.start - 250) / 2100);
+      const two = titleLines === 2;
+      const yN = lerp(two ? 0.0 : -0.1, two ? 0.5 : 0.42, rise) + heroY * 0.5;
+      const viewH = 2 * TITLE_D * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
+      const wW = Math.min(viewH * camera.aspect * (two ? 0.82 : 0.78), viewH * (two ? 0.42 : 0.27) * titleAspect);
+      ndc.set(0, yN, 0.5).unproject(camera).sub(camera.position).normalize();
+      title.position.copy(camera.position).addScaledVector(ndc, TITLE_D);
+      title.quaternion.copy(camera.quaternion);
+      title.scale.set(wW, wW / titleAspect, 1);
+      title.material.opacity = Math.min(1, rise * 1.8) * (1 - smooth(0.08, 0.7, heroY));
+      title.visible = title.material.opacity > 0.005;
+    }
 
     renderer.render(scene, camera);
     if (first) { first = false; canvas.style.opacity = '1'; }
+    if (!announced && titleReady) { announced = true; intro.ready = true; dispatchEvent(new Event('world:ready')); }
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);

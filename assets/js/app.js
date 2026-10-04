@@ -1,4 +1,4 @@
-/* UI: reveals, the trail rail (progress + nav), permit card, fridge magnets, contact. */
+/* UI: reveals, the trail rail (progress + nav), boarding pass, fridge magnets, contact. */
 import { readProgress, MAX_ALT } from './progress.js';
 import { places, links } from './content.js';
 
@@ -40,8 +40,9 @@ function updateRail() {
     a.classList.toggle('passed', i < current);
   });
   root.style.setProperty('--dawn-t', s.dawn.toFixed(3));
-  // keep the reading scrim until the very last stretch of sunrise
-  root.style.setProperty('--scrim', (1 - Math.min(1, Math.max(0, (s.dawn - 0.7) / 0.3))).toFixed(3));
+  // reading scrim: off over the hero, on along the trail, gone again at the summit
+  const on = Math.min(1, Math.max(0, (s.alt - 250) / 650)) * (1 - Math.min(1, Math.max(0, (s.alt - 4150) / 300)));
+  root.style.setProperty('--scrim', on.toFixed(3));
 }
 let ticking = false;
 addEventListener('scroll', () => {
@@ -56,28 +57,16 @@ updateRail();
 const cs = $('caseStudyLink');
 if (cs && links.caseStudy) cs.href = links.caseStudy;
 
-/* ---------- permit card: flip + gentle tilt ---------- */
-const permit = $('permit');
-const flipBtns = [...document.querySelectorAll('.permit-flip')];
-function setFlip(on) {
-  permit.classList.toggle('flipped', on);
-  flipBtns[0].setAttribute('aria-expanded', String(on));
-  // keep focus on the visible side
-  const target = on ? flipBtns[1] : flipBtns[0];
-  setTimeout(() => target.focus({ preventScroll: true }), reduce ? 0 : 450);
-  document.querySelector('.permit-face.front').inert = on;
-  document.querySelector('.permit-face.back').inert = !on;
-}
-document.querySelector('.permit-face.back').inert = true;
-flipBtns.forEach((b, i) => b.addEventListener('click', () => setFlip(i === 0)));
-if (finePointer && !reduce) {
-  const wrap = document.querySelector('.permit-wrap');
-  wrap.addEventListener('pointermove', (e) => {
-    const r = wrap.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-    permit.style.transform = `rotate(-1deg) rotateX(${(-y * 7).toFixed(2)}deg) rotateY(${(x * 9).toFixed(2)}deg)`;
-  });
-  wrap.addEventListener('pointerleave', () => { permit.style.transform = ''; });
+/* ---------- boarding pass: hover flips it (CSS); tap, click on touch, Enter or Space toggle it ---------- */
+const pass = $('pass');
+if (pass) {
+  const toggle = () => {
+    const on = !pass.classList.contains('flipped');
+    pass.classList.toggle('flipped', on);
+    pass.setAttribute('aria-pressed', String(on));
+  };
+  pass.addEventListener('click', () => { if (!finePointer) toggle(); });
+  pass.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
 }
 
 /* ---------- fridge magnets ---------- */
@@ -109,7 +98,7 @@ places.forEach((p, i) => {
   const shape = p.shape === 'round' ? `width:${sz}px;height:${sz}px;border-radius:50%`
     : p.shape === 'rect' ? `width:${sz + 24}px;height:${sz - 24}px;border-radius:12px`
     : `width:${sz}px;height:${sz}px;border-radius:18px 18px 50% 50%`;
-  const bg = p.photo ? `background-image:linear-gradient(rgba(15,27,45,.35),rgba(15,27,45,.35)),url('${esc(p.photo)}')` : `background-color:${p.color}`;
+  const bg = p.photo ? `background-image:linear-gradient(rgba(30,41,50,.35),rgba(30,41,50,.35)),url('${esc(p.photo)}')` : `background-color:${p.color}`;
   b.innerHTML = `<span class="face" style="${shape};${bg}">${esc(p.name)}<small>${esc(p.state.toUpperCase())}</small></span>`;
   door.appendChild(b); mags.push(b);
 
@@ -151,7 +140,7 @@ function openCard(i, scroll = true) {
   $('pc-meta-b').textContent = `From ${p.name}`;
   photo.dataset.label = `Photo · ${p.name}, ${p.state}`;
   photo.innerHTML = p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}, ${esc(p.state)}" loading="lazy">` : '';
-  photo.style.background = `radial-gradient(120% 80% at 70% 15%, rgba(244,167,185,.35), transparent 60%), linear-gradient(170deg, ${p.color} 0%, #1C2B44 70%)`;
+  photo.style.background = `radial-gradient(120% 80% at 25% 15%, rgba(255,226,191,.5), transparent 60%), linear-gradient(170deg, ${p.color} 0%, #2E3B47 72%)`;
   $('pc-title').textContent = `${p.name}, ${p.state}`;
   $('pc-local').textContent = p.local;
   $('pc-note').textContent = p.note;
