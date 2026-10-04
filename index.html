@@ -5,15 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Deeva Gupta · Product Designer</title>
   <meta name="description" content="Deeva Gupta is a product designer who builds 0-to-1 consumer apps. Climb the trail through Astroverse 2.0, client launches and a fridge door of travel magnets.">
-  <meta name="theme-color" content="#0F1B2D">
+  <meta name="theme-color" content="#3F7E8C">
   <meta property="og:title" content="Deeva Gupta · Product Designer">
   <meta property="og:description" content="A portfolio you climb: 0-to-1 consumer products, AI features, and a magnet from every place.">
   <meta property="og:type" content="website">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1B2D'/%3E%3Cpath d='M8 50 26 20l9 14 6-8 15 24Z' fill='%231C2B44' stroke='%23F4A7B9' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='26' cy='20' r='4' fill='%23F6D58E'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233F7E8C'/%3E%3Cpath d='M8 50 26 20l9 14 6-8 15 24Z' fill='%23B85C3C' stroke='%23F7C59F' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='46' cy='16' r='5' fill='%23FFD9A0'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    // start the hero under cloud before first paint (skipped for reduced motion or deep links)
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash) document.documentElement.classList.add('intro-cover');
+  </script>
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
   </script>
@@ -26,9 +30,20 @@
   <div id="world-fallback" aria-hidden="true"></div>
   <div class="scrim" aria-hidden="true"></div>
 
+  <!-- Hero clouds: cover the trailhead, part on load, drift away on scroll -->
+  <div class="hero-clouds" aria-hidden="true">
+    <div class="veil"></div>
+    <div class="cloud cl-left"><div class="px" data-depth="1" data-side="-1"><canvas></canvas></div></div>
+    <div class="cloud cl-right"><div class="px" data-depth="1" data-side="1"><canvas></canvas></div></div>
+    <div class="cloud cl-bank"><div class="px" data-depth="1.25" data-side="0"><canvas></canvas></div></div>
+  </div>
+
   <!-- Top bar -->
   <header class="topbar">
-    <a class="brand" href="#trailhead" aria-label="Deeva Gupta, back to the trailhead">Deeva<i>.</i></a>
+    <div class="topleft">
+      <a class="brand" href="#trailhead" aria-label="Deeva Gupta, back to the trailhead">Deeva<i>.</i></a>
+      <p class="status"><span class="pulse" aria-hidden="true"></span>Open to senior product design roles</p>
+    </div>
     <nav class="toplinks" aria-label="Primary">
       <a href="#expedition">Work</a>
       <a href="#basecamp">About</a>
@@ -52,27 +67,21 @@
 
   <main id="main">
 
-    <!-- TRAILHEAD -->
+    <!-- TRAILHEAD: the name itself is drawn in the 3D world, rising from behind the peak -->
     <section class="camp hero" id="trailhead" data-alt="0" data-name="Trailhead">
-      <div class="wrap">
-        <div class="hero-copy">
-          <p class="status rv"><span class="pulse" aria-hidden="true"></span>Open to senior product design roles</p>
-          <h1 class="rv">Deeva Gupta</h1>
-          <p class="hero-line rv">Product designer who takes apps from <em>zero to one</em>, one switchback at a time.</p>
-          <p class="hero-sub rv">4+ years in consumer mobile and web. Founding designer of Astroverse. Off the clock: treks, fridge magnets and asking locals for the story.</p>
-          <div class="cta-row rv">
-            <a class="btn btn-lg" href="#basecamp">
-              Start the trek
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14m0 0-6-6m6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <a class="text-link" href="astroverse.html">Or skip to the case study</a>
-          </div>
+      <h1 class="hero-title"><span class="sr-only">Deeva Gupta</span><span class="hero-title-fallback" aria-hidden="true">Deeva <em>Gupta</em></span></h1>
+      <div class="wrap hero-center">
+        <p class="hero-line hi" style="--d:0">Product designer who takes apps from <em>zero to one</em>, one switchback at a time.</p>
+        <p class="hero-sub hi" style="--d:1">4+ years in consumer mobile and web. Founding designer of Astroverse. Off the clock: treks, fridge magnets and asking locals for the story.</p>
+        <div class="cta-row hi" style="--d:2">
+          <a class="btn btn-lg" href="#basecamp">
+            Start the trek
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14m0 0-6-6m6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="text-link" href="astroverse.html">Or skip to the case study</a>
         </div>
       </div>
-      <p class="peak-note" aria-hidden="true">my email is waiting at the summit
-        <svg width="54" height="40" viewBox="0 0 54 40" fill="none"><path d="M3 36C14 34 30 26 46 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M37 8h10v10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </p>
-      <a class="scroll-cue" href="#basecamp" aria-label="Scroll to the first camp">
+      <a class="scroll-cue hi" style="--d:3" href="#basecamp" aria-label="Scroll to the first camp">
         <span class="cue-line" aria-hidden="true"><i></i></span>
         <span>Scroll to climb</span>
       </a>
@@ -81,60 +90,84 @@
     <!-- BASE CAMP / ABOUT -->
     <section class="camp about" id="basecamp" data-alt="1200" data-name="Base camp · About">
       <div class="wrap about-grid">
-        <div class="about-copy">
-          <p class="camp-tag rv"><span>Camp 01</span>Base camp · 1,200 m</p>
+        <div class="about-copy panel rv">
+          <p class="camp-tag"><span>Camp 01</span>Base camp · 1,200 m</p>
           <h2 class="rv">Who's on <em>this climb</em></h2>
-          <p class="lede rv">I'm a product designer with 4+ years in consumer mobile and web. For the last two, I've been the founding designer at ScaleX, owning the work from research to shipped UI, design systems, UX writing and Mixpanel funnels.</p>
-          <dl class="stats rv">
+          <p class="lede">I'm a product designer with 4+ years in consumer mobile and web. For the last two, I've been the founding designer at ScaleX, owning the work from research to shipped UI, design systems, UX writing and Mixpanel funnels.</p>
+          <dl class="stats">
             <div><dt>4+</dt><dd>years in consumer product</dd></div>
             <div><dt>100K+</dt><dd>downloads in month one for a client app</dd></div>
             <div><dt>0→1</dt><dd>founding designer on Astroverse</dd></div>
           </dl>
-          <ul class="kit rv" aria-label="What I bring">
+          <ul class="kit" aria-label="What I bring">
             <li>Research</li><li>Flows &amp; IA</li><li>UX writing</li><li>Design systems</li><li>Analytics</li><li>AI products</li>
           </ul>
         </div>
 
-        <div class="permit-wrap rv">
-          <div class="permit" id="permit">
-            <div class="permit-inner">
+        <div class="pass-wrap rv">
+          <div class="pass" id="pass" role="button" tabindex="0" aria-pressed="false" aria-label="Boarding pass for Deeva Gupta. Press to flip and read the itinerary on the back.">
+            <div class="pass-inner">
               <!-- front -->
-              <div class="permit-face front">
-                <div class="permit-head">
-                  <span>Permit to design</span>
-                  <span class="mono">No. DG/2022/0417</span>
+              <div class="pass-face front">
+                <div class="pass-main">
+                  <div class="pass-head">
+                    <span class="pass-air"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 18 10 6l3.5 5.5L16 8l5 10Z" fill="currentColor"/></svg>Trailhead Air</span>
+                    <span>Boarding pass</span>
+                  </div>
+                  <div class="pass-body">
+                    <div class="pass-route">
+                      <div><b>IDEA</b><small>Problem space</small></div>
+                      <svg class="pass-path" viewBox="0 0 120 34" fill="none" aria-hidden="true"><path d="M4 28C34 4 86 4 116 28" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 5" stroke-linecap="round"/><path d="m60 4.5 5 3-5 3-1.2-1.4L61.5 8l-2.7-1.1Z" fill="currentColor" transform="rotate(-2 60 8)"/><circle cx="4" cy="28" r="3" fill="currentColor"/><circle cx="116" cy="28" r="3" fill="currentColor"/></svg>
+                      <div class="to"><b>LIVE</b><small>Shipped product</small></div>
+                    </div>
+                    <dl class="pass-fields">
+                      <div><dt>Passenger</dt><dd>Deeva Gupta</dd></div>
+                      <div><dt>Class</dt><dd>Product Design</dd></div>
+                      <div><dt>Flight</dt><dd>DG 0→1</dd></div>
+                      <div><dt>Base</dt><dd>India</dd></div>
+                      <div class="wide"><dt>Cleared for</dt><dd>Consumer apps · AI · Trust &amp; safety</dd></div>
+                    </dl>
+                  </div>
                 </div>
-                <div class="permit-body">
-                  <div class="ph permit-photo" data-label="Your photo"></div>
-                  <dl class="permit-fields">
-                    <div><dt>Holder</dt><dd>Deeva Gupta</dd></div>
-                    <div><dt>Role</dt><dd>Product Designer</dd></div>
-                    <div><dt>Base</dt><dd>India</dd></div>
-                    <div><dt>Valid for</dt><dd>Consumer apps, AI, trust &amp; safety</dd></div>
-                    <div><dt>On the trail since</dt><dd>2022</dd></div>
-                  </dl>
+                <div class="pass-stub">
+                  <div class="pass-head">Seat 4+ yrs</div>
+                  <div class="pass-stub-body">
+                    <div class="ph pass-photo" data-label="Your photo"></div>
+                    <dl>
+                      <div><dt>Since</dt><dd>2022</dd></div>
+                      <div><dt>Boarding</dt><dd>Now</dd></div>
+                    </dl>
+                    <svg class="barcode" viewBox="0 0 120 38" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><rect x="0" width="3" height="38"/><rect x="5" width="1" height="38"/><rect x="8" width="2" height="38"/><rect x="12" width="4" height="38"/><rect x="18" width="1" height="38"/><rect x="21" width="2" height="38"/><rect x="25" width="1" height="38"/><rect x="28" width="3" height="38"/><rect x="33" width="1" height="38"/><rect x="36" width="2" height="38"/><rect x="40" width="4" height="38"/><rect x="46" width="1" height="38"/><rect x="49" width="2" height="38"/><rect x="53" width="1" height="38"/><rect x="56" width="3" height="38"/><rect x="61" width="2" height="38"/><rect x="65" width="1" height="38"/><rect x="68" width="4" height="38"/><rect x="74" width="1" height="38"/><rect x="77" width="2" height="38"/><rect x="81" width="3" height="38"/><rect x="86" width="1" height="38"/><rect x="89" width="2" height="38"/><rect x="93" width="1" height="38"/><rect x="96" width="4" height="38"/><rect x="102" width="1" height="38"/><rect x="105" width="2" height="38"/><rect x="109" width="1" height="38"/><rect x="112" width="3" height="38"/><rect x="117" width="3" height="38"/></g></svg>
+                  </div>
                 </div>
-                <div class="permit-foot">
-                  <span class="sign">Deeva</span>
-                  <svg class="stamp s1" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="60" cy="60" r="44" fill="none" stroke="currentColor" stroke-width="1.2"/><path id="arcA" d="M60 60m-36 0a36 36 0 1 1 72 0a36 36 0 1 1-72 0" fill="none"/><text font-family="Geist Mono, monospace" font-size="10.5" letter-spacing="2.4" fill="currentColor"><textPath href="#arcA">ZERO TO ONE · CLEARED ·</textPath></text><text x="60" y="68" text-anchor="middle" font-family="Instrument Serif, serif" font-size="26" fill="currentColor">0→1</text></svg>
-                  <svg class="stamp s2" viewBox="0 0 120 120" aria-hidden="true"><rect x="8" y="22" width="104" height="76" rx="10" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="60" y="54" text-anchor="middle" font-family="Geist Mono, monospace" font-size="11" letter-spacing="2" fill="currentColor">MIXPANEL</text><text x="60" y="76" text-anchor="middle" font-family="Geist Mono, monospace" font-size="11" letter-spacing="2" fill="currentColor">FLUENT</text></svg>
-                </div>
-                <button class="permit-flip" type="button" aria-controls="permit" aria-expanded="false">See my route log</button>
+                <svg class="pass-stamp" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="60" cy="60" r="44" fill="none" stroke="currentColor" stroke-width="1.2"/><path id="arcA" d="M60 60m-36 0a36 36 0 1 1 72 0a36 36 0 1 1-72 0" fill="none"/><text font-family="Geist Mono, monospace" font-size="10.5" letter-spacing="2.4" fill="currentColor"><textPath href="#arcA">ZERO TO ONE · CLEARED ·</textPath></text><text x="60" y="68" text-anchor="middle" font-family="Instrument Serif, serif" font-size="26" fill="currentColor">0→1</text></svg>
               </div>
               <!-- back -->
-              <div class="permit-face back">
-                <div class="permit-head"><span>Route log</span><span class="mono">2018 → now</span></div>
-                <ol class="route-log">
-                  <li><time>Jun 2024</time><div><b>ScaleX</b><span>Founding Product Designer · Astroverse, Horocosmo and client launches</span></div></li>
-                  <li><time>Jan 2024</time><div><b>Freelance</b><span>Product design for web and mobile clients</span></div></li>
-                  <li><time>Mar 2022</time><div><b>Hucentric</b><span>UI/UX Designer · Wishup, Vegapay, Webflow builds</span></div></li>
-                  <li><time>2018</time><div><b>B.Tech, Computer Science</b><span>Dr. A.P.J. Abdul Kalam Technical University</span></div></li>
-                </ol>
-                <p class="log-next">next stop: your team?</p>
-                <button class="permit-flip" type="button" aria-controls="permit">Back to the permit</button>
+              <div class="pass-face back">
+                <div class="pass-main">
+                  <div class="pass-head"><span>Itinerary</span><span>2018 → now</span></div>
+                  <ol class="route-log">
+                    <li><time>Jun 2024</time><div><b>ScaleX</b><span>Founding Product Designer · Astroverse, Horocosmo and client launches</span></div></li>
+                    <li><time>Jan 2024</time><div><b>Freelance</b><span>Product design for web and mobile clients</span></div></li>
+                    <li><time>Mar 2022</time><div><b>Hucentric</b><span>UI/UX Designer · Wishup, Vegapay, Webflow builds</span></div></li>
+                    <li><time>2018</time><div><b>B.Tech, Computer Science</b><span>Dr. A.P.J. Abdul Kalam Technical University</span></div></li>
+                  </ol>
+                </div>
+                <div class="pass-stub">
+                  <div class="pass-head">Next stop</div>
+                  <div class="pass-stub-body">
+                    <p class="log-next">your team?</p>
+                    <dl>
+                      <div><dt>Gate</dt><dd>Open</dd></div>
+                      <div><dt>Status</dt><dd>On time</dd></div>
+                    </dl>
+                    <svg class="barcode" viewBox="0 0 120 38" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><rect x="0" width="2" height="38"/><rect x="4" width="1" height="38"/><rect x="7" width="4" height="38"/><rect x="13" width="1" height="38"/><rect x="16" width="2" height="38"/><rect x="20" width="3" height="38"/><rect x="25" width="1" height="38"/><rect x="28" width="2" height="38"/><rect x="32" width="1" height="38"/><rect x="35" width="4" height="38"/><rect x="41" width="2" height="38"/><rect x="45" width="1" height="38"/><rect x="48" width="3" height="38"/><rect x="53" width="1" height="38"/><rect x="56" width="2" height="38"/><rect x="60" width="4" height="38"/><rect x="66" width="1" height="38"/><rect x="69" width="2" height="38"/><rect x="73" width="1" height="38"/><rect x="76" width="3" height="38"/><rect x="81" width="2" height="38"/><rect x="85" width="1" height="38"/><rect x="88" width="4" height="38"/><rect x="94" width="1" height="38"/><rect x="97" width="2" height="38"/><rect x="101" width="3" height="38"/><rect x="106" width="1" height="38"/><rect x="109" width="2" height="38"/><rect x="113" width="1" height="38"/><rect x="116" width="4" height="38"/></g></svg>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <p class="pass-hint" aria-hidden="true"><span class="mouse">Hover the pass to see my itinerary</span><span class="touch">Tap the pass to see my itinerary</span></p>
         </div>
       </div>
     </section>
@@ -277,7 +310,7 @@
     <section class="camp summit" id="summit" data-alt="4500" data-name="Summit">
       <div class="wrap summit-grid">
         <div class="summit-card rv">
-          <p class="camp-tag"><span>Summit</span>4,500 m · sunrise</p>
+          <p class="camp-tag"><span>Summit</span>4,500 m · sunset</p>
           <h2>You made it <em>to the top.</em></h2>
           <p class="lede">I'm looking for senior product design roles on consumer, AI or marketplace products. If you have a route in mind, let's plan it together.</p>
           <div class="contact">
@@ -294,6 +327,7 @@
     </section>
   </main>
 
+  <script type="module" src="assets/js/hero.js"></script>
   <script type="module" src="assets/js/app.js"></script>
   <script type="module" src="assets/js/scene.js"></script>
 </body>

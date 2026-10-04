@@ -1,11 +1,11 @@
 # deeva.design: a portfolio you climb
 
-This is Deeva Gupta's portfolio, built as a 3D night trek. As you scroll, a lantern climbs a low-poly mountain made with Three.js. Along the way you pass five camps (About, Work, Side trails, Travel, Contact) and reach the summit at sunrise. The rail on the left is both the altitude meter and the menu.
+This is Deeva Gupta's portfolio, built as a 3D trek above a sea of golden-hour clouds. The page opens buried in cloud; the clouds part and her name rises from behind the peak. As you scroll, a lantern climbs a low-poly mountain made with Three.js. Along the way you pass five camps (About, Work, Side trails, Travel, Contact) and reach the summit at sunset. The rail on the left is both the altitude meter and the menu.
 
 - `index.html`: the trek (home page)
 - `astroverse.html`: the full Astroverse 2.0 case study
 
-**Look:** "Alpenglow". Deep-blue night (`#0F1B2D`), rose alpenglow as the single accent (`#F4A7B9`), gold only for the lantern (`#F6D58E`). Type is Instrument Serif (headlines, italic accent words), Geist (UI and body), Geist Mono (labels) and Caveat (one or two handwritten notes).
+**Look:** "Golden hour". Teal sky (`#6FA9B5`), peach cloud light as the single accent (`#F7C59F`), terracotta rock (`#B85C3C`) and slate shadows (`#2E3B47`). Content sits on smoked glass panels. Type is Instrument Serif (headlines, italic accent words), Geist (UI and body), Geist Mono (labels) and Caveat (one or two handwritten notes).
 
 It is a static site with no build step. It runs on GitHub Pages as it is.
 
@@ -23,21 +23,22 @@ You have to serve the site over HTTP because ES modules don't load from `file://
 | What | Where |
 |---|---|
 | Astroverse case study (problems, decisions, results, screens) | `astroverse.html` |
-| Work cards, About permit, side trails | `index.html` |
+| Work cards, About boarding pass, side trails | `index.html` |
 | Fridge magnets and local stories (placeholders now) | `assets/js/content.js` → `places` |
 | Email, LinkedIn, case study link | `assets/js/content.js` → `links` |
 | Colours and fonts | `assets/css/style.css` and `assets/css/case.css` → `:root` |
-| Mountain, trail, sky and camera | `assets/js/scene.js` |
+| Mountain, trail, sky, cloud sea, camera and the 3D hero title | `assets/js/scene.js` |
+| Hero cloud intro and parallax | `assets/js/hero.js` (clouds are painted by `assets/js/clouds.js`) |
 
 ### Replace placeholders with real images
 
 1. Put images in `assets/img/`.
 2. Then do one of the following:
    - **Travel photos**: set `photo` in `content.js`, for example `photo: "assets/img/hampi.jpg"`.
-   - **Permit photo** (`.permit-photo`) and **case study screens** (`.shot` in `astroverse.html`): put an `<img>` inside the placeholder. The label hides automatically.
+   - **Boarding pass photo** (`.pass-photo`) and **case study screens** (`.shot` in `astroverse.html`): put an `<img>` inside the placeholder. The label hides automatically.
    - **Work card mockups** (`.wc-stage` in `index.html`): replace the `.phone` / `.browser` placeholders with an `<img>` of your real screens.
      ```html
-     <div class="ph permit-photo" data-label="Your photo"><img src="assets/img/me.jpg" alt="Deeva on the Kedarkantha trail"></div>
+     <div class="ph pass-photo" data-label="Your photo"><img src="assets/img/me.jpg" alt="Deeva on the Kedarkantha trail"></div>
      ```
 
 ### LinkedIn
@@ -64,8 +65,10 @@ Paste your URL into `links.linkedin` in `content.js`. The button appears at the 
 - **Terrain**: a procedural height field (value-noise fBm with ridges) rendered with flat shading. It is coloured by height and slope: forest, then rock, then snow.
 - **Trail and camera**: the trail is a spiral `CatmullRomCurve3` laid on the actual mesh surface. The lit part is a `TubeGeometry` whose draw range grows as you scroll. The camera follows the lantern along the curve.
 - **Scroll mapping**: `assets/js/progress.js` maps scroll position to altitude. The HUD and the 3D camera both use it, so they always agree.
-- **Sky**: a shader dome that blends from night to dawn, with a sun glow, stars, fog and drifting clouds.
+- **Sky**: a shader dome that deepens from golden hour to sunset as you climb, with a low sun, fog and a drifting sea of clouds.
+- **Hero intro**: cloud curtains are painted procedurally on canvas (no image files), part on load, then drift apart and sink as you scroll. The name is a plane far behind the peak in the 3D scene, so it genuinely rises from behind the mountains.
 - **Accessibility**:
-  - Reduced motion is respected: no smoothing, flicker or drift.
+  - Reduced motion is respected: no cloud intro, parallax, smoothing, flicker or drift.
+  - The boarding pass flips on hover with a mouse, and on tap, Enter or Space otherwise.
   - The trail map, tabs and magnets work with the keyboard.
   - Content stays readable without WebGL, because a CSS sky is used as the fallback.
