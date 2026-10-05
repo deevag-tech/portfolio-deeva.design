@@ -1,7 +1,7 @@
 /* ==========================================================================
-   Hero intro: the trailhead starts buried in golden-hour cloud. Once the 3D
-   world is ready the clouds part to the sides, the name rises from behind
-   the peak (scene.js), and the intro copy settles in the middle.
+   Hero intro: the trailhead starts buried in cloud. Once the hero photo is
+   ready (world.js) the clouds part to the sides, the name rises from behind
+   the peaks, and the tagline and buttons settle into place.
    Scrolling then pulls the cloud layers away at different speeds (parallax).
    ========================================================================== */
 import { paintClouds, shapes } from './clouds.js';
@@ -38,7 +38,7 @@ function part() {
   intro.start = performance.now();
   root.classList.remove('intro-cover');
   root.classList.add('intro-part');
-  setTimeout(() => root.classList.add('intro-done'), 3400);
+  setTimeout(() => root.classList.add('intro-done'), 4400);
 }
 
 if (!box) {
@@ -55,7 +55,7 @@ if (!box) {
     paint();
     if (intro.ready) setTimeout(part, 350);
     else addEventListener('world:ready', () => setTimeout(part, 350), { once: true });
-    setTimeout(part, 3200);                // never wait forever (slow GPU, no WebGL)
+    setTimeout(part, 3200);                // never wait forever (slow network)
   });
   // scrolling or a key press skips straight to the reveal
   const skip = () => part();

@@ -39,8 +39,7 @@ function updateRail() {
     a.setAttribute('aria-current', String(i === current));
     a.classList.toggle('passed', i < current);
   });
-  root.style.setProperty('--dawn-t', s.dawn.toFixed(3));
-  // reading scrim: off over the hero, on along the trail, gone again at the summit
+  // reading haze: off over the hero, on along the trail, gone again at the summit
   const on = Math.min(1, Math.max(0, (s.alt - 250) / 650)) * (1 - Math.min(1, Math.max(0, (s.alt - 4150) / 300)));
   root.style.setProperty('--scrim', on.toFixed(3));
 }
@@ -98,7 +97,7 @@ places.forEach((p, i) => {
   const shape = p.shape === 'round' ? `width:${sz}px;height:${sz}px;border-radius:50%`
     : p.shape === 'rect' ? `width:${sz + 24}px;height:${sz - 24}px;border-radius:12px`
     : `width:${sz}px;height:${sz}px;border-radius:18px 18px 50% 50%`;
-  const bg = p.photo ? `background-image:linear-gradient(rgba(30,41,50,.35),rgba(30,41,50,.35)),url('${esc(p.photo)}')` : `background-color:${p.color}`;
+  const bg = p.photo ? `background-image:linear-gradient(rgba(22,33,59,.3),rgba(22,33,59,.3)),url('${esc(p.photo)}')` : `background-color:${p.color}`;
   b.innerHTML = `<span class="face" style="${shape};${bg}">${esc(p.name)}<small>${esc(p.state.toUpperCase())}</small></span>`;
   door.appendChild(b); mags.push(b);
 
@@ -140,7 +139,7 @@ function openCard(i, scroll = true) {
   $('pc-meta-b').textContent = `From ${p.name}`;
   photo.dataset.label = `Photo · ${p.name}, ${p.state}`;
   photo.innerHTML = p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}, ${esc(p.state)}" loading="lazy">` : '';
-  photo.style.background = `radial-gradient(120% 80% at 25% 15%, rgba(255,226,191,.5), transparent 60%), linear-gradient(170deg, ${p.color} 0%, #2E3B47 72%)`;
+  photo.style.background = `radial-gradient(120% 80% at 25% 15%, rgba(255,255,255,.55), transparent 60%), linear-gradient(170deg, ${p.color} 0%, #16213B 86%)`;
   $('pc-title').textContent = `${p.name}, ${p.state}`;
   $('pc-local').textContent = p.local;
   $('pc-note').textContent = p.note;

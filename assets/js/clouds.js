@@ -1,15 +1,16 @@
 /* ==========================================================================
-   Procedural golden-hour clouds, painted pixel by pixel on a 2D canvas.
+   Procedural clouds, painted pixel by pixel on a 2D canvas.
    Billowy fBm noise gives the shape; sampling the density a step towards
-   the sun gives the lighting (sunlit rims, blue-grey undersides).
-   Used for the hero's cloud curtains and for the 3D cloud-sea sprites.
+   the sun gives the lighting (bright rims, lavender undersides).
+   The colours are sampled from the real cloud sea in the hero photo, so the
+   intro curtains melt into the picture behind them.
    ========================================================================== */
 
 export const CLOUD = {
-  light: [255, 244, 230],  // sunlit rims
-  peach: [246, 196, 160],  // golden mid-tones
-  shade: [150, 163, 172],  // blue-grey undersides
-  deep:  [96, 110, 122],   // deepest shadow
+  light: [253, 251, 255],  // bright rims
+  peach: [232, 225, 241],  // soft lavender-white mid-tones
+  shade: [190, 183, 212],  // lavender undersides
+  deep:  [146, 143, 176],  // deepest shadow
 };
 
 /* --- tiny seeded value noise --- */
@@ -102,10 +103,4 @@ export function paintClouds(canvas, { shape, seed = 1, scale = 3.2, cover = 0.55
   }
   ctx.putImageData(img, 0, 0);
   return canvas;
-}
-
-/* A cumulus texture for a 3D sprite. */
-export function cloudCanvas(w, h, seed) {
-  const c = document.createElement('canvas'); c.width = w; c.height = h;
-  return paintClouds(c, { shape: shapes.puff(), seed, scale: 2.2, cover: 0.5, softness: 0.32 });
 }
