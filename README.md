@@ -1,11 +1,11 @@
 # deeva.design: a portfolio you climb
 
-This is Deeva Gupta's portfolio, built as a 3D trek above a sea of golden-hour clouds. The page opens buried in cloud; the clouds part and her name rises from behind the peak. As you scroll, a lantern climbs a low-poly mountain made with Three.js. Along the way you pass five camps (About, Work, Side trails, Travel, Contact) and reach the summit at sunset. The rail on the left is both the altitude meter and the menu.
+This is Deeva Gupta's portfolio, built as a climb up a real mountain. The page opens buried in cloud; the clouds part and her name rises from behind the actual peaks of a dawn photograph. As you scroll, the camera climbs towards the big peak through five camps (About, Work, Side trails, Travel, Contact), passing banks of cloud on the way, while the light warms from dawn to sunset. At the summit the peak sits on the left and the contact card on the right. The rail on the left is both the altitude meter and the menu.
 
 - `index.html`: the trek (home page)
 - `astroverse.html`: the full Astroverse 2.0 case study
 
-**Look:** "Golden hour". Teal sky (`#6FA9B5`), peach cloud light as the single accent (`#F7C59F`), terracotta rock (`#B85C3C`) and slate shadows (`#2E3B47`). Content sits on smoked glass panels. Type is Instrument Serif (headlines, italic accent words), Geist (UI and body), Geist Mono (labels) and Caveat (one or two handwritten notes).
+**Look:** "Above the clouds". Colours come from the photos: deep alpine navy ink (`#16213B`), an alpenglow rose accent (`#BE4766`), sky blue (`#5B8FD0`) and dawn pink (`#F4ADBD`). Every surface is light frosted glass. Type is Instrument Serif (headlines, italic accent words), Geist (UI and body), Geist Mono (labels) and Caveat (one or two handwritten notes).
 
 It is a static site with no build step. It runs on GitHub Pages as it is.
 
@@ -27,7 +27,7 @@ You have to serve the site over HTTP because ES modules don't load from `file://
 | Fridge magnets and local stories (placeholders now) | `assets/js/content.js` → `places` |
 | Email, LinkedIn, case study link | `assets/js/content.js` → `links` |
 | Colours and fonts | `assets/css/style.css` and `assets/css/case.css` → `:root` |
-| Mountain, trail, sky, cloud sea, camera and the 3D hero title | `assets/js/scene.js` |
+| The climb (camera path, light, passing clouds) and the hero name | `assets/js/world.js`, photo in `assets/img/` |
 | Hero cloud intro and parallax | `assets/js/hero.js` (clouds are painted by `assets/js/clouds.js`) |
 
 ### Replace placeholders with real images
@@ -61,14 +61,12 @@ Paste your URL into `links.linkedin` in `content.js`. The button appears at the 
 
 ## Under the hood
 
-- **Three.js r160**, loaded from jsDelivr through an import map.
-- **Terrain**: a procedural height field (value-noise fBm with ridges) rendered with flat shading. It is coloured by height and slope: forest, then rock, then snow.
-- **Trail and camera**: the trail is a spiral `CatmullRomCurve3` laid on the actual mesh surface. The lit part is a `TubeGeometry` whose draw range grows as you scroll. The camera follows the lantern along the curve.
-- **Scroll mapping**: `assets/js/progress.js` maps scroll position to altitude. The HUD and the 3D camera both use it, so they always agree.
-- **Sky**: a shader dome that deepens from golden hour to sunset as you climb, with a low sun, fog and a drifting sea of clouds.
-- **Hero intro**: cloud curtains are painted procedurally on canvas (no image files), part on load, then drift apart and sink as you scroll. The name is a plane far behind the peak in the 3D scene, so it genuinely rises from behind the mountains.
+- **One photo**: a free-licence Unsplash photo of two peaks above a sea of cloud at dawn, in three sizes: `hero-sm.jpg` for phones, `hero.jpg`, and `hero-xl.jpg` (5000px), which loads once the camera starts zooming so the summit stays sharp.
+- **The climb**: `world.js` maps the altitude to a camera path (`PATH`): zoom, the point of the photo it looks at, and where that point sits on screen. The camera eases towards it, like a real camera. Soft-light colour layers warm the photo from dawn to sunset, and painted cloud banks drift past between camps.
+- **Name behind the peaks**: the hero shows the same photo twice. The top copy is cut down to the peaks and the cloud sea with an SVG mask in `style.css` (`.hero-scene .fg`). The name sits between the two copies, so it rises from behind the mountains. `world.js` pins the name and tagline to the photo's horizon on every screen size.
+- **Hero intro**: cloud curtains are painted procedurally on canvas in the colours of the real cloud sea. They part on load, then drift apart and sink as you scroll.
+- **Scroll mapping**: `assets/js/progress.js` maps scroll position to altitude for the rail.
 - **Accessibility**:
-  - Reduced motion is respected: no cloud intro, parallax, smoothing, flicker or drift.
+  - Reduced motion is respected: no cloud intro, parallax or drift.
   - The boarding pass flips on hover with a mouse, and on tap, Enter or Space otherwise.
   - The trail map, tabs and magnets work with the keyboard.
-  - Content stays readable without WebGL, because a CSS sky is used as the fallback.
