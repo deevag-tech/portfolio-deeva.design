@@ -17,13 +17,13 @@ It is a static site with no build step. It runs on GitHub Pages as it is.
 | # | Section | Object | Content lives in |
 |---|---|---|---|
 | 1 | Hero | Painted trail with 5 stops. Tapping a stop opens a bottom sheet | `content.js` → `stops` (x / y place the pin on the art) |
-| 2 | Story | Journal spread with facts and skills | `index.html` |
-| 3 | Work | Postcards. The back holds problem, role and result | `content.js` → `work` |
-| 4 | Astroverse 2.0 | Every hat I wore, plus the key numbers | `content.js` → `hats`, `astroStats` |
+| 2 | Story | Boarding pass on grid paper. Tearing off the stub reveals the skills | `index.html` |
+| 3 | Work | Postcards, front (mockup) and back (problem, role, result) side by side | `content.js` → `work` |
+| 4 | Astroverse 2.0, start to finish | Five steps, the hat worn at each, and the real artifact behind it, plus the toolbox | `content.js` → `steps`, `tools` |
 | 5 | Side trails | Souvenir shelf of websites | `content.js` → `sites` |
-| 6 | Process | Five switchbacks | `content.js` → `process` |
-| 7 | Off the clock | Fridge door with draggable magnets and local tips | `content.js` → `places` |
-| 8 | Say hello | Send-a-postcard form and the wall | `content.js` → `postcard`, `assets/data/postcards.json` |
+| 6 | Off the clock | Fridge door with draggable magnets and local tips | `content.js` → `places` |
+| 7 | Say hello | Post office desk: pick a stamp, write the card, drop it in the postbox. Corkboard wall of approved cards | `content.js` → `postcard`, `assets/data/postcards.json` |
+| 8 | Footer | Rubber stamps on an ink pad (Email, Case study, Postcard, Top) | `content.js` → `links` (a LinkedIn or Résumé stamp appears once `links.linkedin` / `links.resume` is set) |
 
 ## Run locally
 
@@ -46,13 +46,13 @@ You have to serve the site over HTTP because ES modules don't load from `file://
 
 ## Postcards (the contact form)
 
-- **By default:** "Stamp & send" opens the visitor's email app with the postcard already written, addressed to `links.email`.
+- **By default:** "Drop it in" opens the visitor's email app with the postcard already written, addressed to `links.email`.
 - **To receive cards without an email app:** create a free form endpoint (for example on Formspree), paste its URL into `postcard.endpoint` in `content.js`, and cards arrive in your inbox.
 - **The wall** only shows cards you approve. To approve one, add it to `assets/data/postcards.json` (`from`, `place`, `date`, `message`).
 
 ## LinkedIn
 
-Paste your URL into `links.linkedin` in `content.js`. The link appears in the footer only once the URL is set.
+Paste your URL into `links.linkedin` in `content.js` and a LinkedIn stamp appears in the footer. `links.resume` does the same for a Résumé stamp (the footer shows four stamps at most).
 
 ## Deploy on GitHub Pages
 

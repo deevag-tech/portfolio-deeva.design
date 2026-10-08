@@ -41,36 +41,60 @@
       </div>
     </section>
 
-    <!-- 02 · STORY -->
-    <section class="chapter" id="story" aria-labelledby="story-title">
+    <!-- 02 · STORY: boarding pass -->
+    <section class="chapter chapter--grid" id="story" aria-labelledby="story-title">
       <div class="wrap">
         <div class="head reveal">
           <p class="eyebrow t-eyebrow">Camp 01 · The story so far</p>
           <h2 class="t-display-l" id="story-title">Engineer by degree, designer by choice.</h2>
           <p class="t-body-l lead">I studied Computer Science, then fell for the part of software people actually touch.</p>
         </div>
-        <div class="object journal reveal">
-          <div>
-            <p class="t-body-l">Since 2022 I’ve designed websites, brands and apps: at an agency, on my own, and now as the founding product designer at ScaleX.</p>
-            <p class="t-body muted">There I took Astroverse, our own dating app, from a swipe clone to a curated, Kundli-first product, and set the UI base for client apps like Horocosmo, which crossed 100K downloads in its first month.</p>
-            <p class="t-body muted">I like the whole route: the research call, the north-star sentence, the words on the button, and the Mixpanel chart a week after launch.</p>
-            <p class="t-hand sign note">— Deeva</p>
-          </div>
-          <div>
-            <dl class="facts">
-              <div class="metric"><dt>years in consumer product</dt><dd class="t-metric">4+</dd></div>
-              <div class="metric"><dt>downloads in month one for a client app</dt><dd class="t-metric">100K+</dd></div>
-              <div class="metric"><dt>founding designer on Astroverse</dt><dd class="t-metric">0→1</dd></div>
-            </dl>
-            <div class="packed">
-              <span class="t-eyebrow">Packed for the climb</span>
-              <ul class="chips">
-                <li class="chip">Research</li><li class="chip">Flows & IA</li><li class="chip">UX writing</li>
-                <li class="chip">Design systems</li><li class="chip">Analytics</li><li class="chip">AI products</li>
-                <li class="chip">Figma</li><li class="chip">Mixpanel</li><li class="chip">Jira</li>
-              </ul>
+        <div class="object pass-wrap reveal">
+          <article class="pass" id="pass" aria-label="Boarding pass: Deeva Gupta, B.Tech to product design">
+            <div class="pass-main">
+              <header class="pass-band"><span>Trailhead Air</span><span class="pass-band-r">Boarding pass · Product design</span></header>
+              <div class="pass-route">
+                <div><span class="t-eyebrow muted">From</span><b class="pass-city">B.Tech</b><span class="t-body-s muted">Computer Science · 2018</span></div>
+                <div class="pass-arc" aria-hidden="true"><svg viewBox="0 0 220 44"><path d="M2 40 C 62 2 158 2 218 40"/></svg><span class="t-body-s accent">Hucentric · Freelance · ScaleX</span></div>
+                <div><span class="t-eyebrow muted">To</span><b class="pass-city">Product</b><span class="t-body-s muted">Founding designer · now</span></div>
+              </div>
+              <dl class="pass-fields">
+                <div><dt class="t-eyebrow">Passenger</dt><dd>Deeva Gupta</dd></div>
+                <div><dt class="t-eyebrow">Flight</dt><dd>DG 0→1</dd></div>
+                <div><dt class="t-eyebrow">Seat</dt><dd>4+ yrs</dd></div>
+                <div><dt class="t-eyebrow">Gate</dt><dd>ScaleX</dd></div>
+                <div><dt class="t-eyebrow">Boarding</dt><dd>Now</dd></div>
+              </dl>
+              <div class="pass-notes">
+                <span class="t-eyebrow muted">Notes</span>
+                <p class="t-body">Since 2022: an agency, my own clients, and now founding product designer at ScaleX, where I took Astroverse from a swipe clone to a curated, Kundli-first app.</p>
+              </div>
+              <span class="stamp pass-stamp" aria-hidden="true"><b>Cleared</b><span>Consumer · AI</span><span>Trust</span></span>
             </div>
-          </div>
+            <div class="pass-tail">
+              <div class="packed" id="packed">
+                <span class="t-eyebrow accent">Packed for the climb</span>
+                <ul class="chips">
+                  <li class="chip">Research</li><li class="chip">Flows &amp; IA</li><li class="chip">UX writing</li>
+                  <li class="chip">Design systems</li><li class="chip">Analytics</li><li class="chip">AI products</li>
+                </ul>
+                <button class="link" type="button" id="stub-back">Put the stub back</button>
+              </div>
+              <button class="pass-stub" type="button" id="stub" aria-controls="packed" aria-expanded="false">
+                <span class="pass-band"><span>Tear here</span></span>
+                <span class="stub-stats">
+                  <span><b>4+</b><i>years in consumer product</i></span>
+                  <span><b>100K+</b><i>month-one downloads, client app</i></span>
+                  <span><b>0→1</b><i>founding designer, Astroverse</i></span>
+                </span>
+                <span class="barcode" aria-hidden="true"></span>
+                <span class="t-eyebrow muted barcode-id">DG-2018-NOW</span>
+                <span class="sr-only">Tear off the stub to see the skills I packed</span>
+              </button>
+            </div>
+          </article>
+          <p class="t-hand pass-hint" aria-hidden="true">tear the stub to see what I packed</p>
+          <p class="t-hand pass-next" aria-hidden="true">next stop: your team?</p>
         </div>
       </div>
     </section>
@@ -81,23 +105,30 @@
         <div class="head reveal">
           <p class="eyebrow t-eyebrow">Camp 02 · Selected work</p>
           <h2 class="t-display-l" id="work-title">Three products, and the number each one moved.</h2>
-          <p class="t-body-l lead">Real products in people’s pockets. Flip a postcard for the story.</p>
+          <p class="t-body-l lead">Real products in people’s pockets. Each postcard: the product on the front, the story on the back.</p>
         </div>
         <div class="object cards" id="cards"></div>
       </div>
     </section>
 
-    <!-- 04 · ASTROVERSE: every hat -->
+    <!-- 04 · ASTROVERSE: start to finish (process + hats + tools) -->
     <section class="chapter chapter--dark" id="astroverse" aria-labelledby="astro-title">
       <div class="wrap">
         <div class="head reveal">
-          <p class="eyebrow t-eyebrow">Camp 03 · Astroverse 2.0</p>
-          <h2 class="t-display-l" id="astro-title">One product, every hat.</h2>
-          <p class="t-body-l lead">As founding designer, I took Astroverse from research to shipped UI, and wore all of these on the way.</p>
+          <p class="eyebrow t-eyebrow">Camp 03 · Astroverse 2.0, start to finish</p>
+          <h2 class="t-display-l" id="astro-title">One product, five switchbacks.</h2>
+          <p class="t-body-l lead">How I took Astroverse from a swipe clone to a curated app, and the hat I wore at each turn.</p>
         </div>
-        <ul class="object astro-grid" id="hats"></ul>
+        <div class="object journey reveal">
+          <div class="steps" role="tablist" aria-label="Five switchbacks" id="steps"></div>
+          <div class="window" id="step-panel" role="tabpanel" tabindex="0"></div>
+        </div>
+        <div class="step-dots" id="step-dots" aria-hidden="true"></div>
         <div class="astro-foot reveal">
-          <dl class="astro-stats" id="astro-stats"></dl>
+          <div>
+            <p class="t-eyebrow toolbox-label">My toolbox</p>
+            <ul class="toolbox" id="toolbox"></ul>
+          </div>
           <a class="btn btn--primary" href="astroverse.html">Read the case study <span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
@@ -121,26 +152,11 @@
       </div>
     </section>
 
-    <!-- 06 · PROCESS -->
-    <section class="chapter chapter--alt" id="process" aria-labelledby="process-title">
-      <div class="wrap">
-        <div class="head reveal">
-          <p class="eyebrow t-eyebrow">Camp 05 · How I work</p>
-          <h2 class="t-display-l" id="process-title">Five switchbacks, every project.</h2>
-          <p class="t-body-l lead">The same route whether it’s a landing page or a whole app.</p>
-        </div>
-        <div class="object">
-          <svg class="trail-line" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="M16 20 C 120 20, 150 84, 259 84 S 400 20, 502 20 S 640 84, 746 84 S 880 20, 989 20"/></svg>
-          <ol class="trail" id="trail"></ol>
-        </div>
-      </div>
-    </section>
-
     <!-- 07 · OFF THE CLOCK: fridge door -->
     <section class="chapter chapter--dark" id="off-the-clock" aria-labelledby="clock-title">
       <div class="wrap">
         <div class="head reveal">
-          <p class="eyebrow t-eyebrow">Camp 06 · Off the clock</p>
+          <p class="eyebrow t-eyebrow">Camp 05 · Off the clock</p>
           <h2 class="t-display-l" id="clock-title">A magnet from every place, and what a local told me.</h2>
           <p class="t-body-l lead">Treks, road trips and the one tip no guidebook has. Drag the magnets; tap one for its story.</p>
         </div>
@@ -153,21 +169,23 @@
       </div>
     </section>
 
-    <!-- 08 · SAY HELLO: send a postcard -->
-    <section class="chapter" id="hello" aria-labelledby="hello-title">
+    <!-- 08 · SAY HELLO: post office desk + corkboard wall -->
+    <section class="chapter chapter--kraft" id="hello" aria-labelledby="hello-title">
       <div class="wrap">
         <div class="head reveal">
           <p class="eyebrow t-eyebrow">Summit · Say hello</p>
           <h2 class="t-display-l" id="hello-title">Send me a postcard.</h2>
-          <p class="t-body-l lead">Hiring, collaborating, or just saying hi? Write on the back and I’ll write back.</p>
+          <p class="t-body-l lead">Hiring, collaborating, or just saying hi? Pick a stamp, write on the back, drop it in the postbox.</p>
         </div>
 
-        <div class="object composer reveal">
-          <div class="fronts" role="radiogroup" aria-label="Pick a postcard front">
-            <p class="t-eyebrow">1 · Pick a front</p>
-            <button class="front-opt" type="button" role="radio" aria-checked="true" data-front="trail"><span class="front-thumb front-trail"></span><span class="t-label">The trail</span></button>
-            <button class="front-opt" type="button" role="radio" aria-checked="false" data-front="summit"><span class="front-thumb front-summit"></span><span class="t-label">The summit</span></button>
-            <button class="front-opt" type="button" role="radio" aria-checked="false" data-front="fridge"><span class="front-thumb front-fridge"></span><span class="t-label">The fridge door</span></button>
+        <div class="object desk reveal" id="desk">
+          <div class="stamp-sheet" role="radiogroup" aria-label="Pick a stamp">
+            <p class="t-eyebrow">1 · Pick a stamp</p>
+            <div class="stamps">
+              <button class="pick" type="button" role="radio" aria-checked="true" data-front="trail"><span class="pick-art art-trail"></span><span class="pick-label">₹5 · Trail</span></button>
+              <button class="pick" type="button" role="radio" aria-checked="false" data-front="summit"><span class="pick-art art-summit"></span><span class="pick-label">₹5 · Summit</span></button>
+              <button class="pick" type="button" role="radio" aria-checked="false" data-front="fridge"><span class="pick-art art-fridge"></span><span class="pick-label">₹5 · Fridge</span></button>
+            </div>
           </div>
 
           <form class="pc-form" id="pc-form" novalidate>
@@ -179,7 +197,10 @@
             </div>
             <span class="rule" aria-hidden="true"></span>
             <div class="side">
-              <span class="stamp-slot" id="stamp-slot" aria-hidden="true">stamp</span>
+              <div class="side-top" aria-hidden="true">
+                <span class="postmark-ring">Posted<br>India</span>
+                <span class="stamp-slot" id="stamp-slot"><span class="pick-art art-trail" id="slot-art"></span></span>
+              </div>
               <div class="field">
                 <label class="t-eyebrow" for="pc-name">From</label>
                 <input id="pc-name" name="name" autocomplete="name" required aria-describedby="pc-name-err">
@@ -194,35 +215,62 @@
                 <input type="checkbox" name="wall" id="pc-wall">
                 <span>Pin it to the wall<small>Only your message and first name. I approve every card first.</small></span>
               </label>
-              <button class="btn btn--primary" type="submit">Stamp &amp; send <span class="arrow" aria-hidden="true">→</span></button>
-            </div>
-            <div class="sent" id="sent" tabindex="-1">
-              <div>
-                <span class="stamp"><b>Sent</b><span id="sent-date"></span></span>
-                <h3 class="t-display-m">Your postcard is on its way.</h3>
-                <p class="t-body" id="sent-msg">I read every one and reply within a few days.</p>
-                <button class="link" type="button" id="pc-again" style="margin-top:16px">Write another <span class="arrow" aria-hidden="true">→</span></button>
-              </div>
+              <button class="btn btn--primary" type="submit">Drop it in <span class="arrow" aria-hidden="true">→</span></button>
             </div>
           </form>
+
+          <div class="sent" id="sent" tabindex="-1" hidden>
+            <span class="stamp"><b>Posted</b><span id="sent-date"></span></span>
+            <h3 class="t-display-m">Your postcard is on its way.</h3>
+            <p class="t-body" id="sent-msg">I read every one and reply within a few days.</p>
+            <button class="link" type="button" id="pc-again">Write another <span class="arrow" aria-hidden="true">→</span></button>
+          </div>
+
+          <figure class="postbox" id="postbox" aria-hidden="true">
+            <span class="t-hand postbox-note">drop it in</span>
+            <svg viewBox="0 0 200 560">
+              <path d="M10 110 A90 90 0 0 1 190 110 V490 H10 Z" fill="#B8312A"/>
+              <rect x="10" y="108" width="180" height="8" fill="#8E241F" opacity=".6"/>
+              <rect x="40" y="150" width="120" height="14" rx="7" fill="#1E1B16"/>
+              <rect x="50" y="190" width="100" height="64" rx="4" fill="#F5EFE3"/>
+              <text x="100" y="214" text-anchor="middle" font-family="Geist Mono, monospace" font-size="10" letter-spacing="1" fill="#B8312A">LETTER BOX</text>
+              <text x="100" y="240" text-anchor="middle" font-family="Geist, sans-serif" font-size="15" font-weight="500" fill="#B8312A">पत्र पेटी</text>
+              <rect x="60" y="290" width="80" height="50" rx="6" fill="#8E241F" opacity=".5"/>
+              <rect x="92" y="312" width="16" height="6" rx="3" fill="#E8B04A"/>
+              <rect x="24" y="40" width="40" height="150" rx="20" fill="#fff" opacity=".12"/>
+              <rect x="0" y="480" width="200" height="30" rx="4" fill="#3A2E26"/>
+              <rect x="20" y="510" width="160" height="50" rx="2" fill="#2A211B"/>
+            </svg>
+          </figure>
         </div>
 
         <div class="wall-head">
           <h3 class="t-display-m">The wall</h3>
-          <p class="t-body-s muted">Postcards from people who climbed this far.</p>
+          <p class="t-body-s">Postcards from people who climbed this far. I approve every one.</p>
         </div>
-        <ul class="wall" id="wall"></ul>
+        <div class="corkboard"><ul class="wall" id="wall"></ul></div>
       </div>
     </section>
   </main>
 
-  <footer class="foot">
-    <div class="wrap">
-      <div class="contact">
-        <button class="copy-btn" type="button" id="copy-email"><span id="email-text">dee.vag78@gmail.com</span> <span class="t-body-s muted" id="copy-state">Copy</span></button>
-        <a class="link" id="linkedin" href="#" hidden>LinkedIn <span class="arrow" aria-hidden="true">↗</span></a>
+  <footer class="foot" id="foot">
+    <div class="wrap foot-grid">
+      <div class="foot-copy">
+        <p class="t-eyebrow">The end of the trail</p>
+        <h2 class="foot-title">Let’s plan the next trail together.</h2>
+        <p class="foot-email"><a href="mailto:dee.vag78@gmail.com" id="email-link">dee.vag78@gmail.com</a> <button class="chip-btn" type="button" id="copy-email">Copy</button></p>
+        <p class="t-body muted">Open to senior product design roles · consumer, AI, marketplaces.</p>
       </div>
-      <p class="t-body-s muted">© 2026 Deeva Gupta · Product designer · India</p>
+      <div class="stampdesk">
+        <div class="rstamps" id="rstamps" role="group" aria-label="Rubber stamps"></div>
+        <span class="inkpad" aria-hidden="true"></span>
+        <div class="strip" id="strip" aria-live="polite"><span class="imprint ghost t-hand">press a stamp</span></div>
+      </div>
+    </div>
+    <div class="wrap foot-bar">
+      <p class="t-body-s">© 2026 Deeva Gupta · Designed and built by hand in India</p>
+      <p class="t-body-s" id="clock">IST · probably sketching</p>
+      <a class="t-label foot-top" href="#top">Back to the trailhead ↑</a>
     </div>
   </footer>
 
