@@ -1,19 +1,19 @@
 /* ==========================================================================
    Portfolio v3 · behaviour. Content comes from content.js.
    ========================================================================== */
-import { links, postcard, stops, work, hats, astroStats, sites, process, places } from './content.js';
+import { links, postcard, stops, work, steps, tools, sites, places } from './content.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const wait = (ms) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
 
 /* ---------- 1. Hero: pins on the trail + the journey sheet ---------- */
 const heroArt = $('.hero-art');
 const heroImg = $('.hero-art img');
 const pinsEl = $('#pins');
-const hint = $('#hero-hint');
 
 pinsEl.innerHTML = stops.map((s, i) => `
   <button class="pin" type="button" role="listitem" data-i="${i}" aria-expanded="false" aria-controls="sheet">
@@ -31,21 +31,14 @@ function placePins() {
   const ox = (W - dw) * (isNaN(px) ? 0.5 : px), oy = (H - dh) * (isNaN(py) ? 0.5 : py);
   pins.forEach((pin, i) => {
     const x = ox + stops[i].x * dw, y = oy + stops[i].y * dh;
-    const inside = x > 16 && x < W - 16 && y > 16 && y < H - 16;
-    pin.hidden = !inside;
+    pin.hidden = !(x > 16 && x < W - 16 && y > 16 && y < H - 16);
     pin.style.left = x.toFixed(1) + 'px';
     pin.style.top = y.toFixed(1) + 'px';
     // labels flip to the left when a pin sits near the right edge
-    pin.style.flexDirection = x > W - 200 ? 'row-reverse' : 'row';
-    pin.style.transform = x > W - 200 ? 'translate(calc(-100% + 14px), -14px)' : 'translate(-14px, -14px)';
+    const flip = x > W - 200;
+    pin.style.flexDirection = flip ? 'row-reverse' : 'row';
+    pin.style.transform = flip ? 'translate(calc(-100% + 14px), -14px)' : 'translate(-14px, -14px)';
   });
-  // the hand-written hint points at the cabin (stop 2)
-  const ref = pins[1];
-  if (hint && ref && !ref.hidden) {
-    const r = heroArt.getBoundingClientRect(), hero = $('.hero').getBoundingClientRect();
-    hint.style.left = (r.left - hero.left + parseFloat(ref.style.left) - 290) + 'px';
-    hint.style.top = (r.top - hero.top + parseFloat(ref.style.top) + 6) + 'px';
-  }
 }
 if (heroImg.complete) placePins(); else heroImg.addEventListener('load', placePins, { once: true });
 new ResizeObserver(placePins).observe(heroArt);
@@ -98,89 +91,144 @@ sheet.addEventListener('keydown', (e) => {
     else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
   }
 });
-// swipe the sheet down to close
-let sy = null;
+let sy = null; // swipe the sheet down to close
 sheet.addEventListener('touchstart', (e) => { sy = e.touches[0].clientY; }, { passive: true });
 sheet.addEventListener('touchend', (e) => { if (sy !== null && e.changedTouches[0].clientY - sy > 70 && sheet.scrollTop <= 0) closeSheet(); sy = null; });
 
-/* ---------- 2. Work: postcards ---------- */
-const phones = () => `<div class="phones" aria-hidden="true">${[0, 1].map(() => '<div class="phone"><i class="hero-blk"></i><i class="ln"></i><i class="ln s"></i><i class="cta"></i></div>').join('')}</div>`;
-const front = (w, flip) => `
-  <div class="postcard pc-front tint-${esc(w.tint)}">
-    <div class="pc-art">
-      <span class="t-eyebrow">${esc(w.label)}</span>
-      ${w.image ? `<img src="${esc(w.image)}" alt="${esc(w.label)} screens" loading="lazy">` : phones()}
-      ${flip ? '' : '<span class="t-hand greet">greetings from the trail</span>'}
-    </div>
-    ${flip ? `<button class="flip-btn" type="button" aria-label="Flip the ${esc(w.label)} postcard to read the story">Flip <span aria-hidden="true">↻</span></button>` : ''}
-  </div>`;
-const back = (w, flip) => `
-  <div class="postcard pc-back${flip ? ' pc-back-face' : ''}">
-    <div class="rows">
-      <h3 class="t-display-m">${esc(w.title)}</h3>
-      <dl class="rows">
-        <div><dt class="t-eyebrow">Problem</dt><dd class="t-body-s">${esc(w.problem)}</dd></div>
-        <div><dt class="t-eyebrow">My role</dt><dd class="t-body-s">${esc(w.role)}</dd></div>
-        <div class="metric"><dt class="t-eyebrow">Result</dt><dd class="t-metric">${esc(w.metric)}</dd></div>
-      </dl>
-      <p class="t-body-s muted">${esc(w.metricLabel)}</p>
-      <a class="link" href="${esc(w.link.href)}">${esc(w.link.label)} <span class="arrow" aria-hidden="true">→</span></a>
-    </div>
-    <span class="rule" aria-hidden="true"></span>
-    <div class="addr" aria-hidden="true">
-      <span class="pc-stamp">${esc(w.stamp)}</span>
-      <span class="postmark">Shipped<br>${esc(w.year)}</span>
-      <div class="addr-lines"><span>To: whoever’s hiring</span><span>From: Deeva</span><span>India · ${esc(w.year)}</span></div>
-    </div>
-    ${flip ? '<button class="flip-btn" type="button">Flip back <span aria-hidden="true">↻</span></button>' : ''}
-  </div>`;
-
-const [feat, ...rest] = work;
-$('#cards').innerHTML = `
-  <article class="feature reveal" aria-label="${esc(feat.label)}">${front(feat, false)}${back(feat, false)}</article>
-  <div class="pair">
-    <span class="t-hand note work-note" aria-hidden="true">flip me ↓</span>
-    ${rest.map((w, i) => `<article class="flip reveal" style="--d:${i * 80}ms" aria-label="${esc(w.label)}"><div class="flip-inner">${front(w, true)}${back(w, true)}</div></article>`).join('')}
-  </div>`;
-
-$$('.flip').forEach((card) => {
-  const f = $('.pc-front', card), b = $('.pc-back-face', card);
-  let pinned = false;
-  const set = (on) => {
-    card.classList.toggle('is-flipped', on);
-    f.inert = on; b.inert = !on;
-  };
-  set(false);
-  $$('.flip-btn', card).forEach((btn) => btn.addEventListener('click', () => {
-    pinned = !card.classList.contains('is-flipped');
-    set(pinned);
-    (pinned ? $('.flip-btn', b) : $('.flip-btn', f)).focus({ preventScroll: true });
-  }));
-  if (finePointer) {
-    card.addEventListener('mouseenter', () => set(true));
-    card.addEventListener('mouseleave', () => set(pinned));
-  }
+/* ---------- 2. Story: tear the stub off the boarding pass ---------- */
+const pass = $('#pass'), stub = $('#stub');
+stub.addEventListener('click', () => {
+  pass.classList.add('is-torn');
+  stub.setAttribute('aria-expanded', 'true');
+  setTimeout(() => $('#stub-back').focus({ preventScroll: true }), reduce ? 0 : 450);
+});
+$('#stub-back').addEventListener('click', () => {
+  pass.classList.remove('is-torn');
+  stub.setAttribute('aria-expanded', 'false');
+  stub.focus({ preventScroll: true });
 });
 
-/* ---------- 3. Astroverse: every hat ---------- */
-const ICON = {
-  research: '<circle cx="17" cy="17" r="9"/><path d="M24 24l9 9"/>',
-  strategy: '<circle cx="20" cy="20" r="14"/><path d="M26 14l-4 8.5-8.5 4 4-8.5z"/>',
-  ui: '<rect x="12" y="5" width="16" height="30" rx="4"/><path d="M17 30h6"/>',
-  writing: '<path d="M10 30l3-9L27 7l6 6-14 14z"/><path d="M8 34h24"/>',
-  ai: '<path d="M20 5l3 10 10 3-10 3-3 10-3-10-10-3 10-3z"/>',
-  delivery: '<path d="M6 33h28"/><path d="M10 27l7-8 6 5 10-12"/><path d="M27 12h6v6"/>',
-};
-$('#hats').innerHTML = hats.map((h, i) => `
-  <li class="hat reveal" style="--d:${(i % 3) * 70}ms">
-    <svg viewBox="0 0 40 40" aria-hidden="true">${ICON[h.icon] || ICON.ui}</svg>
-    <h3 class="t-label">${esc(h.title)}</h3>
-    <p class="t-body-s">${esc(h.body)}</p>
-    <span class="tool">${esc(h.tool)}</span>
-  </li>`).join('');
-$('#astro-stats').innerHTML = astroStats.map((s) => `<div class="metric"><dt class="t-body-s">${esc(s.label)}</dt><dd class="t-metric">${esc(s.value)}</dd></div>`).join('');
+/* ---------- 3. Work: postcards, front and back side by side ---------- */
+const phones = () => `<div class="phones" aria-hidden="true">${[0, 1].map(() => '<div class="phone"><i class="hero-blk"></i><i class="ln"></i><i class="ln s"></i><i class="cta"></i></div>').join('')}</div>`;
+const browserMock = () => `<div class="web-mock" aria-hidden="true"><span class="web-bar"><i></i><i></i><i></i></span><span class="web-h"></span><span class="web-l"></span><span class="web-l s"></span><span class="web-cta"></span><span class="web-chart"><i></i><i></i><i></i><i></i></span></div>`;
+$('#cards').innerHTML = work.map((w, i) => `
+  <article class="work-row reveal" style="--d:${i * 60}ms" aria-label="${esc(w.label)}">
+    <a class="postcard pc-front tint-${esc(w.tint)}" href="${esc(w.link.href)}" tabindex="-1" aria-hidden="true">
+      <span class="pc-art">
+        <span class="t-eyebrow">${esc(w.label)}</span>
+        ${w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy">` : (w.kind === 'web' ? browserMock() : phones())}
+        <span class="t-hand greet">greetings from the trail</span>
+      </span>
+    </a>
+    <div class="postcard pc-back">
+      <div class="rows">
+        <h3 class="t-display-m">${esc(w.title)}</h3>
+        <dl class="rows">
+          <div><dt class="t-eyebrow">Problem</dt><dd class="t-body-s">${esc(w.problem)}</dd></div>
+          <div><dt class="t-eyebrow">My role</dt><dd class="t-body-s">${esc(w.role)}</dd></div>
+          <div class="metric"><dt class="t-eyebrow">Result</dt><dd class="t-metric">${esc(w.metric)}</dd></div>
+        </dl>
+        <p class="t-body-s muted">${esc(w.metricLabel)}</p>
+        <a class="link" href="${esc(w.link.href)}">${esc(w.link.label)} <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+      <span class="rule" aria-hidden="true"></span>
+      <div class="addr" aria-hidden="true">
+        <span class="pc-stamp">${esc(w.stamp)}</span>
+        <span class="postmark">Shipped<br>${esc(w.year)}</span>
+        <div class="addr-lines"><span>To: whoever’s hiring</span><span>From: Deeva</span><span>India · ${esc(w.year)}</span></div>
+      </div>
+    </div>
+  </article>`).join('');
 
-/* ---------- 4. Websites: the souvenir shelf ---------- */
+/* ---------- 4. Astroverse: start to finish ---------- */
+const ART = {
+  ratio: () => `
+    <div class="art-ratio">
+      <p class="big">3.4</p>
+      <p class="t-body-l">dislikes for every like in the old, endless Discover feed.</p>
+      <div class="dots" role="img" aria-label="17 swipes left for every 5 likes">
+        <span class="row">${'<i></i>'.repeat(17)}<em>swipes left</em></span>
+        <span class="row like">${'<i></i>'.repeat(5)}<em>likes</em></span>
+      </div>
+    </div>`,
+  note: () => `
+    <div class="art-note">
+      <div class="sticky"><p class="t-eyebrow">North star for 2.0</p><p class="t-display-m">Fewer profiles, better matches.</p></div>
+      <p class="t-hand">every screen: one good decision</p>
+    </div>`,
+  phones: () => `
+    <div class="art-phones">
+      <figure><div class="mini-phone before">${'<i></i>'.repeat(7)}</div><figcaption class="t-eyebrow">Before · endless feed</figcaption></figure>
+      <span class="art-arrow" aria-hidden="true">→</span>
+      <figure><div class="mini-phone after">${'<i></i>'.repeat(3)}</div><figcaption class="t-eyebrow accent">After · 3 handpicked a day</figcaption></figure>
+    </div>`,
+  copy: () => `
+    <div class="art-copy">
+      <p class="t-eyebrow muted">Before</p><p class="was">“Prove you’re human”</p>
+      <p class="t-eyebrow accent">After</p><p class="now">“Get seen by trusted profiles”</p>
+      <p class="t-hand">asked after 3 likes, not at the door</p>
+    </div>`,
+  chart: () => `
+    <div class="art-chart" role="img" aria-label="Likes rose from 23% to 38% of Discover decisions">
+      <div class="bar-row"><span class="t-metric muted">23%</span><span class="bar"><i style="--w:23%"></i></span><span class="t-body-s muted">before</span></div>
+      <div class="bar-row"><span class="t-metric accent">38%</span><span class="bar now"><i style="--w:38%"></i></span><span class="t-body-s">after</span></div>
+      <p class="t-body-s muted">Likes as a share of Discover decisions. Plus ~4 in 5 active users open Top Picks, and 11K+ questions asked to Veda in 3 months.</p>
+    </div>`,
+};
+const stepsEl = $('#steps'), panel = $('#step-panel'), dotsEl = $('#step-dots');
+stepsEl.innerHTML = steps.map((s, i) => `
+  <button class="step" type="button" role="tab" id="step-${i}" aria-controls="step-panel" aria-selected="false" tabindex="-1">
+    <span class="step-num">${String(i + 1).padStart(2, '0')}</span>
+    <span class="step-text"><span class="step-title">${esc(s.title)}</span><span class="t-eyebrow step-hat">Hat · ${esc(s.hat)}</span></span>
+  </button>`).join('');
+dotsEl.innerHTML = steps.map(() => '<i></i>').join('');
+const stepBtns = $$('.step', stepsEl), stepDots = $$('i', dotsEl);
+let stepNow = -1;
+function showStep(i, focus) {
+  if (i === stepNow) return;
+  stepNow = i;
+  const s = steps[i];
+  stepBtns.forEach((b, k) => { b.setAttribute('aria-selected', String(k === i)); b.tabIndex = k === i ? 0 : -1; });
+  stepDots.forEach((d, k) => d.classList.toggle('on', k === i));
+  panel.setAttribute('aria-labelledby', 'step-' + i);
+  panel.innerHTML = `
+    <header class="window-bar"><span class="t-eyebrow accent">Step ${String(i + 1).padStart(2, '0')} · ${esc(s.title)}</span><span class="t-label muted">Hat: ${esc(s.hat)}</span></header>
+    <div class="window-body">
+      <div class="window-art">${ART[s.art]()}</div>
+      <div class="window-foot">
+        <div><p class="t-eyebrow muted">What I did</p><p class="t-body">${esc(s.did)}</p></div>
+        <div class="window-side">
+          <ul class="tool-stamps">${s.tools.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+          ${i < steps.length - 1 ? `<button class="link" type="button" data-next>Next: ${esc(steps[i + 1].title)} <span class="arrow" aria-hidden="true">→</span></button>` : '<a class="link" href="astroverse.html">Read the whole case study <span class="arrow" aria-hidden="true">→</span></a>'}
+        </div>
+      </div>
+    </div>`;
+  panel.classList.remove('is-in'); void panel.offsetWidth; panel.classList.add('is-in');
+  const next = $('[data-next]', panel);
+  if (next) next.addEventListener('click', () => { stopAuto(); showStep(i + 1); stepBtns[i + 1].focus({ preventScroll: true }); });
+  if (focus) stepBtns[i].focus({ preventScroll: true });
+}
+stepBtns.forEach((b, i) => {
+  b.addEventListener('click', () => { stopAuto(); showStep(i); });
+  b.addEventListener('keydown', (e) => {
+    const k = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+    if (k) { e.preventDefault(); stopAuto(); showStep((i + k + steps.length) % steps.length, true); }
+  });
+});
+showStep(0);
+// auto-advance gently while the section is in view, until someone takes over
+let autoTimer = null, autoOn = !reduce;
+const journey = $('.journey');
+function stopAuto() { autoOn = false; clearInterval(autoTimer); }
+new IntersectionObserver(([en]) => {
+  clearInterval(autoTimer);
+  if (en.isIntersecting && autoOn) autoTimer = setInterval(() => showStep((stepNow + 1) % steps.length), 6000);
+}, { threshold: 0.5 }).observe(journey);
+journey.addEventListener('pointerenter', () => clearInterval(autoTimer));
+journey.addEventListener('focusin', stopAuto);
+$('#toolbox').innerHTML = tools.map((t, i) => `<li style="--r:${[-2, 1.5, -1, 2, -1.5, 1][i % 6]}deg">${esc(t)}</li>`).join('');
+
+/* ---------- 5. Websites: the souvenir shelf ---------- */
 const shelf = $('#shelf');
 shelf.innerHTML = sites.map((s) => `
   <li class="shelf-item tint-${esc(s.tint)}">
@@ -211,14 +259,6 @@ shelfBtns.forEach((b) => b.addEventListener('click', () => {
 shelf.addEventListener('scroll', shelfState, { passive: true });
 addEventListener('resize', shelfState);
 shelfState();
-
-/* ---------- 5. Process ---------- */
-$('#trail').innerHTML = process.map((p, i) => `
-  <li class="step reveal" style="--d:${i * 80}ms">
-    <span class="step-dot" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
-    <h3>${esc(p.title)}</h3>
-    <p class="t-body-s">${esc(p.body)}</p>
-  </li>`).join('');
 
 /* ---------- 6. Off the clock: the fridge door ---------- */
 const fridge = $('#fridge'), tip = $('#tip');
@@ -299,26 +339,29 @@ placeMagnets(true);
 new ResizeObserver(() => layoutDone && placeMagnets(false)).observe(fridge);
 showTip(1);
 
-/* ---------- 7. Say hello: send a postcard + the wall ---------- */
-const form = $('#pc-form'), msg = $('#pc-msg'), count = $('#pc-count'), slot = $('#stamp-slot');
+/* ---------- 7. Say hello: the post office desk + the wall ---------- */
+const desk = $('#desk'), form = $('#pc-form'), msg = $('#pc-msg'), count = $('#pc-count'), sent = $('#sent');
 msg.maxLength = postcard.maxLength;
 const updateCount = () => { count.textContent = `${msg.value.length} / ${postcard.maxLength}`; };
 msg.addEventListener('input', updateCount); updateCount();
 
 let frontChoice = 'trail';
-const fronts = $$('.front-opt');
-fronts.forEach((b, i) => {
+const picks = $$('.pick');
+function choose(i) {
+  picks.forEach((b, k) => { b.setAttribute('aria-checked', String(k === i)); b.tabIndex = k === i ? 0 : -1; });
+  frontChoice = picks[i].dataset.front;
+  const art = $('#slot-art');
+  art.className = 'pick-art art-' + frontChoice;
+  art.parentElement.classList.remove('is-new'); void art.offsetWidth; art.parentElement.classList.add('is-new');
+}
+picks.forEach((b, i) => {
   b.tabIndex = b.getAttribute('aria-checked') === 'true' ? 0 : -1;
   b.addEventListener('click', () => choose(i));
   b.addEventListener('keydown', (e) => {
     const k = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
-    if (k) { e.preventDefault(); const n = (i + k + fronts.length) % fronts.length; choose(n); fronts[n].focus(); }
+    if (k) { e.preventDefault(); const n = (i + k + picks.length) % picks.length; choose(n); picks[n].focus(); }
   });
 });
-function choose(i) {
-  fronts.forEach((b, k) => { b.setAttribute('aria-checked', String(k === i)); b.tabIndex = k === i ? 0 : -1; });
-  frontChoice = fronts[i].dataset.front;
-}
 
 const setErr = (input, errEl, text) => {
   input.setAttribute('aria-invalid', text ? 'true' : 'false');
@@ -331,8 +374,7 @@ function validate() {
     [name, $('#pc-name-err'), name.value.trim() ? '' : 'Add your name so I know who it’s from.'],
     [email, $('#pc-email-err'), /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) ? '' : 'Add an email I can reply to.'],
   ];
-  // show one error at a time, the first one
-  let first = null;
+  let first = null; // one error at a time, the first one
   errs.forEach(([i, e, t]) => { if (t && !first) { first = i; setErr(i, e, t); } else setErr(i, e, ''); });
   if (first) first.focus();
   return !first;
@@ -348,7 +390,6 @@ form.addEventListener('submit', async (e) => {
     email: $('#pc-email').value.trim(),
     wall: $('#pc-wall').checked,
   };
-  slot.classList.add('is-stamped'); slot.textContent = 'D';
   const btn = $('button[type="submit"]', form);
   btn.disabled = true;
   let viaEmailApp = !postcard.endpoint;
@@ -358,45 +399,91 @@ form.addEventListener('submit', async (e) => {
       if (!r.ok) throw new Error(r.status);
     } catch { viaEmailApp = true; }
   }
+  // the card folds into the postbox, the box gives a little shake
+  desk.classList.add('is-posting');
+  await wait(700);
   if (viaEmailApp) {
-    const body = `${data.message}\n\n— ${data.name} (${data.email})\n\nPostcard front: ${data.front}\nPin it to the wall: ${data.wall ? 'yes' : 'no'}`;
+    const body = `${data.message}\n\n— ${data.name} (${data.email})\n\nStamp: ${data.front}\nPin it to the wall: ${data.wall ? 'yes' : 'no'}`;
     location.href = `mailto:${links.email}?subject=${encodeURIComponent(`A postcard from ${data.name}`)}&body=${encodeURIComponent(body)}`;
   }
   $('#sent-date').textContent = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
   $('#sent-msg').textContent = viaEmailApp
     ? 'Your email app should open with the postcard already written. Hit send there and it’s on its way.'
     : 'I read every one and reply within a few days.';
-  setTimeout(() => { $('#sent').classList.add('is-on'); $('#sent').focus(); btn.disabled = false; }, reduce ? 0 : 450);
+  form.hidden = true; sent.hidden = false; desk.classList.remove('is-posting'); desk.classList.add('is-sent');
+  sent.focus();
+  btn.disabled = false;
 });
 $('#pc-again').addEventListener('click', () => {
-  form.reset(); updateCount(); slot.classList.remove('is-stamped'); slot.textContent = 'stamp';
-  $('#sent').classList.remove('is-on'); msg.focus();
+  form.reset(); updateCount(); form.hidden = false; sent.hidden = true; desk.classList.remove('is-sent'); msg.focus();
 });
 
 fetch('assets/data/postcards.json', { cache: 'no-cache' })
   .then((r) => (r.ok ? r.json() : { cards: [] }))
   .catch(() => ({ cards: [] }))
   .then(({ cards = [] }) => {
-    $('#wall').innerHTML = cards.length
-      ? cards.map((c, i) => `
-        <li class="wall-card${c.mine ? ' is-mine' : ''}" style="--rot:${[-1.5, 1.2, -0.6, 1.8, -2][i % 5]}deg">
-          <div class="top"><span class="t-eyebrow">${esc([c.place, c.date].filter(Boolean).join(' · '))}</span><span class="mini-stamp" aria-hidden="true"></span></div>
-          <blockquote>${esc(c.message)}</blockquote>
-          <p class="t-body-s from">— ${esc(c.from)}</p>
-        </li>`).join('')
-      : '<li class="t-body muted">No postcards yet. Yours could be the first.</li>';
+    const rot = [-3, 2, -1.5, 3, -2, 1.2];
+    const pinCol = ['var(--terra-500)', 'var(--ochre-500)', 'var(--forest-600)'];
+    const real = cards.map((c, i) => `
+      <li class="wall-card${c.mine ? ' is-mine' : ''}" style="--rot:${rot[i % rot.length]}deg;--pin:${pinCol[i % 3]}">
+        <div class="top"><span class="t-eyebrow">${esc([c.place, c.date].filter(Boolean).join(' · '))}</span><span class="mini-stamp" aria-hidden="true"></span></div>
+        <blockquote>${esc(c.message)}</blockquote>
+        <p class="t-body-s from">— ${esc(c.from)}</p>
+      </li>`);
+    const empty = Array.from({ length: Math.max(0, 4 - cards.length) }, (_, k) => `
+      <li class="wall-card is-empty" style="--rot:${rot[(cards.length + k) % rot.length]}deg;--pin:${pinCol[(cards.length + k) % 3]}">
+        <a class="t-hand" href="#hello">your card here</a>
+      </li>`);
+    $('#wall').innerHTML = real.join('') + empty.join('');
   });
 
-/* ---------- 8. Footer, nav, reveals ---------- */
-$('#email-text').textContent = links.email;
-$('#copy-email').addEventListener('click', async () => {
-  const state = $('#copy-state');
-  try { await navigator.clipboard.writeText(links.email); state.textContent = 'Copied'; state.classList.add('done'); }
-  catch { location.href = `mailto:${links.email}`; }
-  setTimeout(() => { state.textContent = 'Copy'; state.classList.remove('done'); }, 2000);
+/* ---------- 8. Footer: the stamp pad ---------- */
+$('#email-link').textContent = links.email;
+$('#email-link').href = `mailto:${links.email}`;
+const copyEmail = async () => { try { await navigator.clipboard.writeText(links.email); return true; } catch { return false; } };
+$('#copy-email').addEventListener('click', async (e) => {
+  const ok = await copyEmail();
+  e.currentTarget.textContent = ok ? 'Copied' : 'Copy failed';
+  setTimeout(() => { $('#copy-email').textContent = 'Copy'; }, 2000);
 });
-if (links.linkedin) { const a = $('#linkedin'); a.href = links.linkedin; a.hidden = false; a.target = '_blank'; a.rel = 'noopener'; }
+const stampDefs = [
+  { label: 'Email', ink: 'Copied ✓', sub: links.email, run: async () => { if (!(await copyEmail())) location.href = `mailto:${links.email}`; } },
+  links.linkedin && { label: 'LinkedIn', ink: 'LinkedIn ↗', sub: 'opening…', run: () => open(links.linkedin, '_blank', 'noopener') },
+  links.resume && { label: 'Résumé', ink: 'Résumé ↗', sub: 'opening…', run: () => open(links.resume, '_blank', 'noopener') },
+  { label: 'Case study', ink: 'Astroverse 2.0', sub: 'opening the case study', run: () => { location.href = links.caseStudy; } },
+  { label: 'Postcard', ink: 'Write to me', sub: 'back to the desk', run: () => $('#hello').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }) },
+  { label: 'Top ↑', ink: 'Trailhead', sub: 'back to the start', run: () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }) },
+].filter(Boolean).slice(0, 4);
+const rstamps = $('#rstamps'), strip = $('#strip');
+rstamps.innerHTML = stampDefs.map((s, i) => `
+  <button class="rstamp" type="button" data-i="${i}">
+    <span class="knob" aria-hidden="true"></span><span class="neck" aria-hidden="true"></span><span class="block" aria-hidden="true"></span>
+    <span class="face">${esc(s.label)}</span>
+  </button>`).join('');
+$$('.rstamp', rstamps).forEach((b) => b.addEventListener('click', async () => {
+  const s = stampDefs[b.dataset.i];
+  b.classList.add('is-pressed');
+  await wait(260);
+  $('.ghost', strip)?.remove();
+  const imp = document.createElement('span');
+  imp.className = 'imprint';
+  imp.style.setProperty('--r', `${(Math.random() * 8 - 4).toFixed(1)}deg`);
+  imp.innerHTML = `<b>${esc(s.ink)}</b><span>${esc(s.sub)}</span>`;
+  strip.append(imp);
+  while (strip.children.length > 2) strip.firstElementChild.remove();
+  await wait(180);
+  b.classList.remove('is-pressed');
+  await wait(220);
+  s.run();
+}));
+const clock = $('#clock');
+const tick = () => {
+  const t = new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: false });
+  clock.textContent = `It’s ${t} in India right now`;
+};
+tick(); setInterval(tick, 30000);
 
+/* ---------- 9. Nav + reveals ---------- */
 const navLinks = $$('.nav a');
 const io = new IntersectionObserver((entries) => {
   entries.forEach((en) => {
@@ -405,7 +492,7 @@ const io = new IntersectionObserver((entries) => {
     navLinks.forEach((a) => a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + id)));
   });
 }, { rootMargin: '-45% 0px -50% 0px' });
-['top', 'story', 'work', 'astroverse', 'sites', 'process', 'off-the-clock', 'hello'].forEach((id) => io.observe(document.getElementById(id)));
+['top', 'story', 'work', 'astroverse', 'sites', 'off-the-clock', 'hello', 'foot'].forEach((id) => io.observe(document.getElementById(id)));
 
 const rv = new IntersectionObserver((entries) => {
   entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-in'); rv.unobserve(en.target); } });

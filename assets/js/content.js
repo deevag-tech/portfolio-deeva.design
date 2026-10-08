@@ -6,7 +6,8 @@
 
 export const links = {
   email: "dee.vag78@gmail.com",
-  linkedin: "",                  // paste your LinkedIn URL to show it in the footer
+  linkedin: "",                  // paste your LinkedIn URL: a LinkedIn stamp appears in the footer
+  resume: "",                    // path or URL to your résumé PDF: a Résumé stamp appears in the footer
   caseStudy: "astroverse.html",
 };
 
@@ -71,13 +72,15 @@ export const stops = [
   },
 ];
 
-/* Selected work: postcards. front.tint is one of: blush, wheat, sage, slate.
-   front.image: a real screenshot or mockup (leave "" for the drawn placeholder). */
+/* Selected work: postcards, front and back side by side.
+   tint: blush | wheat | sage | slate. kind: "app" (phones) or "web" (browser).
+   image: a real screenshot or mockup (leave "" for the drawn placeholder). */
 export const work = [
   {
     id: "astroverse",
     label: "Astroverse 2.0 · Dating",
     tint: "blush",
+    kind: "app",
     image: "",
     stamp: "AV",
     year: "2026",
@@ -92,6 +95,7 @@ export const work = [
     id: "horocosmo",
     label: "Horocosmo · Astrology",
     tint: "wheat",
+    kind: "app",
     image: "",
     stamp: "HC",
     year: "2024",
@@ -106,6 +110,7 @@ export const work = [
     id: "wishup",
     label: "Wishup · SaaS website",
     tint: "sage",
+    kind: "web",
     image: "",
     stamp: "WU",
     year: "2023",
@@ -118,22 +123,34 @@ export const work = [
   },
 ];
 
-/* Astroverse 2.0: every hat. */
-export const hats = [
-  { icon: "research", title: "Research", body: "User calls and Mixpanel funnels to find exactly where people dropped off.", tool: "Mixpanel · user calls" },
-  { icon: "strategy", title: "Product strategy", body: "Set the north star for 2.0: fewer profiles, better matches.", tool: "Discover V3 · Pro tiers" },
-  { icon: "ui", title: "UX & UI", body: "Rebuilt onboarding, Discover and the Kundli, and gave the app a new identity.", tool: "Figma" },
-  { icon: "writing", title: "UX writing", body: "Every string in English and Hinglish, from onboarding to push notifications.", tool: "OneSignal" },
-  { icon: "ai", title: "AI conversation design", body: "Veda’s conversation UX, session logic and the system prompt behind it.", tool: "System prompt · pricing A/B test" },
-  { icon: "delivery", title: "Analytics & delivery", body: "Tracking plans, dashboards and tickets with clear acceptance criteria.", tool: "Mixpanel · Jira" },
+/* Astroverse 2.0, start to finish: five switchbacks, the hat I wore at each,
+   and the real artifact behind it. Every number comes from the case study.
+   art: ratio | note | phones | copy | chart (how the window draws it). */
+export const steps = [
+  {
+    title: "Find the signal", hat: "Researcher", tools: ["Mixpanel", "User calls"], art: "ratio",
+    did: "Read the funnels in Mixpanel and called users. Most onboarding drop-off sat at verification, before anyone had seen a single profile.",
+  },
+  {
+    title: "Name the insight", hat: "Product strategist", tools: ["North-star doc", "Team crit"], art: "note",
+    did: "Turned the signals into one line the whole team could repeat. Every screen had to help someone make one good decision.",
+  },
+  {
+    title: "Design the smallest move", hat: "UX & UI designer", tools: ["Figma"], art: "phones",
+    did: "Moved verification to the moment of contact, cut Discover to 3 handpicked profiles a day, and gave every Guna a plain-language line.",
+  },
+  {
+    title: "Write the words", hat: "UX writer", tools: ["Figma", "Copy deck"], art: "copy",
+    did: "Rewrote the asks around the person, not the form. Verification became an invitation, shown after someone had liked 3 profiles.",
+  },
+  {
+    title: "Ship and measure", hat: "Analyst · PM", tools: ["Jira", "Mixpanel"], art: "chart",
+    did: "Shipped through Jira with clear acceptance criteria, then tracked it in Mixpanel. About 4 in 5 active users now open Top Picks.",
+  },
 ];
 
-export const astroStats = [
-  { value: "26K+", label: "Kundli profiles created" },
-  { value: "~88%", label: "finish onboarding" },
-  { value: "23→38%", label: "likes share in Discover" },
-  { value: "11K+", label: "questions asked to Veda" },
-];
+/* The toolbox row under the Astroverse section. */
+export const tools = ["Figma", "Mixpanel", "Jira", "Clarity", "Webflow", "Claude"];
 
 /* Websites & brands: the souvenir shelf. image: "" shows a drawn placeholder. */
 export const sites = [
@@ -142,15 +159,6 @@ export const sites = [
   { name: "Vegapay", kind: "Brand identity & website", who: "Hucentric", image: "", tint: "sage" },
   { name: "Wishup", kind: "Lead-gen website", who: "Hucentric", image: "", tint: "blush" },
   { name: "Sketchnote · Dexter Ventures · Elevare", kind: "Webflow sites", who: "Hucentric", image: "", tint: "slate" },
-];
-
-/* How I work: five switchbacks. */
-export const process = [
-  { title: "Find the signal", body: "Funnels in Mixpanel and calls with real users show where people actually get stuck." },
-  { title: "Name the insight", body: "One sentence the whole team can repeat, before any pixels." },
-  { title: "Design the smallest move", body: "Sketch options and pick the change that tests the idea fastest." },
-  { title: "Write the words", body: "Copy is design: every label, empty state and notification." },
-  { title: "Ship and measure", body: "Tickets with clear acceptance criteria, then back to Mixpanel to see if it moved." },
 ];
 
 /* Off the clock: fridge door magnets.
