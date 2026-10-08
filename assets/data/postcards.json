@@ -1,0 +1,12 @@
+{
+  "_how": "Approved postcards for the wall. To approve one: copy the visitor's first name, city (optional) and message here. Newest first. 'mine: true' styles a card as your own.",
+  "cards": [
+    {
+      "from": "Deeva",
+      "place": "India",
+      "date": "Oct 2026",
+      "message": "Thanks for climbing all the way up here. Leave a card, I'd love to hear where you're headed.",
+      "mine": true
+    }
+  ]
+}
