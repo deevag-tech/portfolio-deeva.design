@@ -1,13 +1,29 @@
-# deeva.design: a portfolio you climb
+# deeva.design: the Trek Journal
 
-This is Deeva Gupta's portfolio, built as a climb up a real mountain. The page opens buried in cloud; the clouds part and her name rises from behind the actual peaks of a dawn photograph. As you scroll, the camera climbs towards the big peak through five camps (About, Work, Side trails, Travel, Contact), passing banks of cloud on the way, while the light warms from dawn to sunset. At the summit the peak sits on the left and the contact card on the right. The rail on the left is both the altitude meter and the menu.
+This is Deeva Gupta's portfolio. A painted trail runs through it: her career is the route, and each section is an object picked up on the way. It reads as a product designer's portfolio first. The hero is quiet, the work cards lead with metrics, and travel gets one section near the end.
 
-- `index.html`: the trek (home page)
+- `index.html`: the home page
 - `astroverse.html`: the full Astroverse 2.0 case study
 
-**Look:** "Above the clouds". Colours come from the photos: deep alpine navy ink (`#16213B`), an alpenglow rose accent (`#BE4766`), sky blue (`#5B8FD0`) and dawn pink (`#F4ADBD`). Every surface is light frosted glass. Type is Instrument Serif (headlines, italic accent words), Geist (UI and body), Geist Mono (labels) and Caveat (one or two handwritten notes).
+**Style guide:** Figma → "Style guide · Portfolio v3". It holds the colour variables, text styles, spacing, components and the one section pattern. `assets/css/site.css` uses the same tokens, so change a token and not a component.
+
+- **Colour:** paper `#F5EFE3`, ink `#1E1B16`, forest `#22352B` for the two dark chapters, terracotta `#C2553A` for marks, and ochre `#D99A2B` for the single primary action in a section.
+- **Type:** Fraunces for headlines and numbers, Geist for UI and body, Geist Mono for eyebrows, and Caveat for margin notes only.
 
 It is a static site with no build step. It runs on GitHub Pages as it is.
+
+## The page, top to bottom
+
+| # | Section | Object | Content lives in |
+|---|---|---|---|
+| 1 | Hero | Painted trail with 5 stops. Tapping a stop opens a bottom sheet | `content.js` → `stops` (x / y place the pin on the art) |
+| 2 | Story | Journal spread with facts and skills | `index.html` |
+| 3 | Work | Postcards. The back holds problem, role and result | `content.js` → `work` |
+| 4 | Astroverse 2.0 | Every hat I wore, plus the key numbers | `content.js` → `hats`, `astroStats` |
+| 5 | Side trails | Souvenir shelf of websites | `content.js` → `sites` |
+| 6 | Process | Five switchbacks | `content.js` → `process` |
+| 7 | Off the clock | Fridge door with draggable magnets and local tips | `content.js` → `places` |
+| 8 | Say hello | Send-a-postcard form and the wall | `content.js` → `postcard`, `assets/data/postcards.json` |
 
 ## Run locally
 
@@ -18,32 +34,25 @@ python3 -m http.server 8000
 
 You have to serve the site over HTTP because ES modules don't load from `file://`.
 
-## Edit content
+## Swap in real images
 
-| What | Where |
-|---|---|
-| Astroverse case study (problems, decisions, results, screens) | `astroverse.html` |
-| Work cards, About boarding pass, side trails | `index.html` |
-| Fridge magnets and local stories (placeholders now) | `assets/js/content.js` → `places` |
-| Email, LinkedIn, case study link | `assets/js/content.js` → `links` |
-| Colours and fonts | `assets/css/style.css` and `assets/css/case.css` → `:root` |
-| The climb (camera path, light, passing clouds) and the hero name | `assets/js/world.js`, photo in `assets/img/` |
-| Hero cloud intro and parallax | `assets/js/hero.js` (clouds are painted by `assets/js/clouds.js`) |
+1. Put the files in `assets/img/`.
+2. Set the path in `assets/js/content.js`:
+   - `work[].image` for real app screens on a postcard front
+   - `sites[].image` for website screenshots
+   - `places[].photo` for travel photos
+3. Set `sample: false` (or delete it) on any place once its tip is yours.
+4. Case study screens go in `astroverse.html`: put an `<img>` inside the `.shot` placeholder.
 
-### Replace placeholders with real images
+## Postcards (the contact form)
 
-1. Put images in `assets/img/`.
-2. Then do one of the following:
-   - **Travel photos**: set `photo` in `content.js`, for example `photo: "assets/img/hampi.jpg"`.
-   - **Boarding pass photo** (`.pass-photo`) and **case study screens** (`.shot` in `astroverse.html`): put an `<img>` inside the placeholder. The label hides automatically.
-   - **Work card mockups** (`.wc-stage` in `index.html`): replace the `.phone` / `.browser` placeholders with an `<img>` of your real screens.
-     ```html
-     <div class="ph pass-photo" data-label="Your photo"><img src="assets/img/me.jpg" alt="Deeva on the Kedarkantha trail"></div>
-     ```
+- **By default:** "Stamp & send" opens the visitor's email app with the postcard already written, addressed to `links.email`.
+- **To receive cards without an email app:** create a free form endpoint (for example on Formspree), paste its URL into `postcard.endpoint` in `content.js`, and cards arrive in your inbox.
+- **The wall** only shows cards you approve. To approve one, add it to `assets/data/postcards.json` (`from`, `place`, `date`, `message`).
 
-### LinkedIn
+## LinkedIn
 
-Paste your URL into `links.linkedin` in `content.js`. The button appears at the summit only once the URL is set.
+Paste your URL into `links.linkedin` in `content.js`. The link appears in the footer only once the URL is set.
 
 ## Deploy on GitHub Pages
 
@@ -58,15 +67,3 @@ Paste your URL into `links.linkedin` in `content.js`. The button appears at the 
    - `A` records for `@` pointing to `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`
    - a `CNAME` record for `www` pointing to `deevag-tech.github.io`
 3. Once DNS has propagated, tick **Enforce HTTPS**.
-
-## Under the hood
-
-- **One photo**: a free-licence Unsplash photo of two peaks above a sea of cloud at dawn, in three sizes: `hero-sm.jpg` for phones, `hero.jpg`, and `hero-xl.jpg` (5000px), which loads once the camera starts zooming so the summit stays sharp.
-- **The climb**: `world.js` maps the altitude to a camera path (`PATH`): zoom, the point of the photo it looks at, and where that point sits on screen. The camera eases towards it, like a real camera. Soft-light colour layers warm the photo from dawn to sunset, and painted cloud banks drift past between camps.
-- **Name behind the peaks**: the hero shows the same photo twice. The top copy is cut down to the peaks and the cloud sea with an SVG mask in `style.css` (`.hero-scene .fg`). The name sits between the two copies, so it rises from behind the mountains. `world.js` pins the name and tagline to the photo's horizon on every screen size.
-- **Hero intro**: cloud curtains are painted procedurally on canvas in the colours of the real cloud sea. They part on load, then drift apart and sink as you scroll.
-- **Scroll mapping**: `assets/js/progress.js` maps scroll position to altitude for the rail.
-- **Accessibility**:
-  - Reduced motion is respected: no cloud intro, parallax or drift.
-  - The boarding pass flips on hover with a mouse, and on tap, Enter or Space otherwise.
-  - The trail map, tabs and magnets work with the keyboard.
