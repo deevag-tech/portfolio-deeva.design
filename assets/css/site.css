@@ -354,7 +354,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .phone { width: 28%; }
 }
 
-/* ---------- 10. Astroverse: start to finish ---------- */
+/* ---------- 10. How I work: five switchbacks ---------- */
 .journey { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: var(--s7); align-items: start; }
 .steps { position: relative; display: grid; gap: var(--s2); }
 .steps::before { content: ""; position: absolute; left: 39px; top: 30px; bottom: 30px; border-left: 2px dashed rgba(185, 198, 180, .45); }
@@ -375,18 +375,29 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .window-art { flex: 1; display: flex; align-items: center; min-height: 230px; }
 .window-foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--s6); align-items: end; padding-top: var(--s5); border-top: 1px solid var(--hairline); }
 .window-foot .t-eyebrow { margin-bottom: 6px; }
+.window-copy { display: grid; gap: var(--s4); }
+.window-copy .proof { max-width: 560px; color: var(--text-secondary); }
+.chapter--dark .window .muted { color: var(--text-secondary); }
+.art-signal { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s5) var(--s6); width: 100%; }
+.sources { display: flex; gap: var(--s4); }
+.sources li { display: grid; justify-items: center; gap: 10px; }
+.src { display: block; width: 92px; height: 92px; border-radius: var(--r-s); background: var(--paper-100); box-shadow: inset 0 0 0 1.5px var(--hairline); }
+.src-funnel { display: flex; align-items: flex-end; gap: 6px; padding: 14px 14px 12px; }
+.src-funnel i { flex: 1; height: var(--h); border-radius: 3px 3px 0 0; background: var(--ink-400); }
+.src-funnel i:nth-child(3) { background: var(--mark); }
+.src-heat { background: radial-gradient(circle at 32% 38%, rgba(194, 85, 58, .85) 0 8px, rgba(217, 154, 43, .55) 16px, transparent 30px), radial-gradient(circle at 70% 70%, rgba(217, 154, 43, .5) 0 6px, transparent 22px), var(--paper-100); }
+.src-call { display: grid; align-content: center; gap: 8px; padding: 16px; }
+.src-call i { height: 10px; border-radius: 5px; background: var(--paper-300); }
+.src-call i:nth-child(1) { width: 80%; } .src-call i:nth-child(2) { width: 100%; background: var(--mark); } .src-call i:nth-child(3) { width: 56%; }
+.signal-card { max-width: 260px; padding: 20px 24px; border-radius: var(--r-s); background: var(--bg-alt); box-shadow: var(--e1); }
+.signal-card .t-display-m { margin-top: 6px; }
+.art-ledger { display: grid; gap: var(--s4); width: 100%; }
+.art-ledger li { display: grid; grid-template-columns: 176px minmax(0, 1fr); align-items: baseline; gap: var(--s5); padding-bottom: var(--s4); border-bottom: 1px dashed var(--hairline); }
+.art-ledger li:last-child { border-bottom: 0; padding-bottom: 0; }
+.art-ledger b { display: block; font: 600 20px/26px var(--f-display); }
 .window-side { display: flex; flex-direction: column; align-items: flex-end; gap: var(--s4); }
 .tool-stamps { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--s2); }
 .tool-stamps li { padding: 6px 12px; border: 1.5px dashed var(--mark); border-radius: var(--r-xs); color: var(--text-accent); font: 500 12px/16px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; }
-.art-ratio { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 28px; align-items: center; width: 100%; }
-.art-ratio .big { font: 600 112px/1 var(--f-display); letter-spacing: -.03em; font-variation-settings: "SOFT" 0, "opsz" 144; }
-.art-ratio .t-body-l { max-width: 320px; color: var(--text-secondary); }
-.art-ratio .dots { grid-column: 1 / -1; display: grid; gap: 10px; margin-top: var(--s3); }
-.art-ratio .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.art-ratio .row i { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--ink-400); }
-.art-ratio .row.like i { background: var(--mark); box-shadow: none; }
-.art-ratio em { margin-left: 6px; font: 400 14px/20px var(--f-ui); font-style: normal; color: var(--text-secondary); }
-.art-ratio .like em { color: var(--text-accent); }
 .art-note { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s6); }
 .sticky { max-width: 360px; padding: 24px 28px; background: var(--ochre-100); box-shadow: var(--e2); transform: rotate(-2deg); }
 .sticky .t-eyebrow { color: var(--text-secondary); }
@@ -400,13 +411,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .art-arrow { font: 600 32px/1 var(--f-display); color: var(--mark); }
 .art-copy .was { margin: 6px 0 20px; font: 600 26px/32px var(--f-display); color: var(--text-secondary); text-decoration: line-through; text-decoration-color: var(--mark); text-decoration-thickness: 2px; }
 .art-copy .now { margin: 6px 0 12px; font: 600 32px/38px var(--f-display); }
-.art-chart { display: grid; gap: var(--s4); width: 100%; }
-.bar-row { display: grid; grid-template-columns: 96px minmax(0, 1fr) 56px; align-items: center; gap: var(--s4); }
-.bar { height: 26px; border-radius: 6px; background: var(--paper-200); overflow: hidden; }
-.bar i { display: block; height: 100%; width: var(--w); background: var(--ink-400); border-radius: 6px; animation: grow 900ms var(--ease); }
-.bar.now i { background: var(--mark); }
-@keyframes grow { from { width: 0; } }
-.art-chart > p { max-width: 520px; }
 .step-dots { display: flex; justify-content: center; gap: var(--s2); margin-top: var(--s5); }
 .step-dots i { width: 10px; height: 10px; border-radius: 5px; background: rgba(185, 198, 180, .5); transition: width var(--base) var(--ease), background var(--base); }
 .step-dots i.on { width: 28px; background: var(--ochre-500); }
@@ -428,12 +432,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .window-foot { grid-template-columns: 1fr; }
   .window-side { align-items: flex-start; }
   .tool-stamps { justify-content: flex-start; }
-  .art-ratio { grid-template-columns: 1fr; }
-  .art-ratio .big { font-size: 80px; }
-  .art-ratio .row i { width: 12px; height: 12px; }
   .mini-phone { width: 90px; height: 160px; }
-  .bar-row { grid-template-columns: 72px minmax(0, 1fr); }
-  .bar-row > :last-child { display: none; }
+  .sources { gap: var(--s3); }
+  .src { width: 76px; height: 76px; }
+  .art-signal .art-arrow { display: none; }
+  .art-ledger li { grid-template-columns: 1fr; gap: 4px; }
 }
 
 /* ---------- 11. Websites: souvenir shelf ---------- */
