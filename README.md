@@ -19,7 +19,7 @@ It is a static site with no build step. It runs on GitHub Pages as it is.
 | 1 | Hero | Painted trail with 5 stops. Tapping a stop opens a bottom sheet | `content.js` → `stops` (x / y place the pin on the art) |
 | 2 | Story | Boarding pass on grid paper. Tearing off the stub reveals the skills | `index.html` |
 | 3 | Work | Postcards, front (mockup) and back (problem, role, result) side by side | `content.js` → `work` |
-| 4 | Astroverse 2.0, start to finish | Five steps, the hat worn at each, and the real artifact behind it, plus the toolbox | `content.js` → `steps`, `tools` |
+| 4 | How I work | Five switchbacks of my process, the hat worn at each, where it showed up in real projects, plus the toolbox | `content.js` → `steps`, `tools` |
 | 5 | Side trails | Souvenir shelf of websites | `content.js` → `sites` |
 | 6 | Off the clock | Fridge door with draggable magnets and local tips | `content.js` → `places` |
 | 7 | Say hello | Post office desk: pick a stamp, write the card, drop it in the postbox. Corkboard wall of approved cards | `content.js` → `postcard`, `assets/data/postcards.json` |
