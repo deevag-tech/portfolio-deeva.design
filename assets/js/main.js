@@ -140,40 +140,41 @@ $('#cards').innerHTML = work.map((w, i) => `
     </div>
   </article>`).join('');
 
-/* ---------- 4. Astroverse: start to finish ---------- */
+/* ---------- 4. How I work: five switchbacks ---------- */
 const ART = {
-  ratio: () => `
-    <div class="art-ratio">
-      <p class="big">3.4</p>
-      <p class="t-body-l">dislikes for every like in the old, endless Discover feed.</p>
-      <div class="dots" role="img" aria-label="17 swipes left for every 5 likes">
-        <span class="row">${'<i></i>'.repeat(17)}<em>swipes left</em></span>
-        <span class="row like">${'<i></i>'.repeat(5)}<em>likes</em></span>
-      </div>
+  signal: () => `
+    <div class="art-signal">
+      <ul class="sources">
+        <li><span class="src src-funnel" aria-hidden="true"><i style="--h:100%"></i><i style="--h:74%"></i><i style="--h:40%"></i><i style="--h:31%"></i></span><span class="t-eyebrow muted">Funnels</span></li>
+        <li><span class="src src-heat" aria-hidden="true"></span><span class="t-eyebrow muted">Heatmaps</span></li>
+        <li><span class="src src-call" aria-hidden="true"><i></i><i></i><i></i></span><span class="t-eyebrow muted">User calls</span></li>
+      </ul>
+      <span class="art-arrow" aria-hidden="true">→</span>
+      <div class="signal-card"><p class="t-eyebrow accent">1–2 signals</p><p class="t-display-m">Where people stop, and why.</p></div>
     </div>`,
   note: () => `
     <div class="art-note">
-      <div class="sticky"><p class="t-eyebrow">North star for 2.0</p><p class="t-display-m">Fewer profiles, better matches.</p></div>
-      <p class="t-hand">every screen: one good decision</p>
+      <div class="sticky"><p class="t-eyebrow">Example · Astroverse 2.0</p><p class="t-display-m">Fewer profiles, better matches.</p></div>
+      <p class="t-hand">one line the whole team can repeat</p>
     </div>`,
   phones: () => `
     <div class="art-phones">
-      <figure><div class="mini-phone before">${'<i></i>'.repeat(7)}</div><figcaption class="t-eyebrow">Before · endless feed</figcaption></figure>
+      <figure><div class="mini-phone before">${'<i></i>'.repeat(7)}</div><figcaption class="t-eyebrow">Before · many choices</figcaption></figure>
       <span class="art-arrow" aria-hidden="true">→</span>
-      <figure><div class="mini-phone after">${'<i></i>'.repeat(3)}</div><figcaption class="t-eyebrow accent">After · 3 handpicked a day</figcaption></figure>
+      <figure><div class="mini-phone after">${'<i></i>'.repeat(3)}</div><figcaption class="t-eyebrow accent">After · one clear decision</figcaption></figure>
     </div>`,
   copy: () => `
     <div class="art-copy">
       <p class="t-eyebrow muted">Before</p><p class="was">“Prove you’re human”</p>
       <p class="t-eyebrow accent">After</p><p class="now">“Get seen by trusted profiles”</p>
-      <p class="t-hand">asked after 3 likes, not at the door</p>
+      <p class="t-hand">same ask, from the person’s side</p>
     </div>`,
-  chart: () => `
-    <div class="art-chart" role="img" aria-label="Likes rose from 23% to 38% of Discover decisions">
-      <div class="bar-row"><span class="t-metric muted">23%</span><span class="bar"><i style="--w:23%"></i></span><span class="t-body-s muted">before</span></div>
-      <div class="bar-row"><span class="t-metric accent">38%</span><span class="bar now"><i style="--w:38%"></i></span><span class="t-body-s">after</span></div>
-      <p class="t-body-s muted">Likes as a share of Discover decisions. Plus ~4 in 5 active users open Top Picks, and 11K+ questions asked to Veda in 3 months.</p>
-    </div>`,
+  ledger: () => `
+    <ul class="art-ledger">
+      <li><span class="t-metric accent">100K+</span><span><b>Horocosmo</b><span class="t-body-s muted">downloads in the first month</span></span></li>
+      <li><span class="t-metric accent">+25%</span><span><b>Wishup</b><span class="t-body-s muted">pageviews, with 15% less bounce</span></span></li>
+      <li><span class="t-metric accent">23→38%</span><span><b>Astroverse 2.0</b><span class="t-body-s muted">of Discover decisions are likes</span></span></li>
+    </ul>`,
 };
 const stepsEl = $('#steps'), panel = $('#step-panel'), dotsEl = $('#step-dots');
 stepsEl.innerHTML = steps.map((s, i) => `
@@ -196,10 +197,13 @@ function showStep(i, focus) {
     <div class="window-body">
       <div class="window-art">${ART[s.art]()}</div>
       <div class="window-foot">
-        <div><p class="t-eyebrow muted">What I did</p><p class="t-body">${esc(s.did)}</p></div>
+        <div class="window-copy">
+          <div><p class="t-eyebrow muted">What I do</p><p class="t-body">${esc(s.did)}</p></div>
+          ${s.proof ? `<div><p class="t-eyebrow muted">Where it showed up</p><p class="t-body-s proof">${esc(s.proof)}</p></div>` : ''}
+        </div>
         <div class="window-side">
           <ul class="tool-stamps">${s.tools.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
-          ${i < steps.length - 1 ? `<button class="link" type="button" data-next>Next: ${esc(steps[i + 1].title)} <span class="arrow" aria-hidden="true">→</span></button>` : '<a class="link" href="astroverse.html">Read the whole case study <span class="arrow" aria-hidden="true">→</span></a>'}
+          ${i < steps.length - 1 ? `<button class="link" type="button" data-next>Next: ${esc(steps[i + 1].title)} <span class="arrow" aria-hidden="true">→</span></button>` : '<a class="link" href="astroverse.html">See it all in one case study <span class="arrow" aria-hidden="true">→</span></a>'}
         </div>
       </div>
     </div>`;
@@ -492,7 +496,7 @@ const io = new IntersectionObserver((entries) => {
     navLinks.forEach((a) => a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + id)));
   });
 }, { rootMargin: '-45% 0px -50% 0px' });
-['top', 'story', 'work', 'astroverse', 'sites', 'off-the-clock', 'hello', 'foot'].forEach((id) => io.observe(document.getElementById(id)));
+['top', 'story', 'work', 'process', 'sites', 'off-the-clock', 'hello', 'foot'].forEach((id) => io.observe(document.getElementById(id)));
 
 const rv = new IntersectionObserver((entries) => {
   entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-in'); rv.unobserve(en.target); } });

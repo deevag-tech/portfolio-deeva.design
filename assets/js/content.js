@@ -123,33 +123,38 @@ export const work = [
   },
 ];
 
-/* Astroverse 2.0, start to finish: five switchbacks, the hat I wore at each,
-   and the real artifact behind it. Every number comes from the case study.
-   art: ratio | note | phones | copy | chart (how the window draws it). */
+/* How I work: the same five switchbacks on every project, the hat I wear at
+   each, and where it showed up in real work. Every number comes from shipped work.
+   art: signal | note | phones | copy | ledger (how the window draws it). */
 export const steps = [
   {
-    title: "Find the signal", hat: "Researcher", tools: ["Mixpanel", "User calls"], art: "ratio",
-    did: "Read the funnels in Mixpanel and called users. Most onboarding drop-off sat at verification, before anyone had seen a single profile.",
+    title: "Find the signal", hat: "Researcher", tools: ["Mixpanel", "Clarity", "User calls"], art: "signal",
+    did: "I start with what people actually do: funnels, heatmaps and a handful of user calls. I'm looking for the one or two signals worth acting on, not a long list of findings.",
+    proof: "Wishup: Clarity heatmaps and stakeholder interviews set the brief for the redesign.",
   },
   {
     title: "Name the insight", hat: "Product strategist", tools: ["North-star doc", "Team crit"], art: "note",
-    did: "Turned the signals into one line the whole team could repeat. Every screen had to help someone make one good decision.",
+    did: "I turn the signal into one sentence the whole team can repeat. Every decision after that gets checked against it.",
+    proof: "Astroverse 2.0: “Fewer profiles, better matches” steered a full rebuild.",
   },
   {
-    title: "Design the smallest move", hat: "UX & UI designer", tools: ["Figma"], art: "phones",
-    did: "Moved verification to the moment of contact, cut Discover to 3 handpicked profiles a day, and gave every Guna a plain-language line.",
+    title: "Design the smallest move", hat: "UX & UI designer", tools: ["Figma", "Design systems"], art: "phones",
+    did: "I look for the smallest change that fixes the problem, then build it on a system the next ten screens can reuse.",
+    proof: "Horocosmo: I set the whole UI base, from the design system to the launch screens.",
   },
   {
     title: "Write the words", hat: "UX writer", tools: ["Figma", "Copy deck"], art: "copy",
-    did: "Rewrote the asks around the person, not the form. Verification became an invitation, shown after someone had liked 3 profiles.",
+    did: "I write the interface copy myself, from the user's side of the screen. The right ask at the right moment does more than another screen.",
+    proof: "Astroverse 2.0: verification became an invitation, asked after 3 likes instead of at sign-up.",
   },
   {
-    title: "Ship and measure", hat: "Analyst · PM", tools: ["Jira", "Mixpanel"], art: "chart",
-    did: "Shipped through Jira with clear acceptance criteria, then tracked it in Mixpanel. About 4 in 5 active users now open Top Picks.",
+    title: "Ship and measure", hat: "Analyst · PM", tools: ["Jira", "Mixpanel"], art: "ledger",
+    did: "I write the tickets with clear acceptance criteria, stay close to the build, then read the numbers to see whether it worked.",
+    proof: "Three products, three kinds of result: an app launch, a SaaS website and a rebuild.",
   },
 ];
 
-/* The toolbox row under the Astroverse section. */
+/* The toolbox row under How I work. */
 export const tools = ["Figma", "Mixpanel", "Jira", "Clarity", "Webflow", "Claude"];
 
 /* Websites & brands: the souvenir shelf. image: "" shows a drawn placeholder. */
