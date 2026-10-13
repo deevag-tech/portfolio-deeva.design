@@ -168,14 +168,18 @@ export const sites = [
 ];
 
 /* Off the clock: fridge door magnets.
-   sample: true shows a small "sample" mark until you swap in your own story. */
+   image: the souvenir magnet (transparent PNG/WebP in assets/img/magnets/).
+   w: how wide it sits on the fridge, in px (it scales down on phones).
+   photo: an optional travel photo for the tip card (otherwise it shows the magnet).
+   A place without an image falls back to a coloured text magnet (color + shape: rect | round | tri).
+   sample: true shows a small "sample" mark until you swap in your own tip. */
 export const places = [
-  { name: "Kedarkantha", state: "Uttarakhand", kind: "Trek",      color: "#2F4A3B", shape: "rect",   photo: "", tip: "Start before 4 am. The summit is yours at sunrise.", who: "", sample: true },
-  { name: "Hampi",       state: "Karnataka",   kind: "Ruins",     color: "#C2553A", shape: "round", photo: "", tip: "Cross the river by coracle for the quieter side.", who: "", sample: true },
-  { name: "Spiti",       state: "Himachal",    kind: "Road trip", color: "#5C544A", shape: "rect",  photo: "", tip: "Eat at a homestay, not a café.", who: "", sample: true },
-  { name: "Rishikesh",   state: "Uttarakhand", kind: "River",     color: "#3E6B6B", shape: "round", photo: "", tip: "The evening aarti at Triveni Ghat is the one locals go to.", who: "", sample: true },
-  { name: "Jaisalmer",   state: "Rajasthan",   kind: "Desert",    color: "#D99A2B", shape: "rect",  photo: "", tip: "Skip the safari crowds. Ask for Khuri village.", who: "", sample: true },
-  { name: "Coorg",       state: "Karnataka",   kind: "Coffee",    color: "#5E6F3E", shape: "tri",   photo: "", tip: "Buy coffee from the estate, not the highway shop.", who: "", sample: true },
-  { name: "Tawang",      state: "Arunachal",   kind: "Monastery", color: "#8E3B32", shape: "tri",  photo: "", tip: "Carry your permit copy, always.", who: "", sample: true },
-  { name: "Gokarna",     state: "Karnataka",   kind: "Coast",     color: "#2C4D5A", shape: "round", photo: "", tip: "Walk the beach trail from Kudle to Paradise.", who: "", sample: true },
+  { name: "Nainital",        state: "Uttarakhand", kind: "Lake town",    image: "assets/img/magnets/nainital.webp",        w: 190, photo: "", tip: "Row across the lake at 7 am, before the boats crowd in.", who: "", sample: true },
+  { name: "Mussoorie",       state: "Uttarakhand", kind: "Hill station", image: "assets/img/magnets/mussoorie.webp",       w: 112, photo: "", tip: "Walk up to Lal Tibba at sunrise. The snow peaks show up before the haze does.", who: "", sample: true },
+  { name: "McLeodganj",      state: "Himachal",    kind: "Little Lhasa", image: "assets/img/magnets/mcleodganj.webp",      w: 128, photo: "", tip: "Walk the kora around the temple at dusk, with the monks.", who: "", sample: true },
+  { name: "Udaipur",         state: "Rajasthan",   kind: "City of Lakes", image: "assets/img/magnets/udaipur.webp",        w: 126, photo: "", tip: "Take the last boat on Lake Pichola and watch the City Palace light up.", who: "", sample: true },
+  { name: "Jaipur",          state: "Rajasthan",   kind: "Pink City",    image: "assets/img/magnets/jaipur.webp",          w: 150, photo: "", tip: "See Hawa Mahal from the rooftop cafés across the road, not the street.", who: "", sample: true },
+  { name: "Jibhi",           state: "Himachal",    kind: "Valley",       image: "assets/img/magnets/jibhi.webp",           w: 96,  photo: "", tip: "Carry cash. The nearest ATM is a long way down the valley.", who: "", sample: true },
+  { name: "Jaisalmer",       state: "Rajasthan",   kind: "Golden City",  image: "assets/img/magnets/jaisalmer.webp",       w: 132, photo: "", tip: "Skip the safari crowds. Ask for Khuri village.", who: "", sample: true },
+  { name: "Floating Market", state: "Thailand",    kind: "Market",       image: "assets/img/magnets/floating-market.webp", w: 140, photo: "", tip: "Get there by 7 am, before the tour buses, and eat straight off the boats.", who: "", sample: true },
 ];

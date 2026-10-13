@@ -290,10 +290,13 @@ shelfState();
 
 /* ---------- 6. Off the clock: the fridge door ---------- */
 const fridge = $('#fridge'), tip = $('#tip');
-const SPOTS = [[0.08, 0.1], [0.32, 0.06], [0.56, 0.12], [0.76, 0.2], [0.12, 0.52], [0.36, 0.46], [0.58, 0.56], [0.78, 0.6]];
-fridge.insertAdjacentHTML('beforeend', places.map((p, i) => `
-  <button class="magnet ${esc(p.shape)}" type="button" data-i="${i}" aria-pressed="false" style="background:${esc(p.color)}"
-    aria-label="${esc(p.name)}, ${esc(p.state)}. Tap to read the tip. Arrow keys move it.">${esc(p.name)}</button>`).join(''));
+const SPOTS = [[0.02, 0.07], [0.31, 0.04], [0.5, 0.07], [0.71, 0.05], [0.02, 0.52], [0.26, 0.5], [0.44, 0.55], [0.67, 0.52]];
+fridge.insertAdjacentHTML('beforeend', places.map((p, i) => {
+  const label = `${esc(p.name)}, ${esc(p.state)}. Tap to read the tip. Arrow keys move it.`;
+  return p.image
+    ? `<button class="magnet has-img" type="button" data-i="${i}" aria-pressed="false" style="--w:${Number(p.w) || 130}px" aria-label="${label}"><img src="${esc(p.image)}" alt="" draggable="false"></button>`
+    : `<button class="magnet ${esc(p.shape || 'rect')}" type="button" data-i="${i}" aria-pressed="false" style="background:${esc(p.color || '#2F4A3B')}" aria-label="${label}">${esc(p.name)}</button>`;
+}).join(''));
 const magnets = $$('.magnet', fridge);
 let layoutDone = false;
 function placeMagnets(force) {
@@ -302,8 +305,8 @@ function placeMagnets(force) {
     if (!force && m.dataset.x) { m.style.left = (m.dataset.x * W) + 'px'; m.style.top = (m.dataset.y * H) + 'px'; return; }
     const [fx, fy] = SPOTS[i % SPOTS.length];
     const narrow = W < 520;
-    const x = narrow ? [0.06, 0.52][i % 2] + (i % 3) * 0.02 : fx;
-    const y = narrow ? 0.04 + Math.floor(i / 2) * 0.22 : fy;
+    const x = narrow ? [0.04, 0.56][i % 2] + (i % 3) * 0.02 : fx;
+    const y = narrow ? 0.03 + Math.floor(i / 2) * (0.84 / Math.ceil(magnets.length / 2)) : fy;
     m.dataset.x = Math.min(x, (W - m.offsetWidth - 12) / W);
     m.dataset.y = Math.min(y, (H - m.offsetHeight - 40) / H);
     m.style.left = (m.dataset.x * W) + 'px'; m.style.top = (m.dataset.y * H) + 'px';
@@ -316,9 +319,10 @@ function showTip(i) {
   magnets.forEach((m, k) => m.setAttribute('aria-pressed', String(k === i)));
   tip.classList.remove('is-swap'); void tip.offsetWidth; tip.classList.add('is-swap');
   tip.innerHTML = `
-    <div class="tip-photo" style="${p.photo ? '' : `background:${esc(p.color)}`}">
+    <div class="tip-photo${!p.photo && p.image ? ' is-magnet' : ''}" style="${p.photo || p.image ? '' : `background:${esc(p.color)}`}">
       ${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}, ${esc(p.state)}" loading="lazy">`
-                : `<span class="t-display-m" style="color:var(--paper-50)">${esc(p.name)}</span>`}
+        : p.image ? `<img src="${esc(p.image)}" alt="Souvenir magnet from ${esc(p.name)}">`
+        : `<span class="t-display-m" style="color:var(--paper-50)">${esc(p.name)}</span>`}
     </div>
     ${p.sample ? '<span class="stamp" title="Placeholder story, swap in your own"><b>Sample</b></span>' : ''}
     <div class="tip-body">
@@ -364,8 +368,13 @@ magnets.forEach((m, i) => {
   });
 });
 placeMagnets(true);
+// Image magnets only know their height once loaded: lay out again unless someone already moved one.
+let touched = false;
+fridge.addEventListener('pointerdown', () => { touched = true; });
+fridge.addEventListener('keydown', () => { touched = true; });
+Promise.all($$('img', fridge).map((img) => img.decode().catch(() => {}))).then(() => { if (!touched) placeMagnets(true); });
 new ResizeObserver(() => layoutDone && placeMagnets(false)).observe(fridge);
-showTip(1);
+showTip(0);
 
 /* ---------- 7. Say hello: the post office desk + the wall ---------- */
 const desk = $('#desk'), form = $('#pc-form'), msg = $('#pc-msg'), count = $('#pc-count'), sent = $('#sent');
