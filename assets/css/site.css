@@ -498,10 +498,21 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .magnet.is-dragging { cursor: grabbing; z-index: 5; box-shadow: 0 4px 8px rgba(0, 0, 0, .2), 0 22px 30px rgba(0, 0, 0, .22); }
 .magnet[aria-pressed="true"] { outline: 3px solid var(--ochre-400); outline-offset: 4px; }
 .magnet.tri[aria-pressed="true"] { outline: 0; filter: drop-shadow(0 0 0 var(--ochre-400)) drop-shadow(0 6px 8px rgba(0, 0, 0, .3)); }
+/* Real souvenir magnets: the cut-out art is the magnet, no box around it */
+.magnet.has-img { width: var(--w); height: auto; padding: 0; background: none; box-shadow: none; border-radius: 12px;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .22)) drop-shadow(0 10px 12px rgba(0, 0, 0, .2));
+  transition: filter var(--fast), scale var(--fast) var(--ease); }
+.magnet.has-img img { display: block; width: 100%; height: auto; pointer-events: none; -webkit-user-drag: none; }
+.magnet.has-img:hover { scale: 1.04; }
+.magnet.has-img.is-dragging { box-shadow: none; scale: 1.08; filter: drop-shadow(0 4px 4px rgba(0, 0, 0, .2)) drop-shadow(0 24px 22px rgba(0, 0, 0, .24)); }
+.magnet.has-img[aria-pressed="true"] { outline: 0; scale: 1.06; z-index: 2; filter: drop-shadow(0 0 1.5px var(--ochre-400)) drop-shadow(0 0 1.5px var(--ochre-400)) drop-shadow(0 12px 14px rgba(0, 0, 0, .26)); }
+.magnet.has-img:focus-visible { outline: 3px solid var(--ochre-400); outline-offset: 6px; }
 .tip-card { position: relative; padding: var(--s3); border-radius: var(--r-s); background: var(--bg-card); color: var(--text-primary); box-shadow: var(--e2); transform: rotate(1.5deg); transition: transform var(--base) var(--ease); }
 .tip-photo { aspect-ratio: 4 / 3; border-radius: var(--r-xs); background: var(--paper-200); overflow: hidden; display: grid; place-items: center; }
 .tip-photo img { width: 100%; height: 100%; object-fit: cover; }
 .tip-photo .t-hand { color: var(--ink-400); }
+.tip-photo.is-magnet { padding: 22px; background: linear-gradient(100deg, #DCD8CF 0%, #F1EEE7 45%, #D6D1C7 100%); }
+.tip-photo.is-magnet img { width: auto; height: auto; max-width: 78%; max-height: 100%; object-fit: contain; rotate: -3deg; filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .22)); }
 .tip-body { padding: var(--s5) var(--s4) var(--s4); }
 .tip-body .t-eyebrow { color: var(--text-secondary); }
 .tip-body blockquote { margin-top: var(--s3); font: 700 26px/30px var(--f-hand); color: var(--ink-900); }
@@ -512,6 +523,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .fridge-wrap { grid-template-columns: 1fr; }
   .fridge { height: 400px; }
   .fridge::before { display: none; }
+}
+@media (max-width: 560px) {
+  .fridge { height: 600px; }
+  .magnet.has-img { width: calc(var(--w) * .8); }
 }
 
 /* ---------- 13. Say hello: post office desk + corkboard wall ---------- */
