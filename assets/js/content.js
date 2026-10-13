@@ -22,7 +22,8 @@ export const postcard = {
 };
 
 /* The trail in the hero. x / y = where the stop sits on the illustration
-   (0–1 from the left / top of assets/img/trail.jpg). */
+   (0–1 from the left / top of assets/img/trail.jpg). The last stop is the
+   summit: the team I join next. */
 export const stops = [
   {
     id: "btech", x: 0.856, y: 0.772,
@@ -61,14 +62,14 @@ export const stops = [
     note: "first designer in the room",
   },
   {
-    id: "astroverse", x: 0.85, y: 0.141,
-    pin: "Astroverse 2.0 · now",
-    when: "Dec 2025 – Sep 2026",
-    title: "Astroverse 2.0",
-    role: "ScaleX’s own dating app",
-    body: "I rebuilt it from a swipe clone into a curated, Kundli-first product with an AI astrologer that gives people a reason to come back.",
+    id: "next", x: 0.85, y: 0.141,
+    pin: "Your team · next",
+    when: "Next",
+    title: "Your team",
+    role: "The next summit",
+    body: "I'm looking for a team building a consumer product people return to, where design sits next to product and data from day one.",
     note: "",
-    link: { label: "Read the case study", href: "astroverse.html" },
+    link: { label: "Say hello", href: "#hello" },
   },
 ];
 

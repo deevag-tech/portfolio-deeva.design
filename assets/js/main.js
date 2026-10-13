@@ -41,10 +41,29 @@ function placePins() {
   });
 }
 if (heroImg.complete) placePins(); else heroImg.addEventListener('load', placePins, { once: true });
-new ResizeObserver(placePins).observe(heroArt);
+new ResizeObserver(() => { placePins(); if (current > -1) placeSheet(); }).observe(heroArt);
 
 const sheet = $('#sheet'), backdrop = $('#sheet-backdrop');
+const popMQ = matchMedia('(min-width: 901px)');
 let current = -1, opener = null;
+// On wide screens the card is a small glass popover beside the stop's tag;
+// on phones it stays a bottom sheet.
+function placeSheet() {
+  const pop = popMQ.matches && current > -1 && !pins[current].hidden;
+  sheet.classList.toggle('is-pop', pop);
+  backdrop.classList.toggle('is-clear', pop);
+  if (!pop) { sheet.style.left = sheet.style.top = ''; return; }
+  const r = pins[current].getBoundingClientRect(), dot = $('.pin-dot', pins[current]).getBoundingClientRect();
+  const w = sheet.offsetWidth, h = sheet.offsetHeight, gap = 18, vw = document.documentElement.clientWidth;
+  let left = r.left - gap - w, side = 'left';
+  if (left < 16) { left = Math.min(r.right + gap, vw - w - 16); side = 'right'; }
+  const cy = dot.top + dot.height / 2;
+  const top = Math.max(16, Math.min(cy - h / 2, innerHeight - h - 96));
+  sheet.dataset.side = side;
+  sheet.style.left = left + 'px';
+  sheet.style.top = (top + scrollY) + 'px';
+  sheet.style.setProperty('--tip', Math.max(24, Math.min(h - 24, cy - top)) + 'px');
+}
 function fillSheet(i) {
   const s = stops[i];
   $('#sheet-eyebrow').textContent = `Stop ${String(i + 1).padStart(2, '0')} of ${String(stops.length).padStart(2, '0')} · ${s.when}`;
@@ -59,11 +78,12 @@ function fillSheet(i) {
   pins.forEach((p, k) => p.setAttribute('aria-expanded', String(k === i)));
   pins[i].classList.add('is-visited');
   current = i;
+  placeSheet();
 }
 function openSheet(i, from) {
   opener = from || opener;
+  sheet.hidden = false; backdrop.hidden = false; // visible first so the card can be measured and placed
   fillSheet(i);
-  sheet.hidden = false; backdrop.hidden = false;
   requestAnimationFrame(() => document.body.classList.add('sheet-open'));
   $('#sheet-close').focus({ preventScroll: true });
 }
@@ -78,6 +98,10 @@ function closeSheet() {
 pins.forEach((p, i) => p.addEventListener('click', () => openSheet(i, p)));
 $('#sheet-close').addEventListener('click', closeSheet);
 backdrop.addEventListener('click', closeSheet);
+// popover mode has no backdrop: a click anywhere else closes it, another stop switches it
+document.addEventListener('pointerdown', (e) => {
+  if (current > -1 && sheet.classList.contains('is-pop') && !sheet.contains(e.target) && !e.target.closest('.pin')) closeSheet();
+});
 $('#sheet-prev').addEventListener('click', () => current > 0 && fillSheet(current - 1));
 $('#sheet-next').addEventListener('click', () => current < stops.length - 1 && fillSheet(current + 1));
 sheet.addEventListener('keydown', (e) => {
