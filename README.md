@@ -21,7 +21,7 @@ It is a static site with no build step. It runs on GitHub Pages as it is.
 | 3 | Work | Postcards, front (mockup) and back (problem, role, result) side by side | `content.js` → `work` |
 | 4 | How I work | Five switchbacks of my process, the hat worn at each, where it showed up in real projects, plus the toolbox | `content.js` → `steps`, `tools` |
 | 5 | Side trails | Souvenir shelf of websites | `content.js` → `sites` |
-| 6 | Off the clock | Fridge door with draggable magnets and local tips | `content.js` → `places` |
+| 6 | Off the clock | Fridge door with real souvenir magnets you can drag, each with a local tip | `content.js` → `places`, art in `assets/img/magnets/` |
 | 7 | Say hello | Post office desk: pick a stamp, write the card, drop it in the postbox. Corkboard wall of approved cards | `content.js` → `postcard`, `assets/data/postcards.json` |
 | 8 | Footer | Rubber stamps on an ink pad (Email, Case study, Postcard, Top) | `content.js` → `links` (a LinkedIn or Résumé stamp appears once `links.linkedin` / `links.resume` is set) |
 
@@ -40,7 +40,8 @@ You have to serve the site over HTTP because ES modules don't load from `file://
 2. Set the path in `assets/js/content.js`:
    - `work[].image` for real app screens on a postcard front
    - `sites[].image` for website screenshots
-   - `places[].photo` for travel photos
+   - `places[].image` for a souvenir magnet (a cut-out PNG/WebP with a transparent background; `w` sets its width on the fridge)
+   - `places[].photo` for a travel photo on the tip card (without one, the card shows the magnet)
 3. Set `sample: false` (or delete it) on any place once its tip is yours.
 4. Case study screens go in `astroverse.html`: put an `<img>` inside the `.shot` placeholder.
 
