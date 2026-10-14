@@ -417,6 +417,30 @@ function validate() {
   return !first;
 }
 
+// Firebase Realtime Database over plain REST: no SDK, nothing to build.
+const fbURL = (path, q = '') => `${postcard.firebase.replace(/\/$/, '')}/${path}.json${q}`;
+async function saveCard(d) {
+  const at = { '.sv': 'timestamp' }; // the server stamps the time
+  const post = (path, body) => fetch(fbURL(path), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  await post('inbox', { message: d.message, name: d.name, email: d.email, front: d.front, wall: d.wall, createdAt: at });
+  if (d.wall) {
+    await post('wall', { from: d.name.split(/\s+/)[0].slice(0, 40), message: d.message, front: d.front, approved: false, createdAt: at }).catch(() => {});
+  }
+}
+async function approvedCards() {
+  if (!postcard.firebase) return [];
+  try {
+    const r = await fetch(fbURL('wall', '?orderBy=%22approved%22&equalTo=true'), { cache: 'no-store' });
+    if (!r.ok) return [];
+    const all = Object.values((await r.json()) || {}).filter((c) => c && c.approved === true && c.message);
+    return all.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 7).map((c) => ({
+      from: c.from, message: c.message,
+      date: c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }) : '',
+    }));
+  } catch { return []; }
+}
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!validate()) return;
@@ -429,8 +453,10 @@ form.addEventListener('submit', async (e) => {
   };
   const btn = $('button[type="submit"]', form);
   btn.disabled = true;
-  let viaEmailApp = !postcard.endpoint;
-  if (postcard.endpoint) {
+  let viaEmailApp = !postcard.firebase && !postcard.endpoint;
+  if (postcard.firebase) {
+    try { await saveCard(data); } catch { viaEmailApp = true; }
+  } else if (postcard.endpoint) {
     try {
       const r = await fetch(postcard.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ ...data, _subject: `A postcard from ${data.name}` }) });
       if (!r.ok) throw new Error(r.status);
@@ -446,7 +472,8 @@ form.addEventListener('submit', async (e) => {
   $('#sent-date').textContent = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
   $('#sent-msg').textContent = viaEmailApp
     ? 'Your email app should open with the postcard already written. Hit send there and it’s on its way.'
-    : 'I read every one and reply within a few days.';
+    : data.wall ? 'I read every one and reply within a few days. Your card goes up on the wall once I’ve pinned it.'
+      : 'I read every one and reply within a few days.';
   form.hidden = true; sent.hidden = false; desk.classList.remove('is-posting'); desk.classList.add('is-sent');
   sent.focus();
   btn.disabled = false;
@@ -455,10 +482,11 @@ $('#pc-again').addEventListener('click', () => {
   form.reset(); updateCount(); form.hidden = false; sent.hidden = true; desk.classList.remove('is-sent'); msg.focus();
 });
 
-fetch('assets/data/postcards.json', { cache: 'no-cache' })
-  .then((r) => (r.ok ? r.json() : { cards: [] }))
-  .catch(() => ({ cards: [] }))
-  .then(({ cards = [] }) => {
+Promise.all([
+  fetch('assets/data/postcards.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : { cards: [] })).catch(() => ({ cards: [] })),
+  approvedCards(),
+]).then(([{ cards: mine = [] }, approved]) => {
+    const cards = [...mine, ...approved];
     const rot = [-3, 2, -1.5, 3, -2, 1.2];
     const pinCol = ['var(--terra-500)', 'var(--ochre-500)', 'var(--forest-600)'];
     const real = cards.map((c, i) => `

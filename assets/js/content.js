@@ -12,11 +12,15 @@ export const links = {
 };
 
 /* Send-a-postcard (the contact section).
-   endpoint: leave "" and "Stamp & send" opens the visitor's email app with the
-   postcard already written. Paste a form endpoint (Formspree, Web3Forms, Getform…)
-   to receive postcards straight to your inbox instead, no email app needed.
-   The wall shows only the cards you approve in assets/data/postcards.json. */
+   firebase: your Realtime Database URL. Every card is saved to /inbox (private:
+   message, name, email, stamp). If the visitor ticks "Pin it to the wall", a public
+   copy (first name + message) goes to /wall with approved: false. Flip approved to
+   true in the Firebase console and it appears on the wall.
+   endpoint: an optional form service (Formspree…) used only if firebase is "".
+   With neither, or if saving fails, "Drop it in" opens the visitor's email app.
+   assets/data/postcards.json holds your own pinned card(s). */
 export const postcard = {
+  firebase: "https://portfolio-3f7c6-default-rtdb.firebaseio.com",
   endpoint: "",
   maxLength: 400,
 };
