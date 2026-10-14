@@ -47,9 +47,13 @@ You have to serve the site over HTTP because ES modules don't load from `file://
 
 ## Postcards (the contact form)
 
-- **By default:** "Drop it in" opens the visitor's email app with the postcard already written, addressed to `links.email`.
-- **To receive cards without an email app:** create a free form endpoint (for example on Formspree), paste its URL into `postcard.endpoint` in `content.js`, and cards arrive in your inbox.
-- **The wall** only shows cards you approve. To approve one, add it to `assets/data/postcards.json` (`from`, `place`, `date`, `message`).
+Cards are saved to Firebase Realtime Database (`postcard.firebase` in `content.js`).
+
+- **Every card** goes to `/inbox` with the message, name, email and chosen stamp. Read them in the Firebase console under Realtime Database → `inbox`.
+- **Cards for the wall:** if the visitor ticks "Pin it to the wall", a public copy (first name and message only) goes to `/wall` with `approved: false`. To pin it, open it in the console and set `approved` to `true`. It shows up on the wall on the next page load.
+- **Your own card(s)** stay in `assets/data/postcards.json` and always show first.
+- **If saving fails** (offline, blocked), "Drop it in" falls back to opening the visitor's email app with the card already written.
+- **Security rules:** paste `firebase.rules.json` into Realtime Database → Rules. With them, nobody can read the inbox, nobody can edit or delete cards, and the wall only returns approved cards.
 
 ## LinkedIn
 

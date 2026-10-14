@@ -1,0 +1,33 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "inbox": {
+      "$card": {
+        ".write": "!data.exists()",
+        ".validate": "newData.hasChildren(['message', 'name', 'email', 'createdAt'])",
+        "message": { ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 400" },
+        "name": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80" },
+        "email": { ".validate": "newData.isString() && newData.val().length <= 120 && newData.val().matches(/^.+@.+\\..+$/)" },
+        "front": { ".validate": "newData.isString() && newData.val().length <= 20" },
+        "wall": { ".validate": "newData.isBoolean()" },
+        "createdAt": { ".validate": "newData.val() == now" },
+        "$other": { ".validate": false }
+      }
+    },
+    "wall": {
+      ".read": "query.orderByChild == 'approved' && query.equalTo == true",
+      ".indexOn": ["approved"],
+      "$card": {
+        ".write": "!data.exists()",
+        ".validate": "newData.hasChildren(['from', 'message', 'approved', 'createdAt'])",
+        "from": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40" },
+        "message": { ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 400" },
+        "front": { ".validate": "newData.isString() && newData.val().length <= 20" },
+        "approved": { ".validate": "newData.val() == false" },
+        "createdAt": { ".validate": "newData.val() == now" },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}
