@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Wishup · Case study · Deeva Gupta</title>
+  <meta name="description" content="How we pulled Wishup's client and VA work out of Slack threads and email into one app for tasks, EOD reports and feedback, and how I rebuilt the lead-gen website alongside it.">
+  <meta name="theme-color" content="#22352B">
+  <meta property="og:title" content="Wishup: one app for clients, VAs and Wishup">
+  <meta property="og:description" content="A product design case study by Deeva Gupta.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23C2553A'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,serif' font-weight='700' font-size='34' fill='%23FBF8F1'%3ED%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fraunces:opsz,wght,SOFT@9..144,600,0..100&family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="assets/css/case.css">
+</head>
+<body>
+  <a class="skip" href="#tldr">Skip to content</a>
+
+  <header class="bar">
+    <a class="back" href="index.html#work">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to the portfolio
+    </a>
+    <a class="brand" href="index.html" aria-label="Deeva Gupta, home">D</a>
+    <a class="btn btn-sm" href="index.html#hello">Say hello</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <p class="eyebrow"><span>Case study</span>Wishup · Hucentric</p>
+      <h1>One app for clients, VAs <em>and Wishup</em></h1>
+      <p class="hero-sub">How we moved the day-to-day work between busy clients and their virtual assistants out of Slack threads and email into one app, and how I rebuilt Wishup's lead-gen website alongside it.</p>
+      <dl class="facts">
+        <div><dt>Role</dt><dd>Product Designer, client app · Lead, website</dd></div>
+        <div><dt>Timeline</dt><dd>2023 – Jan 2024</dd></div>
+        <div><dt>Platform</dt><dd>iOS &amp; Android app · Website</dd></div>
+        <div><dt>I owned</dt><dd>App flows &amp; UI, website redesign</dd></div>
+        <div><dt>Team</dt><dd>Design manager, research, engineering, founders</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <main class="paper">
+    <div class="wrap layout">
+      <!-- side map -->
+      <nav class="toc" aria-label="On this page">
+        <p class="toc-title">Route</p>
+        <ol>
+          <li><a href="#tldr">30-second version</a></li>
+          <li><a href="#context">Where we started</a></li>
+          <li><a href="#s1"><span>01</span>Work in Slack</a></li>
+          <li><a href="#s2"><span>02</span>EOD by hand</a></li>
+          <li><a href="#s3"><span>03</span>A cold start</a></li>
+          <li><a href="#s4"><span>04</span>One login, many people</a></li>
+          <li><a href="#s5"><span>05</span>The website</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#learnings">What I learned</a></li>
+        </ol>
+      </nav>
+
+      <article class="story">
+        <!-- TL;DR -->
+        <section id="tldr" class="block">
+          <p class="kicker">Got 30 seconds?</p>
+          <div class="tldr">
+            <div><h2 class="mini">The problem</h2><p>Wishup matches clients with virtual assistants (VAs). The work between them lived in Slack, email and informal messages, and VAs rewrote their day into an end-of-day (EOD) report by hand. Clients switched between apps just to know what got done.</p></div>
+            <div><h2 class="mini">What I did</h2><p>As the designer on the client app, working with our design manager, I designed one place for the whole relationship: tasks both sides can update, EOD reports drafted from those tasks, quick feedback, and roles for teams. I also led the redesign of Wishup's lead-gen website.</p></div>
+          </div>
+          <dl class="metrics">
+            <div><dt>~15%</dt><dd>of VAs' productive time saved on EOD reporting</dd></div>
+            <div><dt>+25%</dt><dd>website pageviews after the redesign</dd></div>
+            <div><dt>−15%</dt><dd>website bounce rate</dd></div>
+            <div><dt>10%</dt><dd>lead conversion on the new site</dd></div>
+          </dl>
+        </section>
+
+        <!-- CONTEXT -->
+        <section id="context" class="block">
+          <p class="kicker">Where we started</p>
+          <h2>A service run on <em>Slack threads</em></h2>
+          <p>Wishup is an Indian startup that matches business owners with trained virtual assistants. Three groups had to be happy at once: the client who pays, the VA who does the work, and the Wishup team that keeps the match going.</p>
+          <p>We started with interviews with the in-house team, Clarity session recordings and an audit of the existing dashboards and website, then followed up with client interviews and surveys. One finding reset the brief: the top 5% of clients brought in over 70% of revenue. They became the people we designed for: owners who delegate a lot, have little time, and want to see their team's day without chasing it.</p>
+          <blockquote class="north">North star: <em>every task, update and report in one place</em>, so nobody has to ask "what happened today?"</blockquote>
+          <div class="ba">
+            <figure><div class="shot"><img src="assets/img/wishup/home.webp" alt="Wishup client app home: payment reminder, a Hire More Talent card, the latest EOD report and VA time utilisation" loading="lazy"></div><figcaption><span>Home</span>Reminders, today's EOD and VA utilisation up front</figcaption></figure>
+            <figure><div class="shot"><img src="assets/img/wishup/talent.webp" alt="Talent tab with subscribed VAs, a Best Picks for You card and services" loading="lazy"></div><figcaption><span>Talent</span>Your VAs, and the next one worth hiring</figcaption></figure>
+          </div>
+        </section>
+
+        <!-- 01 -->
+        <section id="s1" class="block switchback">
+          <p class="kicker"><span class="num">01</span>Switchback · Work in Slack</p>
+          <h2>Tasks were assigned <em>in a chat message</em></h2>
+          <div class="signal"><span>Signal</span><p>Clients assigned work over Slack or email, VAs replied in the same threads, and status lived in someone's memory. The old app had few reasons to open it at all.</p></div>
+          <p class="insight"><span>Insight</span>If a task lives in one place with a status both sides can change, nobody has to ask for an update.</p>
+          <ol class="decisions">
+            <li><h3>Create and assign tasks in the app</h3><p>Name, assignee, description, date, frequency and category in one form, with attachments and voice notes.</p><p class="why"><b>Why it mattered:</b> delegating took less effort than typing a Slack message.</p></li>
+            <li><h3>Status that both sides update</h3><p>Open, closed, one-time or recurring, flagged, with new updates counted on the card and time spent per VA.</p><p class="why"><b>Why it mattered:</b> the task list became the status report.</p></li>
+            <li><h3>Speech-to-text and suggestions for repeat work</h3><p>Tasks can be dictated, and repeated tasks are suggested instead of retyped.</p><p class="why"><b>Why it mattered:</b> busy owners delegate on the go.</p></li>
+          </ol>
+          <div class="ba">
+            <figure><div class="shot"><img src="assets/img/wishup/tasks.webp" alt="Tasks list with subscribed talents, filters and task cards showing status, recurrence and new updates" loading="lazy"></div><figcaption><span>New</span>Every task, with its status</figcaption></figure>
+            <figure><div class="shot"><img src="assets/img/wishup/create_task.webp" alt="Create Task form with assignee, rich-text description, date, frequency and category" loading="lazy"></div><figcaption><span>New</span>Delegate in one form</figcaption></figure>
+          </div>
+        </section>
+
+        <!-- 02 -->
+        <section id="s2" class="block switchback">
+          <p class="kicker"><span class="num">02</span>Switchback · EOD by hand</p>
+          <h2>VAs wrote the same day <em>twice</em></h2>
+          <div class="signal"><span>Signal</span><p>Every evening VAs rewrote their task notes into an EOD report, and clients received a long email they rarely opened in full.</p></div>
+          <p class="insight"><span>Insight</span>The EOD should be a by-product of the day's work, not a second job.</p>
+          <ol class="decisions">
+            <li><h3>EOD drafts built from task updates</h3><p>The day's updates compile into a draft the VA reviews, instead of writing from scratch.</p><p class="why"><b>Why it mattered:</b> the report took minutes, not a chunk of the evening.</p></li>
+            <li><h3>Highlights by email, the full report in the app</h3><p>The email carries the key points and links into the app for details, comments and voice notes.</p><p class="why"><b>Why it mattered:</b> the email became a way into the app.</p></li>
+            <li><h3>Filters, bookmarks and EOD streaks</h3><p>Clients with several VAs filter by person, date or unread; VAs keep a streak for timely reports.</p><p class="why"><b>Why it mattered:</b> reports got read, and they arrived on time.</p></li>
+          </ol>
+          <div class="ba">
+            <figure><div class="shot"><img src="assets/img/wishup/eod_list.webp" alt="Daily Reports with dates, subscribed talents, filters and task updates" loading="lazy"></div><figcaption><span>New</span>Daily reports, per VA and per day</figcaption></figure>
+            <figure><div class="shot"><img src="assets/img/wishup/eod_comments.webp" alt="EOD report comments with a written note, a voice note and quick reply chips" loading="lazy"></div><figcaption><span>New</span>Comments and voice notes on a report</figcaption></figure>
+          </div>
+          <p class="result"><span>Result</span>Automating the EOD saved VAs roughly 15% of their productive time, and streaks brought reports in on time more often.</p>
+        </section>
+
+        <!-- 03 -->
+        <section id="s3" class="block switchback">
+          <p class="kicker"><span class="num">03</span>Switchback · A cold start</p>
+          <h2>A generic start and <em>feedback nobody gave</em></h2>
+          <div class="signal"><span>Signal</span><p>Every client saw the same app regardless of what they hired a VA for, and feedback on VAs was a long form that rarely got filled.</p></div>
+          <p class="insight"><span>Insight</span>Ask for what the client needs on day one, and make feedback as quick as a reaction.</p>
+          <ol class="decisions">
+            <li><h3>Onboarding that starts with services</h3><p>Clients pick at least three services, from inbox management to travel planning, so the app opens on what matters to them.</p><p class="why"><b>Why it mattered:</b> a personal first screen instead of an empty one.</p></li>
+            <li><h3>Feedback in a few taps</h3><p>A rating with expressive stars, a "6-star" for standout work, and quick tags like "Fast turnaround" or "Ownership".</p><p class="why"><b>Why it mattered:</b> Wishup heard about VAs often, not just when something broke.</p></li>
+          </ol>
+          <div class="ba">
+            <figure><div class="shot"><img src="assets/img/wishup/onb_services.webp" alt="Select Services onboarding grid with inbox, project and data management options" loading="lazy"></div><figcaption><span>New</span>Pick your services</figcaption></figure>
+            <figure><div class="shot"><img src="assets/img/wishup/feedback_form.webp" alt="Feedback form with emoji star rating, a 6-star option and quick tags" loading="lazy"></div><figcaption><span>New</span>Rate, tag, done</figcaption></figure>
+          </div>
+        </section>
+
+        <!-- 04 -->
+        <section id="s4" class="block switchback">
+          <p class="kicker"><span class="num">04</span>Switchback · One login, many people</p>
+          <h2>Teams shared <em>one account</em></h2>
+          <div class="signal"><span>Signal</span><p>Larger clients had managers, finance people and assistants all needing access, with no way to separate who sees what, including payments.</p></div>
+          <p class="insight"><span>Insight</span>The biggest accounts are teams, so the app has to understand roles.</p>
+          <ol class="decisions">
+            <li><h3>Default and custom roles</h3><p>Team Manager and Team Member out of the box, plus custom roles with their own permissions.</p><p class="why"><b>Why it mattered:</b> sensitive data like payment details stays with the right people.</p></li>
+            <li><h3>Members, reporting lines and organisations</h3><p>Add internal team members, set who reports to whom, and switch between organisations from one login.</p><p class="why"><b>Why it mattered:</b> it fit how the top clients already worked.</p></li>
+          </ol>
+          <div class="ba">
+            <figure><div class="shot"><img src="assets/img/wishup/org.webp" alt="Organization screen listing members with roles, reporting lines and a Need a VA like yours card" loading="lazy"></div><figcaption><span>New</span>Your organisation</figcaption></figure>
+            <figure><div class="shot"><img src="assets/img/wishup/roles.webp" alt="Roles and Permissions list with default and custom roles" loading="lazy"></div><figcaption><span>New</span>Roles and permissions</figcaption></figure>
+          </div>
+        </section>
+
+        <!-- 05 -->
+        <section id="s5" class="block switchback">
+          <p class="kicker"><span class="num">05</span>Switchback · The website</p>
+          <h2>A lead-gen site that <em>needed to convert</em></h2>
+          <div class="signal"><span>Signal</span><p>Wishup's website brought in visitors, but too many left before asking for a VA.</p></div>
+          <p class="insight"><span>Insight</span>Watch where people stop before redesigning what they see.</p>
+          <ol class="decisions">
+            <li><h3>Clarity heatmaps and stakeholder interviews set the brief</h3><p>I led the redesign, starting from where visitors scrolled, clicked and dropped, and from what the sales team heard from leads.</p><p class="why"><b>Why it mattered:</b> the redesign answered real drop-off points, not taste.</p></li>
+          </ol>
+          <div class="ba">
+            <figure><div class="shot" data-label="wishup.co · before"></div><figcaption><span>Before</span>The old website</figcaption></figure>
+            <figure><div class="shot" data-label="wishup.co · redesign"></div><figcaption><span>After</span>The redesigned website</figcaption></figure>
+          </div>
+          <p class="result"><span>Result</span>Pageviews rose 25%, bounce rate dropped 15%, and the site converted 10% of visitors into leads.</p>
+        </section>
+
+        <!-- RESULTS -->
+        <section id="results" class="block">
+          <p class="kicker">Results</p>
+          <h2>Where the climb <em>landed</em></h2>
+          <dl class="metrics big">
+            <div><dt>~15%</dt><dd>VA time saved on EOD reports</dd></div>
+            <div><dt>5% → 70%</dt><dd>of clients, of revenue: who we designed for</dd></div>
+            <div><dt>+25%</dt><dd>website pageviews</dd></div>
+            <div><dt>−15%</dt><dd>website bounce rate</dd></div>
+            <div><dt>10%</dt><dd>website lead conversion</dd></div>
+          </dl>
+          <p class="source">The team also saw higher client engagement and retention, and more subscription upgrades. A shared design system made engineering faster on both the app and the web.</p>
+        </section>
+
+        <!-- LEARNINGS -->
+        <section id="learnings" class="block">
+          <p class="kicker">What I learned</p>
+          <h2>Notes from <em>the trail</em></h2>
+          <ul class="learn">
+            <li><b>Design for the people who pay.</b> Knowing the top 5% of clients drove most revenue changed every priority.</li>
+            <li><b>Make the report a by-product.</b> The best EOD was the one nobody had to write from scratch.</li>
+            <li><b>Bring the conversation to the work.</b> Comments and voice notes on a task beat a Slack thread about it.</li>
+            <li><b>Watch before you redraw.</b> Heatmaps told us where the website was losing people.</li>
+          </ul>
+        </section>
+
+        <!-- NEXT -->
+        <section class="next">
+          <p class="hand">thanks for climbing this far</p>
+          <div class="next-row">
+            <a class="btn" href="index.html#work">See more work</a>
+            <a class="btn btn-ghost" href="index.html#hello">Say hello</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="foot"><div class="wrap"><span>Deeva Gupta · Product Designer · India</span><a href="mailto:dee.vag78@gmail.com">dee.vag78@gmail.com</a></div></footer>
+
+  <script>
+    // Highlight the current section in the side map.
+    (() => {
+      const links = [...document.querySelectorAll('.toc a')];
+      const map = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+      const io = new IntersectionObserver((es) => es.forEach((e) => {
+        if (!e.isIntersecting) return;
+        links.forEach((a) => a.removeAttribute('aria-current'));
+        map.get(e.target.id)?.setAttribute('aria-current', 'true');
+      }), { rootMargin: '-35% 0px -60% 0px' });
+      map.forEach((_, id) => { const el = document.getElementById(id); el && io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
