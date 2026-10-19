@@ -140,7 +140,7 @@ $('#cards').innerHTML = work.map((w, i) => `
     <a class="postcard pc-front tint-${esc(w.tint)}" href="${esc(w.link.href)}" tabindex="-1" aria-hidden="true">
       <span class="pc-art">
         <span class="t-eyebrow">${esc(w.label)}</span>
-        ${w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy">` : (w.kind === 'web' ? browserMock() : phones())}
+        ${w.video ? `<video muted loop playsinline autoplay preload="none" poster="${esc(w.video)}-poster.jpg"><source src="${esc(w.video)}.webm" type="video/webm"><source src="${esc(w.video)}.mp4" type="video/mp4"></video>` : w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy">` : (w.kind === 'web' ? browserMock() : phones())}
         <span class="t-hand greet">greetings from the trail</span>
       </span>
     </a>
@@ -163,6 +163,17 @@ $('#cards').innerHTML = work.map((w, i) => `
       </div>
     </div>
   </article>`).join('');
+
+// Mockup videos play only while on screen, and never for people who prefer less motion.
+{
+  const vids = [...document.querySelectorAll('.pc-art video')];
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  const io = new IntersectionObserver((es) => es.forEach((e) => {
+    const v = e.target;
+    if (e.isIntersecting && !still.matches) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
+  }), { threshold: 0.25 });
+  vids.forEach((v) => { v.removeAttribute('autoplay'); io.observe(v); });
+}
 
 /* ---------- 4. How I work: five switchbacks ---------- */
 const ART = {

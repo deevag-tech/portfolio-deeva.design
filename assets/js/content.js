@@ -79,7 +79,8 @@ export const stops = [
 
 /* Selected work: postcards, front and back side by side.
    tint: blush | wheat | sage | slate. kind: "app" (phones) or "web" (browser).
-   image: a real screenshot or mockup (leave "" for the drawn placeholder). */
+   image: a real screenshot or mockup (leave "" for the drawn placeholder).
+   video: path without extension to a looping mockup (.webm + .mp4 + -poster.jpg). */
 export const work = [
   {
     id: "astroverse",
@@ -113,18 +114,19 @@ export const work = [
   },
   {
     id: "wishup",
-    label: "Wishup · SaaS website",
+    label: "Wishup · App & website",
     tint: "sage",
-    kind: "web",
+    kind: "app",
     image: "",
+    video: "",
     stamp: "WU",
     year: "2023",
-    title: "A lead-gen website, rebuilt from heatmaps",
-    problem: "A lead-generation site that needed to convert better.",
-    role: "Lead UI/UX designer: Clarity heatmaps, stakeholder interviews, redesign.",
-    metric: "+25%",
-    metricLabel: "pageviews · −15% bounce · 10% lead conversion",
-    link: { label: "Ask me about it", href: "#hello" },
+    title: "One app for clients, VAs and Wishup",
+    problem: "Client–VA work lived in Slack threads, email and hand-written EOD reports.",
+    role: "Product designer on the client app under our design manager; led the website revamp.",
+    metric: "~15%",
+    metricLabel: "VA time saved on EOD reports · +25% website pageviews",
+    link: { label: "Read the case study", href: "wishup.html" },
   },
 ];
 
