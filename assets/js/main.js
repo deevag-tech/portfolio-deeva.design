@@ -140,7 +140,7 @@ $('#cards').innerHTML = work.map((w, i) => `
     <a class="postcard pc-front tint-${esc(w.tint)}" href="${esc(w.link.href)}" tabindex="-1" aria-hidden="true">
       <span class="pc-art">
         <span class="t-eyebrow">${esc(w.label)}</span>
-        ${w.video ? `<video muted loop playsinline autoplay preload="none" poster="${esc(w.video)}-poster.jpg"><source src="${esc(w.video)}.webm" type="video/webm"><source src="${esc(w.video)}.mp4" type="video/mp4"></video>` : w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy">` : (w.kind === 'web' ? browserMock() : phones())}
+        ${w.video ? `<video muted loop playsinline autoplay preload="none" data-kind="${esc(w.kind)}" poster="${esc(w.video)}-poster.jpg"><source src="${esc(w.video)}.webm" type="video/webm"><source src="${esc(w.video)}.mp4" type="video/mp4"></video>` : w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy">` : (w.kind === 'web' ? browserMock() : phones())}
         <span class="t-hand greet">greetings from the trail</span>
       </span>
     </a>
@@ -172,7 +172,14 @@ $('#cards').innerHTML = work.map((w, i) => `
     const v = e.target;
     if (e.isIntersecting && !still.matches) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
   }), { threshold: 0.25 });
-  vids.forEach((v) => { v.removeAttribute('autoplay'); io.observe(v); });
+  vids.forEach((v) => {
+    v.removeAttribute('autoplay');
+    // If a video hasn't been uploaded yet, fall back to the drawn mockup.
+    fetch(v.poster, { method: 'HEAD' }).then((r) => {
+      if (!r.ok) throw new Error('missing');
+      io.observe(v);
+    }).catch(() => { v.outerHTML = v.dataset.kind === 'web' ? browserMock() : phones(); });
+  });
 }
 
 /* ---------- 4. How I work: five switchbacks ---------- */
