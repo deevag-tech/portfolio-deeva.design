@@ -34,7 +34,21 @@
       <h1>Fewer profiles, <em>better matches</em></h1>
       <p class="hero-sub">How I rebuilt a Kundli-based dating app from a swipe clone into a curated product people trust enough to come back to.</p>
       </div>
-      <figure class="hero-art"><img src="assets/img/astroverse/hero.webp" width="1200" height="1000" alt="Astroverse 2.0 on three phones: Kundli Match with a 23/36 Cosmic Score, Discover showing Garima's profile with an Already into you tag, and a Hinglish chat with Veda, the AI astrologer"></figure>
+      <figure class="hero-art stage" role="img" aria-label="Astroverse 2.0 on three phones: Kundli Match with a 23/36 Cosmic Score, Discover showing Garima's verified profile with an Already into you tag, and a Hinglish chat with Veda, the AI astrologer">
+        <div class="st">
+          <div class="st-glow"></div>
+          <svg class="st-chart" viewBox="0 0 400 400" fill="none"><rect x="8" y="8" width="384" height="384" rx="6"/><path d="M200 8 392 200 200 392 8 200Z M8 8 392 392 M392 8 8 392"/></svg>
+          <div class="st-orbit"><i></i></div>
+          <div class="st-ph st-l" style="--d:3"><img src="assets/img/astroverse/phone-kundli.webp" width="520" height="1087" alt=""></div>
+          <div class="st-ph st-r" style="--d:3"><img src="assets/img/astroverse/phone-veda.webp" width="520" height="1087" alt=""></div>
+          <div class="st-ph st-c" style="--d:5"><img src="assets/img/astroverse/phone-discover.webp" width="600" height="1254" alt=""></div>
+          <div class="chip chip-score" style="--d:9"><span class="avs"><img src="assets/img/astroverse/av-her.webp" alt=""><img src="assets/img/astroverse/av-him.webp" alt=""></span><b>23<small>/36</small></b><span class="lbl">Cosmic Score<em>Guna milan, explained</em></span></div>
+          <div class="chip chip-ver" style="--d:7"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10"/><path d="m5.5 10.2 3 3 6-6.4"/></svg>Verified, live face check</div>
+          <div class="chip chip-like" style="--d:8"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.4-9.3C1.2 8.2 3.4 4.5 7 4.5c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.6 0 5.8 3.7 4.4 7.2C19.5 16.4 12 21 12 21Z"/></svg>Already into you</div>
+          <div class="chip chip-veda" style="--d:6"><span class="vd">✦</span><span>Ask Veda<em>“Compatibility check karo!”</em></span></div>
+          <i class="spk k1"></i><i class="spk k2"></i><i class="spk k3"></i><i class="spk k4"></i><i class="spk k5"></i>
+        </div>
+      </figure>
       <dl class="facts">
         <div><dt>Role</dt><dd>Founding Product Designer</dd></div>
         <div><dt>Timeline</dt><dd>Dec 2025 – Sep 2026</dd></div>
@@ -215,6 +229,18 @@
         map.get(e.target.id)?.setAttribute('aria-current', 'true');
       }), { rootMargin: '-35% 0px -60% 0px' });
       map.forEach((_, id) => { const el = document.getElementById(id); el && io.observe(el); });
+    })();
+    // Hero stage: layers drift a little with the pointer (skipped for reduced motion and touch).
+    (() => {
+      const st = document.querySelector('.st');
+      if (!st || matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(hover: hover)').matches) return;
+      const hero = st.closest('.hero');
+      hero.addEventListener('pointermove', (e) => {
+        const r = st.getBoundingClientRect();
+        st.style.setProperty('--mx', (((e.clientX - r.left) / r.width - 0.5) * 2).toFixed(3));
+        st.style.setProperty('--my', (((e.clientY - r.top) / r.height - 0.5) * 2).toFixed(3));
+      });
+      hero.addEventListener('pointerleave', () => { st.style.setProperty('--mx', 0); st.style.setProperty('--my', 0); });
     })();
   </script>
 </body>
