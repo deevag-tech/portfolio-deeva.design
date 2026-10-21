@@ -213,3 +213,21 @@ figcaption span{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:u
 .light .st-ph{filter:drop-shadow(0 26px 30px rgba(90,40,30,.22))}
 .light .chip{box-shadow:0 0 0 1px rgba(30,27,22,.06),0 16px 30px -12px rgba(90,40,30,.35)}
 .light .k2,.light .k5{background:#E8B04A}.light .k4{background:#FE5C7D}
+/* Wishup hero: work board backdrop, phones cropped from the case study tiles */
+.hero.has-art.light.wu{background:radial-gradient(55% 65% at 78% 45%,rgba(26,99,186,.12),transparent 70%),radial-gradient(45% 55% at 4% 0%,rgba(127,197,155,.22),transparent 70%),linear-gradient(180deg,#FBF8F1 0%,#F3F1E6 60%,#E6ECDF 100%)}
+.wu .st-board{left:2%;top:16%;width:96%;height:auto;stroke:rgba(26,99,186,.22);stroke-width:1.2;stroke-dasharray:4 5}
+.wu .st-board .cards rect{fill:rgba(26,99,186,.05);stroke:rgba(26,99,186,.16);stroke-dasharray:none}
+.st-ph .crop{display:block;aspect-ratio:346/712;overflow:hidden;border-radius:16.5%/8%;animation:float 7s ease-in-out infinite}
+.st-ph .crop img{display:block;width:289.02%;max-width:none;height:auto;margin:-12.72% 0 0 -94.51%;animation:none}
+.st-l .crop{animation-delay:-2.3s}.st-r .crop{animation-delay:-4.6s}
+.chip-task{left:0;top:66%;border-radius:16px;rotate:-4deg}
+.tk{display:grid;place-items:center;width:2.1em;height:2.1em;border-radius:10px;background:#E7EEF8}
+.tk svg{width:1.3em;height:1.3em}.tk rect{fill:#1A63BA}.tk path{stroke:#fff;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.chip-task>span:last-child,.chip-voice>span:last-child{font-weight:600}
+.chip-add{left:39%;top:88%;background:#1A63BA;color:#fff;border-radius:999px;font-weight:600;rotate:-2deg}
+.chip-add b{font-size:1.3em;line-height:1}
+.chip-voice{right:0;top:56%;border-radius:18px 18px 18px 4px;rotate:3deg}
+.mic{display:grid;place-items:center;width:2.1em;height:2.1em;border-radius:50%;background:#22352B}
+.mic svg{width:1.15em;height:1.15em;fill:none;stroke:#E8B04A;stroke-width:2;stroke-linecap:round}
+.wu .spk{background:#7FC59B}.wu .k1{background:#E8B04A}.wu .k4{background:#1A63BA}
+@media (max-width:900px){.chip-task{top:72%}.chip-voice{top:48%}}
