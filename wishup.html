@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fraunces:opsz,wght,SOFT@9..144,600,0..100&family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="assets/css/case.css?v=5">
+  <link rel="stylesheet" href="assets/css/case.css?v=6">
 </head>
 <body>
   <a class="skip" href="#tldr">Skip to content</a>
@@ -20,10 +20,13 @@
   <header class="bar">
     <a class="back" href="index.html#work">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Back to the portfolio
+      <span>Back to the portfolio</span>
     </a>
     <a class="brand" href="index.html" aria-label="Deeva Gupta, home">D</a>
-    <a class="btn btn-sm" href="index.html#hello">Say hello</a>
+    <div class="bar-actions">
+      <a class="btn btn-sm" href="index.html#hello">Say hello</a>
+      <a class="btn btn-sm bar-resume" href="assets/Deeva_Gupta_Resume.pdf" target="_blank" rel="noopener" data-resume>Résumé<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg></a>
+    </div>
   </header>
 
   <!-- HERO -->
@@ -251,6 +254,14 @@
       });
       hero.addEventListener('pointerleave', () => { st.style.setProperty('--mx', 0); st.style.setProperty('--my', 0); });
     })();
+    // Résumé: save a copy and open it in a new tab.
+    document.querySelectorAll('[data-resume]').forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const d = document.createElement('a');
+      d.href = a.href; d.download = a.href.split('/').pop();
+      document.body.append(d); d.click(); d.remove();
+      window.open(a.href, '_blank', 'noopener');
+    }));
   </script>
 </body>
 </html>
