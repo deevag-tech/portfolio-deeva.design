@@ -7,7 +7,7 @@
 export const links = {
   email: "dee.vag78@gmail.com",
   linkedin: "",                  // paste your LinkedIn URL: a LinkedIn stamp appears in the footer
-  resume: "",                    // path or URL to your résumé PDF: a Résumé stamp appears in the footer
+  resume: "assets/Deeva_Gupta_Resume.pdf", // your résumé PDF: shows a Résumé pill in the nav and a stamp in the footer
   caseStudy: "astroverse.html",
 };
 

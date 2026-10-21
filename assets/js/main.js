@@ -529,10 +529,22 @@ $('#copy-email').addEventListener('click', async (e) => {
   e.currentTarget.textContent = ok ? 'Copied' : 'Copy failed';
   setTimeout(() => { $('#copy-email').textContent = 'Copy'; }, 2000);
 });
+// Résumé: save a copy and open it in a new tab, from the nav pill and the footer stamp.
+const openResume = () => {
+  const a = document.createElement('a');
+  a.href = links.resume; a.download = links.resume.split('/').pop();
+  document.body.append(a); a.click(); a.remove();
+  open(links.resume, '_blank', 'noopener');
+};
+$$('[data-resume]').forEach((a) => {
+  if (!links.resume) { a.remove(); return; }
+  a.href = links.resume;
+  a.addEventListener('click', (e) => { e.preventDefault(); openResume(); });
+});
 const stampDefs = [
   { label: 'Email', ink: 'Copied ✓', sub: links.email, run: async () => { if (!(await copyEmail())) location.href = `mailto:${links.email}`; } },
+  links.resume && { label: 'Résumé', ink: 'Résumé ↓', sub: 'saving + opening', run: openResume },
   links.linkedin && { label: 'LinkedIn', ink: 'LinkedIn ↗', sub: 'opening…', run: () => open(links.linkedin, '_blank', 'noopener') },
-  links.resume && { label: 'Résumé', ink: 'Résumé ↗', sub: 'opening…', run: () => open(links.resume, '_blank', 'noopener') },
   { label: 'Case study', ink: 'Astroverse 2.0', sub: 'opening the case study', run: () => { location.href = links.caseStudy; } },
   { label: 'Postcard', ink: 'Write to me', sub: 'back to the desk', run: () => $('#hello').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }) },
   { label: 'Top ↑', ink: 'Trailhead', sub: 'back to the start', run: () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }) },
