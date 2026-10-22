@@ -141,7 +141,7 @@ $('#cards').innerHTML = work.map((w, i) => `
       <span class="pc-art">
         <span class="t-eyebrow">${esc(w.label)}</span>
         ${w.video ? `<video muted loop playsinline autoplay preload="none" data-kind="${esc(w.kind)}" poster="${esc(w.video)}-poster.jpg"><source src="${esc(w.video)}.webm" type="video/webm"><source src="${esc(w.video)}.mp4" type="video/mp4"></video>` : w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy">` : (w.kind === 'web' ? browserMock() : phones())}
-        <span class="t-hand greet">greetings from the trail</span>
+        /* <span class="t-hand greet"></span> */
       </span>
     </a>
     <div class="postcard pc-back">
