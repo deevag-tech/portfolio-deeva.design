@@ -285,7 +285,7 @@ shelf.innerHTML = sites.map((s) => `
         <div class="browser-view">
           ${s.image ? `<img src="${esc(s.image)}" alt="${esc(s.name)}: ${esc(s.kind)}" loading="lazy">`
                     : `<div class="ph" aria-hidden="true"><b>${esc(s.name)}</b><i></i><i></i><u></u></div>`}
-          ${s.video ? `<video hidden muted loop playsinline preload="none" poster="${esc(s.video)}-poster.jpg" aria-label="${esc(s.name)}: scrolling through the home page"><source src="${esc(s.video)}.webm" type="video/webm"><source src="${esc(s.video)}.mp4" type="video/mp4"></video>
+          ${s.video ? `<video hidden muted loop playsinline preload="none" poster="${esc(s.image || '')}" aria-label="${esc(s.name)}: scrolling through the home page"><source src="${esc(encodeURI(s.video))}" type="video/${s.video.endsWith('.mp4') ? 'mp4' : 'webm'}"></video>
           <span class="play-badge" aria-hidden="true" hidden><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg><span class="pb-txt"></span></span>` : ''}
         </div>
       </div>
@@ -308,7 +308,7 @@ $$('#shelf .browser').forEach((b) => {
   $('.pb-txt', badge).textContent = touch || reduce ? 'Tap to play' : 'Hover to play';
   const play = () => { v.preload = 'auto'; v.play().then(() => b.classList.add('is-playing')).catch(() => {}); };
   const stop = () => { v.pause(); v.currentTime = 0; b.classList.remove('is-playing'); };
-  fetch(v.poster, { method: 'HEAD' }).then((r) => {
+  fetch(v.currentSrc || $('source', v).src, { method: 'HEAD' }).then((r) => {
     if (!r.ok) throw new Error('missing');
     v.hidden = false; badge.hidden = false;
     b.tabIndex = 0; b.setAttribute('role', 'button'); b.setAttribute('aria-label', `Play the ${v.getAttribute('aria-label')}`);

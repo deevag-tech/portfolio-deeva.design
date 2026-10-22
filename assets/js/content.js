@@ -167,11 +167,11 @@ export const steps = [
 export const tools = ["Figma", "Mixpanel", "Jira", "Clarity", "Webflow", "Claude"];
 
 /* Websites & brands: the souvenir shelf. image: "" shows a drawn placeholder.
-   video (optional): base path of a recording in assets/video (name.webm, name.mp4, name-poster.jpg); it plays on hover.
+   video (optional): path to a recording in assets/video (.webm or .mp4); it plays on hover, and image is the still shown first.
    href (optional) turns the card into a link to a short case study; stats and cta show on that card. */
 export const sites = [
-  { name: "Astroverse", kind: "Landing page", who: "Buildd", image: "", video: "assets/video/site-astroverse", tint: "blush" },
-  { name: "Astrologer Arvind Sud", kind: "Report landing pages", who: "ScaleX client", image: "assets/img/work-arvind.jpg", video: "assets/video/site-arvind", tint: "slate" },
+  { name: "Astroverse", kind: "Landing page", who: "Buildd", image: "assets/img/site-astroverse.webp", video: "assets/video/Astroverse LP.webm", tint: "blush" },
+  { name: "Astrologer Arvind Sud", kind: "Report landing pages", who: "ScaleX client", image: "assets/img/site-arvind.webp", video: "assets/video/Arvind Sud Report LP.webm", tint: "slate" },
   { name: "BeerBiceps SkillHouse", kind: "Program landing page", who: "ScaleX client", image: "", tint: "wheat" },
   { name: "Vegapay", kind: "Brand identity & website", who: "Hucentric", image: "", tint: "sage" },
   { name: "Wishup", kind: "Lead-gen website", who: "Hucentric", image: "", tint: "blush", stats: "+25% pageviews · −15% bounce · 10% lead conversion", href: "wishup-website.html", cta: "Read the short case study" },
