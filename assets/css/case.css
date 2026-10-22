@@ -236,3 +236,4 @@ figcaption span{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:u
 .mic svg{width:1.15em;height:1.15em;fill:none;stroke:#E8B04A;stroke-width:2;stroke-linecap:round}
 .wu .spk{background:#7FC59B}.wu .k1{background:#E8B04A}.wu .k4{background:#1A63BA}
 @media (max-width:900px){.chip-task{top:72%}.chip-voice{top:48%}}
+[hidden]{display:none!important}
