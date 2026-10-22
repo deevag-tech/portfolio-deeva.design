@@ -35,7 +35,7 @@ export const stops = [
     when: "2018",
     title: "B.Tech, Computer Science",
     role: "Dr. A.P.J. Abdul Kalam Technical University",
-    body: "Where I learned how software is built, which is why I still talk to engineers in their language.",
+    body: "Where I learned how software works, and where I noticed I cared more about the person using it. That curiosity is what moved me into design.",
     note: "engineer by degree",
   },
   {
@@ -50,10 +50,10 @@ export const stops = [
   {
     id: "freelance", x: 0.828, y: 0.515,
     pin: "Freelance · 2024",
-    when: "Jan – May 2024",
+    when: "Jan – Apr 2024",
     title: "Freelance",
-    role: "Product designer · web and mobile",
-    body: "Product design for web and mobile clients, from first flows to handoff.",
+    role: "Contract UX Designer · Cravin’ Foods",
+    body: "Designed a restaurant management and analytics dashboard, plus the customer-side food ordering app.",
     note: "",
   },
   {
