@@ -72,4 +72,3 @@ Paste your URL into `links.linkedin` in `content.js` and a LinkedIn stamp appear
    - `A` records for `@` pointing to `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`
    - a `CNAME` record for `www` pointing to `deevag-tech.github.io`
 3. Once DNS has propagated, tick **Enforce HTTPS**.
-
