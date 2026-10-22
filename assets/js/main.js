@@ -572,10 +572,10 @@ $$('[data-resume]').forEach((a) => {
 });
 const SHOW_HELLO = false; // Say hello is hidden for now: set to true to bring the Postcard stamp back
 const stampDefs = [
-  { label: 'Email', ink: 'Copied ✓', sub: links.email, run: async () => { if (!(await copyEmail())) location.href = `mailto:${links.email}`; } },
+  { label: 'Email', ink: 'Email ↗', sub: 'opening your mail app', run: () => { location.href = `mailto:${links.email}`; } },
   links.resume && { label: 'Résumé', ink: 'Résumé ↓', sub: 'saving + opening', run: openResume },
   links.linkedin && { label: 'LinkedIn', ink: 'LinkedIn ↗', sub: 'opening…', run: () => open(links.linkedin, '_blank', 'noopener') },
-  { label: 'Case study', ink: 'Astroverse 2.0', sub: 'opening the case study', run: () => { location.href = links.caseStudy; } },
+  { label: 'Case study', ink: 'Case studies ↓', sub: 'scrolling to my work', run: () => $('#work').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }) },
   SHOW_HELLO && { label: 'Postcard', ink: 'Write to me', sub: 'back to the desk', run: () => $('#hello').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }) },
   { label: 'Top ↑', ink: 'Trailhead', sub: 'back to the start', run: () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }) },
 ].filter(Boolean).slice(0, 4);
