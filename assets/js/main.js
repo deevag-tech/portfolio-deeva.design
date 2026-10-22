@@ -347,6 +347,7 @@ const magnets = $$('.magnet', fridge);
 let layoutDone = false;
 function placeMagnets(force) {
   const W = fridge.clientWidth, H = fridge.clientHeight;
+  if (!W || !H) return; // section is hidden: lay out when it is shown
   magnets.forEach((m, i) => {
     if (!force && m.dataset.x) { m.style.left = (m.dataset.x * W) + 'px'; m.style.top = (m.dataset.y * H) + 'px'; return; }
     const [fx, fy] = SPOTS[i % SPOTS.length];
@@ -419,7 +420,7 @@ let touched = false;
 fridge.addEventListener('pointerdown', () => { touched = true; });
 fridge.addEventListener('keydown', () => { touched = true; });
 Promise.all($$('img', fridge).map((img) => img.decode().catch(() => {}))).then(() => { if (!touched) placeMagnets(true); });
-new ResizeObserver(() => layoutDone && placeMagnets(false)).observe(fridge);
+new ResizeObserver(() => placeMagnets(!layoutDone)).observe(fridge);
 showTip(0);
 
 /* ---------- 7. Say hello: the post office desk + the wall ---------- */
