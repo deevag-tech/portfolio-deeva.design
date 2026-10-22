@@ -277,7 +277,8 @@ $('#toolbox').innerHTML = tools.map((t, i) => `<li style="--r:${[-2, 1.5, -1, 2,
 /* ---------- 5. Websites: the souvenir shelf ---------- */
 const shelf = $('#shelf');
 shelf.innerHTML = sites.map((s) => `
-  <li class="shelf-item tint-${esc(s.tint)}">
+  <li class="shelf-item tint-${esc(s.tint)}${s.href ? ' has-link' : ''}">
+    ${s.href ? `<a class="shelf-link" href="${esc(s.href)}" aria-label="${esc(s.name)}: ${esc(s.cta || 'Read the case study')}">` : ''}
     <figure>
       <div class="browser">
         <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -290,8 +291,11 @@ shelf.innerHTML = sites.map((s) => `
         <span class="t-eyebrow">${esc(s.who)}</span>
         <h3>${esc(s.name)}</h3>
         <p class="t-body-s muted">${esc(s.kind)}</p>
+        ${s.stats ? `<p class="shelf-stats">${esc(s.stats)}</p>` : ''}
+        ${s.href ? `<span class="shelf-cta">${esc(s.cta || 'Read the case study')} <span aria-hidden="true">→</span></span>` : ''}
       </figcaption>
     </figure>
+    ${s.href ? '</a>' : ''}
   </li>`).join('');
 const shelfBtns = $$('[data-shelf]');
 const shelfState = () => {

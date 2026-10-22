@@ -116,7 +116,7 @@ export const work = [
   },
   {
     id: "wishup",
-    label: "Wishup · App & website",
+    label: "Wishup · App",
     tint: "sage",
     kind: "app",
     image: "",
@@ -125,9 +125,9 @@ export const work = [
     year: "2023",
     title: "One app for clients, VAs and Wishup",
     problem: "Client–VA work lived in Slack threads, email and hand-written EOD reports.",
-    role: "Product designer on the client app under our design manager; led the website revamp.",
+    role: "Product designer on the client app, working with our design manager.",
     metric: "~15%",
-    metricLabel: "VA time saved on EOD reports · +25% website pageviews",
+    metricLabel: "VA time saved on EOD reports",
     link: { label: "Read the case study", href: "wishup.html" },
   },
 ];
@@ -166,12 +166,13 @@ export const steps = [
 /* The toolbox row under How I work. */
 export const tools = ["Figma", "Mixpanel", "Jira", "Clarity", "Webflow", "Claude"];
 
-/* Websites & brands: the souvenir shelf. image: "" shows a drawn placeholder. */
+/* Websites & brands: the souvenir shelf. image: "" shows a drawn placeholder.
+   href (optional) turns the card into a link to a short case study; stats and cta show on that card. */
 export const sites = [
   { name: "Astrologer Arvind Sud", kind: "Report landing pages", who: "ScaleX client", image: "assets/img/work-arvind.jpg", tint: "slate" },
   { name: "BeerBiceps SkillHouse", kind: "Program landing page", who: "ScaleX client", image: "", tint: "wheat" },
   { name: "Vegapay", kind: "Brand identity & website", who: "Hucentric", image: "", tint: "sage" },
-  { name: "Wishup", kind: "Lead-gen website", who: "Hucentric", image: "", tint: "blush" },
+  { name: "Wishup", kind: "Lead-gen website", who: "Hucentric", image: "", tint: "blush", stats: "+25% pageviews · −15% bounce · 10% lead conversion", href: "wishup-website.html", cta: "Read the short case study" },
   { name: "Sketchnote · Dexter Ventures · Elevare", kind: "Webflow sites", who: "Hucentric", image: "", tint: "slate" },
 ];
 
