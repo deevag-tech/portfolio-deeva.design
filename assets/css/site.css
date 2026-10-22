@@ -476,6 +476,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .shelf-item figcaption { padding-top: var(--s4); }
 .shelf-item figcaption .t-eyebrow { color: var(--text-secondary); }
 .shelf-item figcaption h3 { margin-top: var(--s1); font: 500 16px/24px var(--f-ui); }
+.shelf-link { display: block; color: inherit; text-decoration: none; border-radius: var(--r-s); }
+.shelf-link:focus-visible { outline: 2px solid var(--ink-900); outline-offset: 6px; }
+.shelf-stats { margin-top: var(--s2); font: 500 13px/20px var(--f-ui); color: var(--ink-900); }
+.shelf-cta { display: inline-flex; gap: 6px; margin-top: var(--s2); font: 600 14px/20px var(--f-ui); color: var(--ink-900); border-bottom: 1.5px solid currentColor; padding-bottom: 1px; transition: gap var(--fast); }
+.shelf-link:hover .shelf-cta { gap: 10px; }
 .shelf-nav { display: flex; gap: var(--s2); }
 .round-btn { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--bg-card); box-shadow: inset 0 0 0 1.5px var(--strong); cursor: pointer; transition: background var(--fast); }
 .round-btn:hover { background: var(--bg-alt); }
