@@ -73,7 +73,7 @@ export const stops = [
     role: "The next summit",
     body: "I'm looking for a team building a consumer product people return to, where design sits next to product and data from day one.",
     note: "",
-    link: { label: "Say hello", href: "#hello" },
+    link: { label: "Say hello", href: "mailto:dee.vag78@gmail.com" },
   },
 ];
 
