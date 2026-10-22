@@ -299,6 +299,16 @@ shelf.innerHTML = sites.map((s) => `
     </figure>
     ${s.href ? '</a>' : ''}
   </li>`).join('');
+// Auto-scroll: when the cards overflow, repeat them once so the shelf can loop without a jump.
+const looping = !reduce && shelf.scrollWidth > shelf.clientWidth + 8;
+if (looping) {
+  $$('.shelf-item', shelf).forEach((li) => {
+    const c = li.cloneNode(true);
+    c.classList.add('is-clone'); c.setAttribute('aria-hidden', 'true');
+    $$('a', c).forEach((a) => { a.tabIndex = -1; });
+    shelf.append(c);
+  });
+}
 // Site recordings: still frame first, plays on hover or focus (a tap on touch screens), rewinds on leave.
 // If a recording hasn't been uploaded yet, the drawn placeholder stays.
 $$('#shelf .browser').forEach((b) => {
@@ -312,7 +322,7 @@ $$('#shelf .browser').forEach((b) => {
   fetch(v.currentSrc || $('source', v).src, { method: 'HEAD' }).then((r) => {
     if (!r.ok) throw new Error('missing');
     v.hidden = false; badge.hidden = false;
-    b.tabIndex = 0; b.setAttribute('role', 'button'); b.setAttribute('aria-label', `Play the ${v.getAttribute('aria-label')}`);
+    b.tabIndex = b.closest('.is-clone') ? -1 : 0; b.setAttribute('role', 'button'); b.setAttribute('aria-label', `Play the ${v.getAttribute('aria-label')}`);
     if (!touch && !reduce) {
       b.addEventListener('pointerenter', play); b.addEventListener('pointerleave', stop);
       b.addEventListener('focus', play); b.addEventListener('blur', stop);
@@ -322,17 +332,46 @@ $$('#shelf .browser').forEach((b) => {
   }).catch(() => {});
 });
 const shelfBtns = $$('[data-shelf]');
+let pausedUntil = 0; // auto-scroll waits until this time (ms), e.g. after a swipe or an arrow tap
+const loopW = () => ($('.is-clone', shelf).offsetLeft - $('.shelf-item', shelf).offsetLeft);
 const shelfState = () => {
+  if (looping) { shelfBtns.forEach((b) => { b.disabled = false; }); return; }
   shelfBtns[0].disabled = shelf.scrollLeft < 8;
   shelfBtns[1].disabled = shelf.scrollLeft + shelf.clientWidth > shelf.scrollWidth - 8;
 };
 shelfBtns.forEach((b) => b.addEventListener('click', () => {
   const step = ($('.shelf-item', shelf)?.offsetWidth || 400) + 24;
+  pausedUntil = performance.now() + 2500;
+  if (looping && Number(b.dataset.shelf) < 0 && shelf.scrollLeft < step) shelf.scrollLeft += loopW();
   shelf.scrollBy({ left: step * Number(b.dataset.shelf), behavior: reduce ? 'auto' : 'smooth' });
 }));
 shelf.addEventListener('scroll', shelfState, { passive: true });
 addEventListener('resize', shelfState);
 shelfState();
+// Auto-scroll: drifts left to right, stops while the pointer is over the shelf, a card has focus or is playing, or someone is swiping.
+if (looping) {
+  shelf.style.scrollSnapType = 'none';
+  const SPEED = 36; /* px per second */
+  let pos = shelf.scrollLeft, lastSet = pos, hovering = false, visible = false, prev = performance.now();
+  shelf.addEventListener('pointerenter', (e) => { hovering = e.pointerType === 'mouse'; });
+  shelf.addEventListener('pointerleave', () => { hovering = false; });
+  shelf.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') pausedUntil = performance.now() + 4000; });
+  shelf.addEventListener('scroll', () => {
+    if (Math.abs(shelf.scrollLeft - lastSet) > 1.5) { pausedUntil = performance.now() + 2500; pos = shelf.scrollLeft; }
+  }, { passive: true });
+  new IntersectionObserver(([en]) => { visible = en.isIntersecting; }, { threshold: 0.1 }).observe(shelf);
+  const tick = (t) => {
+    const dt = Math.min(t - prev, 64) / 1000; prev = t;
+    if (!(hovering || shelf.matches(':focus-within') || $('.is-playing', shelf) || document.hidden || !visible || t < pausedUntil)) {
+      const L = loopW();
+      pos += SPEED * dt;
+      if (pos >= L) pos -= L;
+      shelf.scrollLeft = pos; lastSet = shelf.scrollLeft;
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
 
 /* ---------- 6. Off the clock: the fridge door ---------- */
 const fridge = $('#fridge'), tip = $('#tip');
