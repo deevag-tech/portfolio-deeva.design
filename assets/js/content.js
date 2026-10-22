@@ -172,10 +172,12 @@ export const tools = ["Figma", "Mixpanel", "Jira", "Clarity", "Webflow", "Claude
 export const sites = [
   { name: "Astroverse", kind: "Landing page", who: "Buildd", image: "assets/img/site-astroverse.webp", video: "assets/video/Astroverse LP.webm", tint: "blush" },
   { name: "Astrologer Arvind Sud", kind: "Report landing pages", who: "ScaleX client", image: "assets/img/site-arvind.webp", video: "assets/video/Arvind Sud Report LP.webm", tint: "slate" },
-  { name: "BeerBiceps SkillHouse", kind: "Program landing page", who: "ScaleX client", image: "", tint: "wheat" },
-  { name: "Vegapay", kind: "Brand identity & website", who: "Hucentric", image: "", tint: "sage" },
+  { name: "BeerBiceps SkillHouse", kind: "Program landing page", who: "ScaleX client", image: "assets/video/Design for Clicks.png", video: "assets/video/Design for clicks by Skillhouse Beerbicep.webm", tint: "wheat" },
+  { name: "Vegapay", kind: "Brand identity & website", who: "Hucentric", image: "assets/video/VegaPay.png", video: "assets/video/Vegapay LP.webm", tint: "sage" },
+  /* Hidden for now, bring back by removing the comment markers. The short case study page (wishup-website.html) is still in the repo.
   { name: "Wishup", kind: "Lead-gen website", who: "Hucentric", image: "", tint: "blush", stats: "+25% pageviews · −15% bounce · 10% lead conversion", href: "wishup-website.html", cta: "Read the short case study" },
-  { name: "Sketchnote · Dexter Ventures · Elevare", kind: "Webflow sites", who: "Hucentric", image: "", tint: "slate" },
+  */
+  { name: "Sketchnote · Dexter Ventures · Elevare", kind: "Webflow sites", who: "Hucentric", image: "", video: "assets/video/Sketchnote LP.webm", tint: "slate" },
 ];
 
 /* Off the clock: fridge door magnets.
