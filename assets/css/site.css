@@ -460,7 +460,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 /* ---------- 11. Websites: souvenir shelf ---------- */
-.shelf { display: flex; gap: var(--s5); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--side); padding: var(--s2) var(--side) var(--s5); margin-inline: calc(var(--side) * -1); scrollbar-width: thin; scrollbar-color: var(--paper-300) transparent; }
+.shelf { display: flex; gap: var(--s5); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--side); padding: var(--s2) var(--side) var(--s5); margin-inline: calc(var(--side) * -1); scrollbar-width: none; }
+.shelf::-webkit-scrollbar { display: none; }
 .shelf-item { flex: none; width: min(440px, 82vw); scroll-snap-align: start; }
 .browser { border-radius: var(--r-s); background: var(--bg-card); box-shadow: var(--e1); overflow: hidden; transition: transform var(--base) var(--ease), box-shadow var(--base) var(--ease); }
 .shelf-item:hover .browser { transform: translateY(-4px) rotate(-.4deg); box-shadow: var(--e2); }
