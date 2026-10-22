@@ -285,6 +285,8 @@ shelf.innerHTML = sites.map((s) => `
         <div class="browser-view">
           ${s.image ? `<img src="${esc(s.image)}" alt="${esc(s.name)}: ${esc(s.kind)}" loading="lazy">`
                     : `<div class="ph" aria-hidden="true"><b>${esc(s.name)}</b><i></i><i></i><u></u></div>`}
+          ${s.video ? `<video hidden muted loop playsinline preload="none" poster="${esc(s.video)}-poster.jpg" aria-label="${esc(s.name)}: scrolling through the home page"><source src="${esc(s.video)}.webm" type="video/webm"><source src="${esc(s.video)}.mp4" type="video/mp4"></video>
+          <span class="play-badge" aria-hidden="true" hidden><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg><span class="pb-txt"></span></span>` : ''}
         </div>
       </div>
       <figcaption>
@@ -297,6 +299,27 @@ shelf.innerHTML = sites.map((s) => `
     </figure>
     ${s.href ? '</a>' : ''}
   </li>`).join('');
+// Site recordings: still frame first, plays on hover or focus (a tap on touch screens), rewinds on leave.
+// If a recording hasn't been uploaded yet, the drawn placeholder stays.
+$$('#shelf .browser').forEach((b) => {
+  const v = $('video', b), badge = $('.play-badge', b);
+  if (!v) return;
+  const touch = matchMedia('(hover: none)').matches;
+  $('.pb-txt', badge).textContent = touch || reduce ? 'Tap to play' : 'Hover to play';
+  const play = () => { v.preload = 'auto'; v.play().then(() => b.classList.add('is-playing')).catch(() => {}); };
+  const stop = () => { v.pause(); v.currentTime = 0; b.classList.remove('is-playing'); };
+  fetch(v.poster, { method: 'HEAD' }).then((r) => {
+    if (!r.ok) throw new Error('missing');
+    v.hidden = false; badge.hidden = false;
+    b.tabIndex = 0; b.setAttribute('role', 'button'); b.setAttribute('aria-label', `Play the ${v.getAttribute('aria-label')}`);
+    if (!touch && !reduce) {
+      b.addEventListener('pointerenter', play); b.addEventListener('pointerleave', stop);
+      b.addEventListener('focus', play); b.addEventListener('blur', stop);
+    }
+    b.addEventListener('click', () => (v.paused ? play() : stop()));
+    b.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); v.paused ? play() : stop(); } });
+  }).catch(() => {});
+});
 const shelfBtns = $$('[data-shelf]');
 const shelfState = () => {
   shelfBtns[0].disabled = shelf.scrollLeft < 8;

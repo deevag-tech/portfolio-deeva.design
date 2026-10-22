@@ -167,9 +167,11 @@ export const steps = [
 export const tools = ["Figma", "Mixpanel", "Jira", "Clarity", "Webflow", "Claude"];
 
 /* Websites & brands: the souvenir shelf. image: "" shows a drawn placeholder.
+   video (optional): base path of a recording in assets/video (name.webm, name.mp4, name-poster.jpg); it plays on hover.
    href (optional) turns the card into a link to a short case study; stats and cta show on that card. */
 export const sites = [
-  { name: "Astrologer Arvind Sud", kind: "Report landing pages", who: "ScaleX client", image: "assets/img/work-arvind.jpg", tint: "slate" },
+  { name: "Astroverse", kind: "Landing page", who: "Buildd", image: "", video: "assets/video/site-astroverse", tint: "blush" },
+  { name: "Astrologer Arvind Sud", kind: "Report landing pages", who: "ScaleX client", image: "assets/img/work-arvind.jpg", video: "assets/video/site-arvind", tint: "slate" },
   { name: "BeerBiceps SkillHouse", kind: "Program landing page", who: "ScaleX client", image: "", tint: "wheat" },
   { name: "Vegapay", kind: "Brand identity & website", who: "Hucentric", image: "", tint: "sage" },
   { name: "Wishup", kind: "Lead-gen website", who: "Hucentric", image: "", tint: "blush", stats: "+25% pageviews · −15% bounce · 10% lead conversion", href: "wishup-website.html", cta: "Read the short case study" },
