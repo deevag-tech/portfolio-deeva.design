@@ -317,8 +317,8 @@ $$('#shelf .browser').forEach((b) => {
   const touch = matchMedia('(hover: none)').matches;
   $('.pb-txt', badge).textContent = touch || reduce ? 'Tap to play' : 'Hover to play';
   const HOVER_SPEED = 2; /* playback speed of the hover recordings; 1 is normal */
-  const play = () => { v.preload = 'auto'; v.defaultPlaybackRate = HOVER_SPEED; v.playbackRate = HOVER_SPEED; v.play().then(() => b.classList.add('is-playing')).catch(() => {}); };
-  const stop = () => { v.pause(); v.currentTime = 0; b.classList.remove('is-playing'); };
+  const play = () => { b.classList.add('is-hot'); v.preload = 'auto'; v.defaultPlaybackRate = HOVER_SPEED; v.playbackRate = HOVER_SPEED; v.play().then(() => b.classList.add('is-playing')).catch(() => {}); };
+  const stop = () => { v.pause(); v.currentTime = 0; b.classList.remove('is-playing', 'is-hot'); };
   fetch(v.currentSrc || $('source', v).src, { method: 'HEAD' }).then((r) => {
     if (!r.ok) throw new Error('missing');
     v.hidden = false; badge.hidden = false;
@@ -352,17 +352,16 @@ shelfState();
 if (looping) {
   shelf.style.scrollSnapType = 'none';
   const SPEED = 36; /* px per second */
-  let pos = shelf.scrollLeft, lastSet = pos, hovering = false, visible = false, prev = performance.now();
-  shelf.addEventListener('pointerenter', (e) => { hovering = e.pointerType === 'mouse'; });
-  shelf.addEventListener('pointerleave', () => { hovering = false; });
+  const canHover = matchMedia('(hover: hover)').matches;
+  let pos = shelf.scrollLeft, lastSet = pos, visible = false, prev = performance.now();
   shelf.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') pausedUntil = performance.now() + 4000; });
   shelf.addEventListener('scroll', () => {
-    if (Math.abs(shelf.scrollLeft - lastSet) > 1.5) { pausedUntil = performance.now() + 2500; pos = shelf.scrollLeft; }
+    if (Math.abs(shelf.scrollLeft - lastSet) > 4) { pausedUntil = performance.now() + 2500; pos = shelf.scrollLeft; }
   }, { passive: true });
   new IntersectionObserver(([en]) => { visible = en.isIntersecting; }, { threshold: 0.1 }).observe(shelf);
   const tick = (t) => {
     const dt = Math.min(t - prev, 64) / 1000; prev = t;
-    if (!(hovering || shelf.matches(':focus-within') || $('.is-playing', shelf) || document.hidden || !visible || t < pausedUntil)) {
+    if (!((canHover && shelf.matches(':hover')) || shelf.matches(':focus-within') || $('.is-hot, .is-playing', shelf) || document.hidden || !visible || t < pausedUntil)) {
       const L = loopW();
       pos += SPEED * dt;
       if (pos >= L) pos -= L;
